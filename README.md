@@ -12,6 +12,7 @@ A tutorial is written in Jupyter Notebook. By clicking the badge above, you will
 To download or clone the repository, using the green button `Clone or download`.
 
 ## Prerequisites
+Ensure your version of Python is >= 3.6.
 The following Python packages are required for running the core algorithms:
 ```
 NumPy, Scipy, Numba
