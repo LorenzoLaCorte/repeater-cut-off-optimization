@@ -249,7 +249,7 @@ def optimize_cutoff_time():
     logging.info("Secret key rate: {:.6f}".format(key_rate))
 
     logging.info("No cut-off\n")
-    parameters["cutoff"] = np.iinfo(np.int).max
+    parameters["cutoff"] = np.iinfo(int).max
     pmf, w_func = repeater_sim(parameters=parameters)
     key_rate = secret_key_rate(pmf, w_func)
     logging.info("Secret key rate without cut-off: {:.6f}".format(key_rate))

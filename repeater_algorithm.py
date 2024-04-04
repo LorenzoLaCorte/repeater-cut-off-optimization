@@ -407,15 +407,15 @@ class RepeaterChainSimulation():
         if "cutoff" in parameters.keys():
             cutoff = parameters["cutoff"]
         elif cut_type == "memory_time":
-            cutoff = parameters.get("mt_cut", np.iinfo(np.int).max)
+            cutoff = parameters.get("mt_cut", np.iinfo(int).max)
         elif cut_type == "fidelity":
             cutoff = parameters.get("w_cut", 1.0e-16)  # shouldn't be zero
             if cutoff == 0.:
                 cutoff = 1.0e-16
         elif cut_type == "run_time":
-            cutoff = parameters.get("rt_cut", np.iinfo(np.int).max)
+            cutoff = parameters.get("rt_cut", np.iinfo(int).max)
         else:
-            cutoff = np.iinfo(np.int).max
+            cutoff = np.iinfo(int).max
 
         # type check
         if not np.isreal(p_gen) or not np.isreal(p_swap):
@@ -484,13 +484,13 @@ class RepeaterChainSimulation():
             parameters["mt_cut"] = parameters.pop("tau")
         if "cutoff_dict" in parameters.keys():
             cutoff_dict = parameters["cutoff_dict"]
-            mt_cut = cutoff_dict.get("memory_time", np.iinfo(np.int).max)
+            mt_cut = cutoff_dict.get("memory_time", np.iinfo(int).max)
             w_cut = cutoff_dict.get("fidelity", 1.e-8)
-            rt_cut = cutoff_dict.get("run_time", np.iinfo(np.int).max)
+            rt_cut = cutoff_dict.get("run_time", np.iinfo(int).max)
         else:
-            mt_cut = parameters.get("mt_cut", np.iinfo(np.int).max)
+            mt_cut = parameters.get("mt_cut", np.iinfo(int).max)
             w_cut = parameters.get("w_cut", 1.e-8)
-            rt_cut = parameters.get("rt_cut", np.iinfo(np.int).max)
+            rt_cut = parameters.get("rt_cut", np.iinfo(int).max)
         if "cutoff" in parameters:
             cutoff = parameters["cutoff"]
         if not isinstance(mt_cut, Iterable):

@@ -163,14 +163,14 @@ def create_cutoff_dict(cutoff_list, cut_types, parameters, ref_pmf_matrix=None):
                 #         "len(cutoff)={}\n len(ref_pmf_matrix)={}\n".format(
                 #             len(cutoff), len(ref_pmf_matrix)))
                 cutoff_pos = cutoff
-                cutoff = np.empty(cutoff_pos.shape, dtype=np.int)
+                cutoff = np.empty(cutoff_pos.shape, dtype=int)
                 for i in range(len(cutoff)):
                     cutoff[i] = np.searchsorted(np.cumsum(ref_pmf_matrix[i]), cutoff_pos[i])
             # make sure runtime cutoff is in the increasing order
             if cut_type in ["run_time"]:
                 for i in range(1, len(cutoff)):
                     cutoff[i] = min(cutoff[i] + cutoff[i-1], parameters["t_trunc"])
-            cutoff = cutoff.astype(np.int)
+            cutoff = cutoff.astype(int)
         if len(cutoff) == 1 and len(parameters["protocol"]) != 1:
             cutoff = np.repeat(cutoff, len(parameters["protocol"]))
         cutoff_dict[cut_type] = cutoff

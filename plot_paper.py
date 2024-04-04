@@ -310,7 +310,7 @@ def get_zero_keyrate_borderline(remark=None):
         parameters_list = [parameters_list]
 
     w0_array = np.array([], dtype=np.float)
-    t_coh_array = np.array([], dtype=np.int)
+    t_coh_array = np.array([], dtype=int)
     data = {}
     for parameters in parameters_list:
         ID = parameters["ID"]
@@ -356,7 +356,7 @@ def plot_parameter_contour(remark):
         parameters_list = [parameters_list]
 
     w0_array = np.array([], dtype=np.float)
-    t_coh_array = np.array([], dtype=np.int)
+    t_coh_array = np.array([], dtype=int)
     data = {}
     for parameters in parameters_list:
         ID = parameters["ID"]
@@ -806,7 +806,7 @@ if __name__ == "__main__":
     # ID = log_init("optimize", level=logging_level)
     # temp_parameters = deepcopy(parameters)
     # log_params(temp_parameters)
-    # temp_parameters["t_coh"] = list(np.trunc(np.linspace(15000, 100000, 18)).astype(np.int))
+    # temp_parameters["t_coh"] = list(np.trunc(np.linspace(15000, 100000, 18)).astype(int))
     # parameter_regime(temp_parameters, ID, workers=8, remark="fourier_sensitivity_t_coh")
     # calculate_key_rate_with_default_cutoff(ID, parameters, temp_parameters)
 
