@@ -183,7 +183,7 @@ class CutoffOptimizer():
         If the found cut-off is not a local optimal because of
         the discrete search space, improve the optimization parameters
         and restart the algorithm
-    wokers:, optional
+    workers:, optional
         Number of processes used for parallel computing
         (`multiprocessing.Pool`) for differential evolution.
     pretrain: python function, optional
