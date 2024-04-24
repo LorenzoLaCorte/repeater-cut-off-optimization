@@ -508,10 +508,16 @@ class RepeaterChainSimulation():
 
         t_trunc = parameters["t_trunc"]
 
-        # elementary link
+        # --- elementary link generation ---
+        # generate array for the waiting time distribution (from 1 to t_trunc)
         t_list = np.arange(1, t_trunc)
-        pmf = p_gen * (1 - p_gen)**(t_list - 1)
-        pmf = np.concatenate((np.array([0.]), pmf))
+        print("Generating array for the waiting time distribution (from 1 to t_trunc)...")
+
+        # calculates the probability mass function (pmf) for a geometric distribution. p_gen is the probability of success on each trial. The geometric distribution models the number of trials needed to get the first success in repeated, independent Bernoulli trials.
+        pmf = np.concatenate((np.array([0.]), p_gen * (1 - p_gen)**(t_list - 1)))
+        print("The probability mass function (pmf) for a geometric distribution has been calculated:", pmf)
+
+
         w_func = np.array([w0] * t_trunc)
         if all_level:
             full_result = [(pmf, w_func)]

@@ -16,3 +16,5 @@ venv
 *.png
 .cache/v/cache/lastfailed
 /.ipynb_checkpoints
+
+thesis
