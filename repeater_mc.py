@@ -34,13 +34,13 @@ def repeater_mc(parameters, multiprocessing=False, return_pmf=False):
         parameters["mt_cut"] = parameters.pop("tau")
     if "cutoff_dict" in parameters.keys():
         cutoff_dict = parameters["cutoff_dict"]
-        mt_cut = cutoff_dict.get("memory_time", np.iinfo(np.int).max)
+        mt_cut = cutoff_dict.get("memory_time", np.iinfo(int).max)
         w_cut = cutoff_dict.get("fidelity", 1.e-8)
-        rt_cut = cutoff_dict.get("run_time", np.iinfo(np.int).max)
+        rt_cut = cutoff_dict.get("run_time", np.iinfo(int).max)
     else:
-        mt_cut = parameters.get("mt_cut", np.iinfo(np.int).max)
+        mt_cut = parameters.get("mt_cut", np.iinfo(int).max)
         w_cut = parameters.get("w_cut", 1.e-8)
-        rt_cut = parameters.get("rt_cut", np.iinfo(np.int).max)
+        rt_cut = parameters.get("rt_cut", np.iinfo(int).max)
     if not isinstance(mt_cut, Iterable):
         mt_cut = (mt_cut,) * len(protocol)
     else:
@@ -156,12 +156,12 @@ def cut_off_swap(step, network_parameters):
                 if wA < w_cut:
                     waiting_time = tA
                 else:
-                    waiting_time = min(tB, tA + np.int(np.floor(t_coh * np.log(wA/w_cut))))
+                    waiting_time = min(tB, tA + int(np.floor(t_coh * np.log(wA/w_cut))))
             elif tA > tB:
                 if wB < w_cut:
                     waiting_time = tB
                 else:
-                    memory_time = np.int(np.floor(t_coh * np.log(wB/w_cut)))
+                    memory_time = int(np.floor(t_coh * np.log(wB/w_cut)))
                     waiting_time = min(tA, tB + memory_time)
             else:
                 waiting_time = tA
@@ -222,12 +222,12 @@ def cut_off_swap(step, network_parameters):
 #                 if wA < w_cut:
 #                     waiting_time = tA
 #                 else:
-#                     waiting_time = min(tB, tA + np.int(np.floor(t_coh * np.log(wA/w_cut))))
+#                     waiting_time = min(tB, tA + int(np.floor(t_coh * np.log(wA/w_cut))))
 #             elif tA > tB:
 #                 if wB < w_cut:
 #                     waiting_time = tB
 #                 else:
-#                     memory_time = np.int(np.ceil(t_coh * np.log(wB/w_cut)))
+#                     memory_time = int(np.ceil(t_coh * np.log(wB/w_cut)))
 #                     waiting_time = min(tA, tB + memory_time)
 #             else:
 #                 waiting_time = tA

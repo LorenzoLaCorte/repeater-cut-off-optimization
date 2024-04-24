@@ -109,7 +109,7 @@ result: bool
 @nb.jit(nopython=True, error_model="numpy")
 def memory_cut_off(
         t1, t2, w1=1.0, w2=1.0,
-        mt_cut=np.iinfo(np.int).max, w_cut=1.e-8, rt_cut=np.iinfo(np.int).max, t_coh=np.iinfo(np.int).max):
+        mt_cut=np.iinfo(int).max, w_cut=1.e-8, rt_cut=np.iinfo(int).max, t_coh=np.iinfo(int).max):
     """
     Memory storage cut-off. The two input links suvives only if
     |t1-t2|<=mt_cut
@@ -124,7 +124,7 @@ def memory_cut_off(
 @nb.jit(nopython=True, error_model="numpy")
 def fidelity_cut_off(
     t1, t2, w1, w2,
-    mt_cut=np.iinfo(np.int).max, w_cut=1.e-8, rt_cut=np.iinfo(np.int).max, t_coh=np.iinfo(np.int).max):
+    mt_cut=np.iinfo(int).max, w_cut=1.e-8, rt_cut=np.iinfo(int).max, t_coh=np.iinfo(int).max):
     """
     Fidelity-dependent cut-off, The two input links suvives only if
     w1 <= w_cut and w2 <= w_cut including decoherence.
@@ -140,7 +140,7 @@ def fidelity_cut_off(
     # first link has low quality
     if w1 < w_cut:
         return t1, False  # waiting_time = min(t1, t2)
-    waiting = np.int(np.floor(t_coh * np.log(w1/w_cut)))
+    waiting = int(np.floor(t_coh * np.log(w1/w_cut)))
     # first link waits too long
     if t1 + waiting < t2:
         return t1 + waiting, False  # min(t1, t2) < waiting_time < max(t1, t2)
@@ -155,7 +155,7 @@ def fidelity_cut_off(
 @nb.jit(nopython=True, error_model="numpy")
 def run_time_cut_off(
     t1, t2, w1, w2,
-    mt_cut=np.iinfo(np.int).max, w_cut=1.e-8, rt_cut=np.iinfo(np.int).max, t_coh=np.iinfo(np.int).max):
+    mt_cut=np.iinfo(int).max, w_cut=1.e-8, rt_cut=np.iinfo(int).max, t_coh=np.iinfo(int).max):
     if t1 > rt_cut or t2 > rt_cut:
         return rt_cut, False
     else:
@@ -165,7 +165,7 @@ def run_time_cut_off(
 @nb.jit(nopython=True, error_model="numpy")
 def time_cut_off(
     t1, t2, w1, w2,
-    mt_cut=np.iinfo(np.int).max, w_cut=1.e-8, rt_cut=np.iinfo(np.int).max, t_coh=np.iinfo(np.int).max):
+    mt_cut=np.iinfo(int).max, w_cut=1.e-8, rt_cut=np.iinfo(int).max, t_coh=np.iinfo(int).max):
     waiting_time1, result1 = memory_cut_off(
         t1, t2, w1, w2, mt_cut=mt_cut, w_cut=w_cut, rt_cut=rt_cut, t_coh=t_coh)
     waiting_time2, result2 = run_time_cut_off(
