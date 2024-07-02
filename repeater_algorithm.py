@@ -478,6 +478,10 @@ class RepeaterChainSimulation():
         """
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
+        # in case of 1-level protocol:
+        # ensure protocol is treated as a tuple
+        if isinstance(protocol, int): 
+            protocol = (protocol,)
         p_gen = parameters["p_gen"]
         w0 = parameters["w0"]
         if "tau" in parameters:  # backward compatibility
