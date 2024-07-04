@@ -510,12 +510,24 @@ class RepeaterChainSimulation():
         else:
             rt_cut = tuple(rt_cut)
 
-        t_trunc = parameters["t_trunc"]
-
         # elementary link
-        t_list = np.arange(1, t_trunc)
-        pmf = p_gen * (1 - p_gen)**(t_list - 1)
-        pmf = np.concatenate((np.array([0.]), pmf))
+        # new method with epsilon
+        if parameters["t_trunc"] is None:
+            epsilon = parameters.get("epsilon", 0.003)
+            pmf = np.array([0.])
+            coverage = 0
+            while coverage < (1-epsilon):
+                el_prob = p_gen * (1 - p_gen)**(len(pmf)-1)
+                pmf = np.append(pmf, el_prob)
+                coverage += el_prob
+            t_trunc = len(pmf)
+        # old method with t_trunc
+        else:
+            t_trunc = parameters["t_trunc"]
+            t_list = np.arange(1, t_trunc)
+            pmf = p_gen * (1 - p_gen)**(t_list - 1)
+            pmf = np.concatenate((np.array([0.]), pmf))
+
         w_func = np.array([w0] * t_trunc)
         if all_level:
             full_result = [(pmf, w_func)]
