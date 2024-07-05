@@ -330,8 +330,8 @@ def mixed_protocol(cutoff=False):
         "p_gen": 0.1,
         "p_swap": 0.5,
         "w0": 0.85,
-        "t_coh": 400,
-        "t_trunc": 1200,
+        "t_coh": 800,
+        "t_trunc": 3000,
     }
     p_gen = parameters["p_gen"]
     t_trunc = parameters["t_trunc"]
@@ -450,18 +450,20 @@ def mixed_protocol(cutoff=False):
     if cutoff:
         print("secret key rate with cutoffs", secret_key_rate(pmf_span3_dist3_cut, w_span3_dist3_cut))
 
+    formatted_parameters = ', '.join([f"{key}={value}" for key, value in parameters.items()])
 
     plt.tight_layout()
-    plt.subplots_adjust(left=0.1, hspace=0.1)
+    plt.subplots_adjust(left=0.1, top=0.94, hspace=0.1)
 
     if cutoff:
         axs[2][2].legend()
         axs[3][2].legend()
     
-    row_titles = ["2 Distillations of A-B", "Swapping B-C-D to B-D", "2 Distillations of B-D", "Swapping A-B-D to A-D"]
+    row_titles = ["(a)", "(b)", "(c)", "(d)"]
     for ax, row_title in zip(axs[:,0], row_titles):
         ax.text(-0.2, 0.5, row_title, transform=ax.transAxes, ha="right", va="center", rotation=90, fontsize=14)
 
+    fig.suptitle(f"Mixed protocol with {formatted_parameters}")
     fig.savefig(f"mixed_protocol_t_trunc{t_trunc}.png")
 
     # Plot with only final results
@@ -481,9 +483,95 @@ def mixed_protocol(cutoff=False):
         axs2[2].plot(np.arange(t_trunc), remove_unstable_werner(pmf_span3_dist3_cut, w_span3_dist3_cut), label='With cutoff')
         axs2[2].legend()
 
+    fig2.suptitle(f"Mixed protocol with {formatted_parameters}")
     plt.tight_layout()
-    plt.subplots_adjust(left=0.1, hspace=0.1)
     fig2.savefig(f"mixed_protocol_final_t_trunc{t_trunc}.png")
+
+
+def mixed_protocol_comp():
+    """
+
+    """
+    t_cohs = [200, 400, 800]
+
+    parameters = {
+        "p_gen": 0.1,
+        "p_swap": 0.5,
+        "w0": 0.85,
+        "t_trunc": 3000,
+    }
+    formatted_parameters = ', '.join([f"{key}={value}" for key, value in parameters.items()])
+
+    p_gen = parameters["p_gen"]
+    t_trunc = parameters["t_trunc"]
+    w0 = parameters["w0"]
+
+    simulator = RepeaterChainSimulation()
+
+    colors = ['blue', 'red']
+    rows = 3
+    fig, axs = plt.subplots(rows, 1, figsize=(15, 4*rows), sharex=True)
+
+    for index, t_coh in enumerate(t_cohs):
+        parameters["t_coh"] = t_coh
+
+        ############################
+        # Part1
+        # Generate entanglement link for all qubits pairs between AB, BC and CD
+        pmf_span1_dist1 = np.concatenate(
+            (np.array([0.]),  # generation needs at least one step.
+            p_gen * (1 - p_gen)**(np.arange(1, t_trunc) - 1))
+            )
+        w_span1_dist1 = w0 * np.ones(t_trunc)  # initial werner parameter
+
+        ############################
+        # Part2: Between A and B, we distill the entanglement twice.
+        # We first distill A1-B1 and A2-B2, save the result in A1-B1
+        pmf_span1_dist2, w_span1_dist2 = simulator.compute_unit(
+            parameters, pmf_span1_dist1, w_span1_dist1, unit_kind="dist")
+
+        # We then distill A1-B1 and A3-B3, obtain a single link A-B
+        pmf_span1_dist3, w_span1_dist3 = simulator.compute_unit(
+            parameters, pmf_span1_dist2, w_span1_dist2,
+            pmf_span1_dist1, w_span1_dist1, unit_kind="dist")
+
+        ############################
+        # Part3: Among B, C and D. Performed simultaneously as part2
+        # We first connect all elementary links between B-C and C-D, and then distill.
+        # We begin from swap between B-C and C-D, for all 3 pairs of elementary link.
+        pmf_span2_dist1, w_span2_dist1 = simulator.compute_unit(
+            parameters, pmf_span1_dist1, w_span1_dist1, unit_kind="swap")
+        
+        axs[index].plot(np.arange(t_trunc), remove_unstable_werner(pmf_span2_dist1, w_span2_dist1), color=colors[0], label=f'Before distillation')
+        axs[index].set_ylim([0, 1])
+
+        # When B1-D1, B2-D2 and prepared, we distill them
+        pmf_span2_dist2, w_span2_dist2 = simulator.compute_unit(
+            parameters, pmf_span2_dist1, w_span2_dist1, unit_kind="dist")
+
+        # When B3-D3 is ready, we merge it too with distillation to obtain
+        # a single link between B and D
+        # Here we add a cutoff on the memory storage time to increase the fidelity,
+        # at the cost of a longer waiting time.
+        pmf_span2_dist3, w_span2_dist3 = simulator.compute_unit(
+            parameters, pmf_span2_dist2, w_span2_dist2,
+            pmf_span2_dist1, w_span2_dist1, unit_kind="dist")
+
+        axs[index].plot(np.arange(t_trunc), remove_unstable_werner(pmf_span2_dist3, w_span2_dist3), color=colors[1], label=f'After distillation')
+        axs[index].set_ylim([0, 1])
+
+    for ax in axs.flat:
+        ax.legend()
+
+    plt.tight_layout()
+    plt.subplots_adjust(left=0.1, top=0.94, hspace=0.1)
+
+    row_titles = ["t_coh = 400", "t_coh = 800", "t_coh = 1600"]
+    for ax, row_title in zip(axs, row_titles):
+        ax.text(-0.05, 0.5, row_title, transform=ax.transAxes, ha="right", va="center", rotation=90, fontsize=14)
+
+    fig.suptitle(f"Mixed protocol, distillation comparison, with {formatted_parameters}")
+    fig.savefig(f"mixed_protocol_dist_comp_t_trunc{t_trunc}.png")
 
 
 def optimize_cutoff_time():
@@ -629,6 +717,7 @@ def run_trunc_experiments():
 if __name__ == "__main__":
     # swap_protocol()
     mixed_protocol()
+    # mixed_protocol_comp()
     # optimize_cutoff_time()
     # plot_protocol_func(protocol_func=entanglement_swap)
     # plot_protocol_func(protocol_func=entanglement_dist)
