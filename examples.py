@@ -33,10 +33,10 @@ from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algor
 from repeater_mc import repeater_mc, plot_mc_simulation
 from optimize_cutoff import CutoffOptimizer
 from logging_utilities import (
-    log_init, log_params, log_finish, create_iter_kwargs, save_data)
-from utility_functions import secret_key_rate
+    log_init, log_params, log_finish, create_iter_kwargs, save_data, load_data)
+from utility_functions import secret_key_rate, pmf_to_cdf
+from distillation_levels import save_plot, plot_pmf_cdf_werner
 
-from utility_functions import pmf_to_cdf
 from matplotlib.ticker import MaxNLocator
 import itertools
 
@@ -166,14 +166,66 @@ def entanglement_dist(p_gen=0.5, p_swap=0.5, w_0=0.99, t_trunc=20):
     }
 
     pmf, w_func = repeater_sim(parameters)
-    t = 0
-    # Remove unstable Werner parameter,
-    # because the the probability mass is too low 10^(-22)
-    while(pmf[t] < 1.0e-17):
-        w_func[t] = np.nan
-        t += 1
     return pmf, w_func
 
+
+def entanglement_dist_no_decoherence():
+    p_gen = 0.5
+    p_swap = 0.5
+    w_0 = 0.9
+    t_trunc = 300
+
+    test_protocols = {
+        (): "only generation",
+        (1,): "distillation after generation",
+        (1, 1): "two distillations after generation",
+        (0,): "only swapping",
+        (1, 0): "distillation after generation, then swap",
+        (0, 1): "swap after generation, then distillation",
+    }
+
+    results = []
+
+    for i, protocol in enumerate(test_protocols.keys()):
+        parameters = {
+            # not setting the coherence time allows for an easy analytical solution
+            "protocol": protocol,
+            "p_gen": p_gen,
+            "p_swap": p_swap,
+            "w0": w_0,
+            "t_trunc": t_trunc,
+         }
+
+        pmf, w_func = repeater_sim(parameters)
+        cdf = pmf_to_cdf(pmf)
+
+        fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+        plot_pmf_cdf_werner(pmf, w_func, t_trunc//20, axs, i, full_werner=False)
+        parameters["t_coh"] = "None"
+        save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, rate=None, 
+                exp_name=f"{test_protocols[protocol]}")
+    
+        results.append({
+            "protocol": protocol,
+            "secret_key_rate": secret_key_rate(pmf, w_func),
+            "pmf": pmf,
+            "cdf": cdf,
+            "w_func": w_func
+        })
+
+        print(f"""Protocol {protocol}:
+              t_1:      PMF: {pmf[1]:.5f}, CDF: {cdf[1]:.5f}, Werner: {w_func[1]:.5f}
+              t_2:      PMF: {pmf[2]:.5f}, CDF: {cdf[2]:.5f}, Werner: {w_func[2]:.5f}
+              t_3:      PMF: {pmf[3]:.5f}, CDF: {cdf[3]:.5f}, Werner: {w_func[3]:.5f}
+              t_10:     PMF: {pmf[10]:.5f}, CDF: {cdf[10]:.5f}, Werner: {w_func[10]:.5f}
+              t_50:     PMF: {pmf[50]:.5f}, CDF: {cdf[50]:.5f}, Werner: {w_func[50]:.5f}
+        """)
+
+    logging.getLogger().level = logging.EXP
+    filename = f"distillation_analytical_test_{protocol}"
+    save_data(filename, results)
+
+    return results
 
 def plot_protocol_func(protocol_func=entanglement_swap):
     t_trunc = 30000
@@ -497,12 +549,13 @@ def mixed_protocol_comp():
     parameters = {
         "p_gen": 0.1,
         "p_swap": 0.5,
-        "w0": 0.85,
+        "w0": 0.9999,
         "t_trunc": 3000,
     }
     formatted_parameters = ', '.join([f"{key}={value}" for key, value in parameters.items()])
 
     p_gen = parameters["p_gen"]
+    p_swap = parameters["p_swap"]
     t_trunc = parameters["t_trunc"]
     w0 = parameters["w0"]
 
@@ -543,7 +596,6 @@ def mixed_protocol_comp():
             parameters, pmf_span1_dist1, w_span1_dist1, unit_kind="swap")
         
         axs[index].plot(np.arange(t_trunc), remove_unstable_werner(pmf_span2_dist1, w_span2_dist1), color=colors[0], label=f'Before distillation')
-        axs[index].set_ylim([0, 1])
 
         # When B1-D1, B2-D2 and prepared, we distill them
         pmf_span2_dist2, w_span2_dist2 = simulator.compute_unit(
@@ -558,7 +610,6 @@ def mixed_protocol_comp():
             pmf_span2_dist1, w_span2_dist1, unit_kind="dist")
 
         axs[index].plot(np.arange(t_trunc), remove_unstable_werner(pmf_span2_dist3, w_span2_dist3), color=colors[1], label=f'After distillation')
-        axs[index].set_ylim([0, 1])
 
     for ax in axs.flat:
         ax.legend()
@@ -571,7 +622,7 @@ def mixed_protocol_comp():
         ax.text(-0.05, 0.5, row_title, transform=ax.transAxes, ha="right", va="center", rotation=90, fontsize=14)
 
     fig.suptitle(f"Mixed protocol, distillation comparison, with {formatted_parameters}")
-    fig.savefig(f"mixed_protocol_dist_comp_t_trunc{t_trunc}.png")
+    fig.savefig(f"m_dist_cmp_pgen{p_gen}_pswap{p_swap}_w{w0}_.png")
 
 
 def optimize_cutoff_time():
@@ -664,7 +715,7 @@ def no_trunc_swap():
 '''
 Get in input a set of parameters and return the truncation time to cover 99.7% of the distribution
 '''
-def trunc_experiment(parameters):
+def trunc_experiment(parameters, epsilon=0.01):
     trunc_to_coverage = {}
     
     levels = len(parameters["protocol"]) if isinstance(parameters["protocol"], (tuple)) else 1
@@ -681,7 +732,7 @@ def trunc_experiment(parameters):
 
         trunc_to_coverage[t_trunc] = coverage
 
-        if coverage > 0.997:
+        if coverage > (1-epsilon):
             return trunc_to_coverage 
 
 def plot_trunc_to_coverage(trunc_to_coverage, parameters):
@@ -697,13 +748,23 @@ def plot_trunc_to_coverage(trunc_to_coverage, parameters):
     filename = f"{len(parameters['protocol'])}level_gen{parameters['p_gen']}_swap{parameters['p_swap']}.png"
     plt.savefig(filename)
 
+
+def compute_analytical_bound(parameters, epsilon=0.01):
+    p_gen = parameters["p_gen"]
+    p_swap = parameters["p_swap"]
+    levels = len(parameters["protocol"]) if isinstance(parameters["protocol"], (tuple)) else 1
+
+    bound = int(((2/p_swap)**(levels)) * (1 / p_gen) * (1 / epsilon))
+    return bound
+
+
 def run_trunc_experiments():
-    protocols = [(), (0,), (0, 0), (0, 0, 0), (0, 0, 0, 0)]
+    protocols = [()]
     p_gens = [0.1, 0.01]
     p_swaps = [0.1, 0.01]
 
     all_combinations = itertools.product(protocols, p_gens, p_swaps)
-
+    comparisons = []
     for protocol, p_gen, p_swap in all_combinations:
         parameters = {
             "protocol": protocol,
@@ -711,14 +772,26 @@ def run_trunc_experiments():
             "p_swap": p_swap,
             "w0": 0.98,
         }
+        analytical_bound = compute_analytical_bound(parameters)
         trunc_to_coverage = trunc_experiment(parameters)
+
+        experimental_trunc = sorted(trunc_to_coverage.keys())[-1]
+        comparisons.append((parameters, analytical_bound, experimental_trunc))
+        
         plot_trunc_to_coverage(trunc_to_coverage, parameters)
 
+    logging.getLogger().level = logging.EXP
+    filename = f"{len(parameters['protocol'])}level_gen{parameters['p_gen']}_swap{parameters['p_swap']}"
+    save_data(filename, comparisons)
+
+import pandas as pd
 if __name__ == "__main__":
     # swap_protocol()
-    mixed_protocol()
+    # mixed_protocol()
     # mixed_protocol_comp()
     # optimize_cutoff_time()
     # plot_protocol_func(protocol_func=entanglement_swap)
     # plot_protocol_func(protocol_func=entanglement_dist)
     # run_trunc_experiments()
+    entanglement_dist_no_decoherence()
+        
