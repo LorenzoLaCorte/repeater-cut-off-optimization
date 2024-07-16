@@ -1,9 +1,9 @@
 """
-... % explain the purpose of this example module
+This script is used to run simulations to compare different quantum repeater protocols 
+and visualize the performance of these protocols under various conditions. 
+We perform some manual steps, calling the unit protocols, to understand the evolution of the distributions given in output
+We also get some insights on the comparison between different paramters' regimes
 """
-
-import logging
-import time
 
 import matplotlib.pyplot as plt
 colorblind_palette = [

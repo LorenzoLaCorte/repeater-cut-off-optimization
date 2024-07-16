@@ -1,9 +1,8 @@
 """
-... % explain the purpose of this example module
+This script is used to run simulations to compare different quantum repeater protocols 
+and visualize the performance of these protocols under various conditions. 
+We are trying to compare strategies for distillation, which include distill-as-fast-as-possible and swap-as-fast-as-possible
 """
-
-import logging
-import time
 
 import matplotlib.pyplot as plt
 colorblind_palette = [
@@ -161,10 +160,10 @@ if __name__ == "__main__":
         A costant line is added to benchmark the protocol in the case where no distillation is applied.
     """
     parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 100000, 
-                    "t_coh": 400, "w0": 0.85}
+                    "t_coh": 400, "w0": 0.9}
     
     SWAPS = range(1, 4)
-    DISTS = range(1, 10, 4)
+    DISTS = range(1, 8, 2)
 
     MAX_SWAPS = SWAPS.stop
     MAX_DISTS = DISTS.stop

@@ -1,9 +1,8 @@
 """
-... % explain the purpose of this example module
+This script is used to run simulations to compare different quantum repeater protocols 
+and visualize the performance of these protocols under various conditions. 
+We are trying to compare strategies for distillation, and in particular to check at which level it is better to distill
 """
-
-import logging
-import time
 
 import matplotlib.pyplot as plt
 colorblind_palette = [
