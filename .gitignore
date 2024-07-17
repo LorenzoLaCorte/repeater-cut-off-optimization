@@ -10,7 +10,6 @@
 *.pyc
 *.npy
 *.pdf
-*.png
 .cache/v/cache/lastfailed
 /.ipynb_checkpoints
 

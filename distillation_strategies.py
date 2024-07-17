@@ -30,6 +30,11 @@ from utility_functions import pmf_to_cdf
 from matplotlib.ticker import MaxNLocator
 
 
+def index_lowercase_alphabet(i):
+    """
+    Takes in input an integer i and returns the corresponding lowercase letter in the alphabet.
+    """
+    return chr(i + 97)
 
 def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     """
@@ -198,7 +203,7 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
             ax.legend()
 
     title_params = f"p_gen = {parameters['p_gen']}, p_swap = {parameters['p_swap']}, t_coh = {parameters['t_coh']}"
-    row_titles = [f"w0 = {parameters['w0']}" for parameters in parameters_set] if len(parameters_set) > 1 else None
+    row_titles = [f"({index_lowercase_alphabet(idx)}) w0 = {parameters['w0']}" for idx, parameters in enumerate(parameters_set)] if len(parameters_set) > 1 else None
     save_plot(fig=fig, axs=axs, row_titles=row_titles, parameters=parameters, 
               rate=None, exp_name="distillation_strategies", general_title=title_params)
     
