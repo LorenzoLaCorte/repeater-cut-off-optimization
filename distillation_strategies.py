@@ -51,7 +51,7 @@ def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     return new_w_func
 
 
-def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False):
+def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False, general_title=None):
     """
     Formats the input figure and axes.
     """
@@ -68,20 +68,16 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
         if legend:
             axs[-1].legend()
 
-    title_params = f"p_gen = {parameters['p_gen']}, p_swap = {parameters['p_swap']}, w0 = {parameters['w0']}, t_coh = {parameters['t_coh']}"
-    title = f"protocol with {exp_name.replace('_', ' ')} - {title_params}"
-    if rate is not None:
-        title += f" - R = {rate}"
-    fig.suptitle(title)
-
+    if general_title is not None:
+        fig.suptitle(general_title)
 
     if row_titles is not None:
-        for ax, row_title in zip(axs[:,0], row_titles):
-            ax.text(-0.2, 0.5, row_title, transform=ax.transAxes, ha="right", va="center", rotation=90, fontsize=14)
+        for ax, row_title in zip(axs[:,-1], row_titles):
+            ax.text(1.075, 0.5, row_title, transform=ax.transAxes, ha="left", va="center", rotation=90, fontsize=14)
 
-    left_space = 0.1 if row_titles is not None else 0.06
+    right_space = 0.95 if row_titles is not None else 0.975
     plt.tight_layout()
-    plt.subplots_adjust(left=left_space, top=(0.75 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
+    plt.subplots_adjust(right=right_space, top=(0.75 + axs.shape[0]*0.075), hspace=0.2*axs.shape[0])
 
     fig.savefig(f"{exp_name}.png")
     
@@ -152,54 +148,64 @@ def get_protocol(number_of_swaps, number_of_dists, where_to_distill=None):
     
     return tuple(protocol)
 
-if __name__ == "__main__":
+def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 100000, 
+                                    "t_coh": 400, "w0": 0.9}]):
     """
         For a set of parameters we test different protocols to compare distillation strategies.
         On the x-axis we have the step at which the distillation is applied.
         On the y-axis we have the rate for the protocol.
         A costant line is added to benchmark the protocol in the case where no distillation is applied.
     """
-    parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 100000, 
-                    "t_coh": 400, "w0": 0.9}
-    
     SWAPS = range(1, 4)
-    DISTS = range(1, 8, 2)
+    DISTS = range(1, 6, 2)
+    fig, axs = plt.subplots(len(parameters_set), len(SWAPS), figsize=(15, 4*len(parameters_set)))
 
-    MAX_SWAPS = SWAPS.stop
-    MAX_DISTS = DISTS.stop
-    
-    print(f"Parameters: {parameters}")
+    for i, parameters in enumerate(parameters_set):
+        print(f"\nParameters: {parameters}")
 
-    fig, axs = plt.subplots(1, len(SWAPS), figsize=(15, 5))
-
-    for i, number_of_swaps in enumerate(SWAPS):
-        print(f"\n{number_of_swaps}-level(s) of swapping...")
-    
-        protocol = get_protocol(number_of_swaps=number_of_swaps, number_of_dists=0)
-        parameters["protocol"] = protocol
-        print(f"Protocol {protocol},\t r = {get_protocol_rate(parameters)}") # DEBUG
-        benchmark = get_protocol_rate(parameters)
-
-        for number_of_dists in DISTS:
-            plot_results = []
-            print() # DEBUG 
-
-            for where_to_distill in range(0, number_of_swaps+1):
-                protocol = get_protocol(number_of_swaps=number_of_swaps, number_of_dists=number_of_dists, 
-                                            where_to_distill=where_to_distill)
-                parameters["protocol"] = protocol
-
-                plot_results.append(get_protocol_rate(parameters))
-                print(f"Protocol {protocol},\t r = {get_protocol_rate(parameters)}") # DEBUG
+        for j, number_of_swaps in enumerate(SWAPS):
+            print(f"\n{number_of_swaps}-level(s) of swapping...")
         
-            axs[i].plot(np.arange(number_of_swaps+1), np.array(plot_results), 
-                        label=f"{number_of_dists} {'distillations' if number_of_dists > 1 else 'distillation'}")
+            protocol = get_protocol(number_of_swaps=number_of_swaps, number_of_dists=0)
+            parameters["protocol"] = protocol
+            print(f"Protocol {protocol},\t r = {get_protocol_rate(parameters)}") # DEBUG
+            benchmark = get_protocol_rate(parameters)
 
-        axs[i].axhline(y=benchmark, color='r', linestyle='--', label="No distillation")
-        axs[i].set_xlabel("Level at which distillation is applied")
-        axs[i].set_ylabel("Secret Key Rate")
-        axs[i].set_title(f"{number_of_swaps} {'swaps' if number_of_swaps > 1 else 'swap'}")
-        axs[i].legend()
+            if axs.ndim == 1:
+                ax = axs[j]
+            else:
+                ax = axs[i, j]
 
-    save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
-              rate=None, exp_name="distillation_strategies")
+            for number_of_dists in DISTS:
+                plot_results = []
+                print() # DEBUG 
+
+                for where_to_distill in range(0, number_of_swaps+1):
+                    protocol = get_protocol(number_of_swaps=number_of_swaps, number_of_dists=number_of_dists, 
+                                                where_to_distill=where_to_distill)
+                    parameters["protocol"] = protocol
+
+                    plot_results.append(get_protocol_rate(parameters))
+                    print(f"Protocol {protocol},\t r = {get_protocol_rate(parameters)}") # DEBUG
+            
+                ax.plot(np.arange(number_of_swaps+1), np.array(plot_results), 
+                            label=f"{number_of_dists} {'distillations' if number_of_dists > 1 else 'distillation'}")
+
+            ax.axhline(y=benchmark, color='r', linestyle='--', label="No distillation")
+            ax.set_xlabel("Nesting level at which distillation is applied")
+            ax.set_ylabel("Secret Key Rate")
+            ax.set_title(f"{number_of_swaps} {'swaps' if number_of_swaps > 1 else 'swap'}")
+            ax.legend()
+
+    title_params = f"p_gen = {parameters['p_gen']}, p_swap = {parameters['p_swap']}, t_coh = {parameters['t_coh']}"
+    row_titles = [f"w0 = {parameters['w0']}" for parameters in parameters_set] if len(parameters_set) > 1 else None
+    save_plot(fig=fig, axs=axs, row_titles=row_titles, parameters=parameters, 
+              rate=None, exp_name="distillation_strategies", general_title=title_params)
+    
+if __name__ == "__main__":
+    parameters_set = [
+        {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 50000, "t_coh": 600, "w0": 0.9},
+        {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 50000, "t_coh": 600, "w0": 0.99999}     
+        ]
+    
+    sim_distillation_strategies(parameters_set)
