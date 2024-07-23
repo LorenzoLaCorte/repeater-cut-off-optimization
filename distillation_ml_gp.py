@@ -229,7 +229,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_swaps", type=int, default=5, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=10, help="Maximum amount of distillations to be performed")
-    parser.add_argument("--gp_shots", type=int, default=50, help="Number of shots for Gaussian Process")
+    parser.add_argument("--gp_shots", type=int, default=100, help="Number of shots for Gaussian Process")
     parser.add_argument("--gp_initial_points", type=int, default=20, help="Number of initial points for Gaussian Process")
     parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
     
@@ -247,21 +247,21 @@ if __name__ == "__main__":
 
     parameters_set = [
         {
-            "t_coh": 600,
-            "p_gen": 0.9,
-            "p_swap": 0.9,
+            "t_coh": 10000,
+            "p_gen": 0.5,
+            "p_swap": 0.5,
             "w0": 0.9
         },
         {
-            "t_coh": 600,
-            "p_gen": 0.9,
-            "p_swap": 0.9,
+            "t_coh": 10000,
+            "p_gen": 0.5,
+            "p_swap": 0.5,
             "w0": 0.99
         },
         {
-            "t_coh": 600,
-            "p_gen": 0.9,
-            "p_swap": 0.9,
+            "t_coh": 10000,
+            "p_gen": 0.5,
+            "p_swap": 0.5,
             "w0": 0.999
         }
     ]
