@@ -161,25 +161,17 @@ def get_protocol(number_of_swaps, number_of_dists, where_to_distill=None):
     return tuple(protocol)
 
 
-def get_t_trunc(p_gen, p_swap, w0, t_coh, swaps, dists, where_to_distill):
+def get_t_trunc(p_gen, p_swap, w0, t_coh, swaps, dists, where_to_distill, epsilon=0.01):
     """
     TODO: this is very unprecise and should be improved, especially in the distillation case.
     Returns the truncation time based on a lower bound of what is sufficient to reach 99% of the simulation cdf.
     """
-    t_trunc = int((2/p_swap)**(swaps) * (1/p_gen)) # not considering distillation
-    # t_trunc *= t_coh # maybe required 
+    t_trunc = int((2/p_swap)**(swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
 
-    decoherence_factor = np.exp(-t_trunc / t_coh)
-    if dists != 0:
-        w = w0
-        for i in range(dists):
-            p_dist = (1+w*w) / 2
-            w = (2*w + 4*w*w) / (6*p_dist) * decoherence_factor
-            
-        t_trunc *= (1/p_dist)**(dists) # considering distillation
-        t_trunc *= (1/p_dist)**(where_to_distill) # very rough approximation
+    p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
+    t_trunc *= (1/p_dist)**(dists+where_to_distill) # considering distillation, but very unprecise
 
-    t_trunc = min(max(10000, int(t_trunc)), t_coh * 300)
+    t_trunc = min(max(t_coh, t_trunc//10), t_coh * 300)
     return int(t_trunc)
 
 
@@ -199,11 +191,13 @@ def sim_distillation_strategies(number_of_dists, where_to_distill):
     protocol = get_protocol(number_of_swaps=number_of_swaps, number_of_dists=number_of_dists, 
                                             where_to_distill=where_to_distill)
     parameters["protocol"] = protocol
-    secret_key_rate = get_protocol_rate(parameters)
-    print(f"Protocol {protocol},\t r = {secret_key_rate}")
-    
-    return secret_key_rate
 
+    print(f"\nRunning: {parameters}")
+    pmf, w_func = repeater_sim(parameters)
+
+    rate = secret_key_rate(pmf, w_func, parameters["t_trunc"])
+    print(f"Protocol {protocol},\t r = {rate}")
+    return rate, pmf, w_func
 
 
 def single_test(): 
@@ -213,17 +207,21 @@ def single_test():
      ```py -c "from distillation_ml_gp import single_test; single_test()"```
     """
     parameters = {
-                    "t_coh": 200,
+                    "t_coh": 10000,
                     "p_gen": 0.999,
-                    "p_swap": 0.4,
+                    "p_swap": 0.999,
                     "w0": 0.999,
-                    "t_trunc": 200*300
+                    "t_trunc": 10000*300
                 }
-    parameters["protocol"] = (0, 1, 1, 0, 0)
+    parameters["protocol"] = (0,0,0,0,1,1,1,1,1,1,1,1,1,1,0)
     print(get_protocol_rate(parameters))    
 
 
-# TODO: add in the process a count of the times cdf < 0.99 and the average percentage reached by simulations
+class ThresholdExceededError(Exception):
+    def __init__(self, message="CDF under threshold count incremented", extra_info=None):
+        super().__init__(message)
+        self.extra_info = extra_info
+        
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
@@ -245,20 +243,34 @@ if __name__ == "__main__":
     gp_initial_points: int = args.gp_initial_points
     filename: str = args.filename
 
+    cdf_threshold = 0.99
+
     parameters_set = [
         {
-            "t_coh": 10**4,
-            "p_gen": 0.5,
-            "p_swap": 0.5,
+            "t_coh": 600,
+            "p_gen": 0.9,
+            "p_swap": 0.9,
             "w0": 0.9
+        },
+        {
+            "t_coh": 600,
+            "p_gen": 0.9,
+            "p_swap": 0.9,
+            "w0": 0.99
+        },
+        {
+            "t_coh": 600,
+            "p_gen": 0.9,
+            "p_swap": 0.9,
+            "w0": 0.999
         }
     ]
 
     with open(filename, 'w') as file:
         file.write(f"From {min_swaps} to {max_swaps} swaps\nFrom {min_dists} to {max_dists} distillations\n")
-        file.write(f"Gaussian process with {gp_shots} evaluations and {gp_initial_points} initial points\n")
+        file.write(f"Gaussian process with {gp_shots} evaluations and {gp_initial_points} initial points\n\n")
 
-    for parameters in parameters_set: 
+    for idx, parameters in enumerate(parameters_set): 
         best_results = {}
 
         for number_of_swaps in range(min_swaps, max_swaps+1):
@@ -278,22 +290,30 @@ if __name__ == "__main__":
                 number_of_dists = params['number_of_dists']
                 where_to_distill = params['where_to_distill']
                 
-                secret_key_rate = sim_distillation_strategies(number_of_dists, where_to_distill)
+                secret_key_rate, pmf, _ = sim_distillation_strategies(number_of_dists, where_to_distill)
+                
+                cdf_coverage = pmf_to_cdf(pmf)[-1]
+                if cdf_coverage < cdf_threshold:
+                    raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})                
                 
                 # The gaussian process minimizes the function, so return the negative of the key rate 
                 return -secret_key_rate
 
-            result = gp_minimize(objective, space, n_calls=gp_shots, n_initial_points=gp_initial_points, random_state=0)
-
+            try:
+                result = gp_minimize(objective, space, n_calls=gp_shots, n_initial_points=gp_initial_points, random_state=0)
+            except ThresholdExceededError as e:
+                best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
+                continue
+                
             # Get the best parameters and score from results 
             best_parameters = result.x
             best_score = -result.fun
 
-            best_results[number_of_swaps] = (best_parameters, best_score)
+            best_results[number_of_swaps] = (best_parameters, best_score, None)
         
         with open(filename, 'a') as file:
             output = (
-                    f"Protocol parameters:\n"
+                    f"\nProtocol parameters:\n"
                     f"{{\n"
                     f"    't_coh': {parameters['t_coh']},\n"
                     f"    'p_gen': {parameters['p_gen']},\n"
@@ -301,13 +321,21 @@ if __name__ == "__main__":
                     f"    'w0': {parameters['w0']}\n"
                     f"}}\n\n")
             
-            for number_of_swaps, (best_parameters, best_score) in best_results.items():
-                output += (
-                    f"Best configuration for {number_of_swaps} swaps:\n"
-                    f"    No. of distillations: {best_parameters[0]},\n"
-                    f"    After how many swaps is best to distill: {best_parameters[1]}\n"
-                    f"    Best Protocol: {get_protocol(number_of_swaps, best_parameters[0], best_parameters[1])}\n"
-                    f"    Best secret key rate: {best_score}\n\n"
-                )
+            for number_of_swaps, (best_parameters, best_score, error_coverage) in best_results.items():
+                if best_parameters is None:
+                    output += (
+                        f"CDF under threshold for {number_of_swaps} swaps:\n"
+                        f"    CDF coverage: {error_coverage*100}%\n\n"
+                    )
+                else:
+                    best_dists = best_parameters[0]
+                    best_dist_level = best_parameters[1]
+                    output += (
+                        f"Best configuration for {number_of_swaps} swaps:\n"
+                        f"    No. of distillations: {best_dists},\n"
+                        f"    After how many swaps is best to distill: {best_dist_level}\n"
+                        f"    Best Protocol: {get_protocol(number_of_swaps, best_dists, best_dist_level)}\n"
+                        f"    Best secret key rate: {best_score}\n\n"
+                    )
             
             file.write(output)
