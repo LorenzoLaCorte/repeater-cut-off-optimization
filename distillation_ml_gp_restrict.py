@@ -4,8 +4,11 @@ This script is used to test the performance of different distillation strategies
 """
 
 from argparse import ArgumentParser, Namespace
+import logging
 
+from matplotlib import cm
 import matplotlib.pyplot as plt
+import pandas as pd
 colorblind_palette = [
     "#0072B2",
     "#E69F00",
@@ -22,9 +25,11 @@ from matplotlib.ticker import MaxNLocator
 import copy
 import numpy as np
 
-from skopt import gp_minimize
+from skopt import gp_minimize, dummy_minimize
 from skopt.space import Integer
 from skopt.utils import use_named_args
+
+from distillation_ml_plots import plot_objective, plot_convergence
 
 from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algorithm
 from logging_utilities import (
@@ -92,41 +97,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
     fig.savefig(f"{exp_name}.png")
     
 
-def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
-    """
-    Plots (on the input axs) the PMF, CDF, and Werner parameter arrays (one row of subplots),
-    making deep copies of the input arrays to ensure the originals are not modified.
-    """
-    assert len(pmf) >= trunc, "The length of pmf must be larger or equal to t_trunc"
 
-    pmf_copy = copy.deepcopy(pmf)[:trunc]
-    w_func_copy = copy.deepcopy(w_func)[:trunc]
-
-    w_func_copy[0] = np.nan
-    cdf = pmf_to_cdf(pmf_copy)
-    
-    plot_data = {
-        "PMF": pmf_copy,
-        "CDF": cdf,
-        "Werner parameter": remove_unstable_werner(pmf_copy, w_func_copy)
-    }
-    
-    plot_axs = axs[row] if axs.ndim == 2 else axs  # handle both 1D and 2D axes arrays
-    
-    for title, data in plot_data.items():
-        ax = plot_axs[list(plot_data.keys()).index(title)]
-        if label is not None and title == "Werner parameter":
-            ax.plot(np.arange(trunc), data, label=label)
-        else:
-            ax.plot(np.arange(trunc), data)
-        ax.set_xlabel("Waiting Time")
-        ax.set_title(title)
-        if title == "Werner parameter":
-            if full_werner:
-                ax.set_ylim([0, 1])
-            ax.set_ylabel("Werner parameter")            
-        else:
-            ax.set_ylabel("Probability")
 
 
 def get_protocol_rate(parameters):
@@ -175,7 +146,7 @@ def get_t_trunc(p_gen, p_swap, w0, t_coh, swaps, dists, where_to_distill, epsilo
     return int(t_trunc)
 
 
-def sim_distillation_strategies(number_of_dists, where_to_distill):
+def sim_distillation_strategies(parameters, number_of_swaps, number_of_dists, where_to_distill):
     """
         Fixed parameters:
             - number of swaps
@@ -221,51 +192,15 @@ class ThresholdExceededError(Exception):
     def __init__(self, message="CDF under threshold count incremented", extra_info=None):
         super().__init__(message)
         self.extra_info = extra_info
-        
-if __name__ == "__main__":
-    parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
-    parser.add_argument("--max_swaps", type=int, default=5, help="Maximum number of swaps")
-    parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=10, help="Maximum amount of distillations to be performed")
-    parser.add_argument("--gp_shots", type=int, default=100, help="Number of shots for Gaussian Process")
-    parser.add_argument("--gp_initial_points", type=int, default=20, help="Number of initial points for Gaussian Process")
-    parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
-    
-    args: Namespace = parser.parse_args()
-    
-    min_swaps: int = args.min_swaps
-    max_swaps: int = args.max_swaps
-    min_dists: int = args.min_dists
-    max_dists: int = args.max_dists
-    gp_shots: int = args.gp_shots
-    gp_initial_points: int = args.gp_initial_points
-    filename: str = args.filename
 
-    cdf_threshold = 0.99
-
-    parameters_set = [
-        {
-            "t_coh": 10000,
-            "p_gen": 0.5,
-            "p_swap": 0.5,
-            "w0": 0.9
-        },
-        {
-            "t_coh": 10000,
-            "p_gen": 0.5,
-            "p_swap": 0.5,
-            "w0": 0.99
-        },
-        {
-            "t_coh": 10000,
-            "p_gen": 0.5,
-            "p_swap": 0.5,
-            "w0": 0.999
-        }
-    ]
-
+def gaussian_optimization(parameters_set, min_swaps, max_swaps, min_dists, max_dists, gp_shots, gp_initial_points, filename):
+    """
+    This function is used to test the performance of different distillation strategies in an extensive way, 
+    by using a Gaussian Process to optimize 
+        - the number of distillations
+        - the nesting level at which is applied.
+    """
     with open(filename, 'w') as file:
         file.write(f"From {min_swaps} to {max_swaps} swaps\nFrom {min_dists} to {max_dists} distillations\n")
         file.write(f"Gaussian process with {gp_shots} evaluations and {gp_initial_points} initial points\n\n")
@@ -276,8 +211,8 @@ if __name__ == "__main__":
         for number_of_swaps in range(min_swaps, max_swaps+1):
             print(f"\n\nNumber of swaps: {number_of_swaps}")
             space = [
-                Integer(min_dists, max_dists, name='number_of_dists'), 
-                Integer(0, number_of_swaps, name='where_to_distill')
+                Integer(min_dists, max_dists, name='rounds of distillation'), 
+                Integer(0, number_of_swaps, name='after how many swaps we distill')
             ]
             
             @use_named_args(space)
@@ -287,10 +222,11 @@ if __name__ == "__main__":
                     returning a negative secret key rate
                     in order for the optimizer to maximize the function.
                 """
-                number_of_dists = params['number_of_dists']
-                where_to_distill = params['where_to_distill']
+                number_of_dists = params['rounds of distillation']
+                where_to_distill = params['after how many swaps we distill']
                 
-                secret_key_rate, pmf, _ = sim_distillation_strategies(number_of_dists, where_to_distill)
+                secret_key_rate, pmf, _ = sim_distillation_strategies(parameters, number_of_swaps, 
+                                                                      number_of_dists, where_to_distill)
                 
                 cdf_coverage = pmf_to_cdf(pmf)[-1]
                 if cdf_coverage < cdf_threshold:
@@ -301,13 +237,38 @@ if __name__ == "__main__":
 
             try:
                 result = gp_minimize(objective, space, n_calls=gp_shots, n_initial_points=gp_initial_points, random_state=0)
+                result.fun = -result.fun
+                result.func_vals = [-val for val in result.func_vals]
+                
+                fig = plt.figure(figsize=(12, 6))
+                ax1 = fig.add_subplot(1, 2, 1)  # 1 row, 2 columns, 1st subplot
+                ax2 = fig.add_subplot(1, 2, 2)  # 1 row, 2 columns, 2nd subplot
+
+                plot_convergence(result, ax=ax1)
+                plot_objective(result, ax=ax2)
+
+                title = (
+                    f"Protocols with {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
+                    f"from {min_dists} to {max_dists} distillations\n"
+                    f"$p_{{gen}} = {parameters['p_gen']}, "
+                    f"p_{{swap}} = {parameters['p_swap']}, "
+                    f"w_0 = {parameters['w0']}, "
+                    f"t_{{coh}} = {parameters['t_coh']}$"
+                    f"\nBest secret-key-rate: {result.fun:.5f}, Protocol: {get_protocol(number_of_swaps, result.x[0], result.x[1])}"
+                )
+                plt.tight_layout()
+                plt.subplots_adjust(top=0.75, wspace=0.25)
+
+                fig.suptitle(title)
+                fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_ml.png')
+            
             except ThresholdExceededError as e:
                 best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
                 continue
                 
             # Get the best parameters and score from results 
             best_parameters = result.x
-            best_score = -result.fun
+            best_score = result.fun
 
             best_results[number_of_swaps] = (best_parameters, best_score, None)
         
@@ -323,6 +284,10 @@ if __name__ == "__main__":
             
             for number_of_swaps, (best_parameters, best_score, error_coverage) in best_results.items():
                 if best_parameters is None:
+                    logging.warning(
+                        "Maximal number of attempts arrived. "
+                        "Optimization fails.")
+                    print(f"CDF under threshold for {number_of_swaps} swaps")
                     output += (
                         f"CDF under threshold for {number_of_swaps} swaps:\n"
                         f"    CDF coverage: {error_coverage*100}%\n\n"
@@ -339,3 +304,49 @@ if __name__ == "__main__":
                     )
             
             file.write(output)
+
+
+if __name__ == "__main__":
+    parser: ArgumentParser = ArgumentParser()
+
+    parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
+    parser.add_argument("--max_swaps", type=int, default=5, help="Maximum number of swaps")
+    parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
+    parser.add_argument("--max_dists", type=int, default=10, help="Maximum amount of distillations to be performed")
+    parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
+    parser.add_argument("--gp_shots", type=int, default=100, help="Number of shots for Gaussian Process")
+    parser.add_argument("--gp_initial_points", type=int, default=20, help="Number of initial points for Gaussian Process")
+    parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
+    
+    args: Namespace = parser.parse_args()
+    
+    min_swaps: int = args.min_swaps
+    max_swaps: int = args.max_swaps
+    min_dists: int = args.min_dists
+    max_dists: int = args.max_dists
+    optimizer: str = args.optimizer
+    gp_shots: int = args.gp_shots
+    gp_initial_points: int = args.gp_initial_points
+    filename: str = args.filename
+
+    cdf_threshold = 0.99
+
+    parameters_set = [
+        {
+            't_coh': 40,
+            'p_gen': 0.9,
+            'p_swap': 0.9,
+            'w0': 0.867
+        },
+    ]
+
+    if optimizer == "gp":
+        gaussian_optimization(parameters_set, min_swaps, max_swaps, min_dists, max_dists, gp_shots, gp_initial_points, filename)
+    elif optimizer == "random":
+        # dummy_minimize(objective, space, n_calls=100)
+        pass
+    elif optimizer == "bruteforce":
+        # brute_force_optimization(min_swaps, max_swaps, min_dists, max_dists)
+        pass
+    else:
+        raise ValueError("Invalid optimizer")

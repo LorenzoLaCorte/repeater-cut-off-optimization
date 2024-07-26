@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 colorblind_palette = [
     "#0072B2",
     "#E69F00",
-    "#56B4E9",
     "#009E73",
+    "#56B4E9",
     "#D55E00",
     "#CC79A7",
     "#F0E442",
@@ -38,10 +38,9 @@ class DistillationType(Enum):
     """
     Enum class for the distillation type.
     """
-    DIST_L0 = (1, 0, 0)
-    DIST_L1 = (0, 1, 0)
-    DIST_L2 = (0, 0, 1)
-    NO_DISTILLATION = (0, 0)
+    DIST_SWAP = (1, 0, 0)
+    SWAP_DIST = (0, 1, 0)
+    NO_DIST = (0, 0)
 
 def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     """
@@ -80,8 +79,14 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
         if legend:
             axs[-1].legend()
 
-    title_params = f"p_gen = {parameters['p_gen']}, p_swap = {parameters['p_swap']}, w0 = {parameters['w0']}, t_coh = {parameters['t_coh']}"
-    title = f"protocol with {exp_name.replace('_', ' ')} - {title_params}"
+    title_params = (
+        f"$p_{{gen}} = {parameters['p_gen']}, "
+        f"p_{{swap}} = {parameters['p_swap']}, "
+        f"w_0 = {parameters['w0']}, "
+        f"t_{{coh}} = {parameters['t_coh']}$"
+    )
+
+    title = f"{title_params}"
     if rate is not None:
         title += f" - R = {rate}"
     fig.suptitle(title)
@@ -93,7 +98,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
 
     left_space = 0.1 if row_titles is not None else 0.06
     plt.tight_layout()
-    plt.subplots_adjust(left=left_space, top=(0.75 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
+    plt.subplots_adjust(left=left_space, top=(0.725 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
 
     fig.savefig(f"{exp_name}.png")
     
@@ -147,16 +152,17 @@ def entanglement_distillation_runner(distillation_type, parameters):
 
 
 if __name__ == "__main__":
-    parameters = {"p_gen": 0.1, "p_swap": 0.2, "t_trunc": 20000, 
-            "t_coh": 200, "w0": 0.999}
+    parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 300, 
+            "t_coh": 40, "w0": 1.}
     
-    zoom = 1
+    zoom = 10
     fig, axs = plt.subplots(1, 3, figsize=(15, 4))
     
     for dist_type in DistillationType:
         pmf, w_func = entanglement_distillation_runner(dist_type, parameters)
         plot_pmf_cdf_werner(pmf=pmf, w_func=w_func, trunc=(parameters["t_trunc"]//zoom), axs=axs, row=0, 
-                            full_werner=False, label=f"{dist_type.name.lower().replace('_', ' ')}, r = {secret_key_rate(pmf, w_func):.5f}")
+                            full_werner=False, 
+                            label=f"{dist_type.name.upper().replace('_', '-')}, r = {secret_key_rate(pmf, w_func):.5f}")
         
     save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
               rate=None, exp_name="distillation_levels", legend=True)
