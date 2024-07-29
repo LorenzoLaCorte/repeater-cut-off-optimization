@@ -1,0 +1,31 @@
+From 1 to 3 swaps
+From 0 to 7 distillations
+Bruteforce process for all the possible evaluations
+
+
+Protocol parameters:
+{
+    't_coh': 120,
+    'p_gen': 0.9,
+    'p_swap': 0.9,
+    'w0': 0.867
+}
+
+Best configuration for 1 swaps:
+    No. of distillations: 1,
+    After how many swaps is best to distill: 0
+    Best Protocol: (1, 0)
+    Best secret key rate: 0.19789096377416104
+
+Best configuration for 2 swaps:
+    No. of distillations: 3,
+    After how many swaps is best to distill: 0
+    Best Protocol: (1, 1, 1, 0, 0)
+    Best secret key rate: 0.055674454170764526
+
+Best configuration for 3 swaps:
+    No. of distillations: 5,
+    After how many swaps is best to distill: 0
+    Best Protocol: (1, 1, 1, 1, 1, 0, 0, 0)
+    Best secret key rate: 0.004828898594849708
+
