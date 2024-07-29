@@ -4,6 +4,8 @@ This script is used to test the performance of different distillation strategies
 """
 
 from argparse import ArgumentParser, Namespace
+from collections import OrderedDict
+import itertools
 import logging
 
 from matplotlib import cm
@@ -37,7 +39,9 @@ from logging_utilities import (
 
 from utility_functions import secret_key_rate
 from utility_functions import pmf_to_cdf
-    
+
+from scipy.special import binom
+
 
 def index_lowercase_alphabet(i):
     """
@@ -112,7 +116,7 @@ def get_t_trunc(p_gen, p_swap, t_coh, swaps, dists, epsilon=0.01):
     return int(t_trunc)
 
 
-def sim_distillation_strategies(parameters, number_of_swaps, number_of_dists, where_to_distill):
+def sim_distillation_strategies(parameters):
     """
         Fixed parameters:
             - number of swaps
@@ -123,7 +127,7 @@ def sim_distillation_strategies(parameters, number_of_swaps, number_of_dists, wh
         and returning the secret key rate of the strategy.
     """
     parameters["t_trunc"] = get_t_trunc(parameters["p_gen"], parameters["p_swap"], parameters["t_coh"],
-                                        number_of_swaps, number_of_dists)
+                                        parameters["protocol"].count(0), parameters["protocol"].count(1))
 
     print(f"\nRunning: {parameters}")
     pmf, w_func = repeater_sim(parameters)
@@ -170,8 +174,8 @@ def write_results(filename, parameters, best_results):
                     f"    'w0': {parameters['w0']}\n"
                     f"}}\n\n")
             
-        for number_of_swaps, (best_parameters, best_score, error_coverage) in best_results.items():
-            if best_parameters is None:
+        for number_of_swaps, (best_protocol, best_score, error_coverage) in best_results.items():
+            if best_protocol is None:
                 logging.warning(
                         "Maximal number of attempts arrived. "
                         "Optimization fails.")
@@ -181,13 +185,9 @@ def write_results(filename, parameters, best_results):
                         f"    CDF coverage: {error_coverage*100}%\n\n"
                     )
             else:
-                best_dists = best_parameters[0]
-                best_dist_level = best_parameters[1]
                 output += (
                         f"Best configuration for {number_of_swaps} swaps:\n"
-                        f"    No. of distillations: {best_dists},\n"
-                        f"    After how many swaps is best to distill: {best_dist_level}\n"
-                        f"    Best Protocol: {get_protocol(number_of_swaps, best_dists, best_dist_level)}\n"
+                        f"    Best Protocol: {best_protocol}\n"
                         f"    Best secret key rate: {best_score}\n\n"
                     )
             
@@ -219,7 +219,34 @@ def plot_results(min_dists, max_dists, parameters, number_of_swaps, result):
     fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_ml.png')
 
 
-def brute_force_optimization(parameters_set, space, min_swaps, max_swaps, min_dists, max_dists, filename):
+def get_permutation_space(min_dists, max_dists, number_of_swaps):
+    """
+    The permutation space is used to test all the possible combinations of distillations for a fixed number of swaps.
+    For each number of distillation tested, we test all the possible permutations of distillations. 
+        i.e. for 2 swaps and from 0 to 2 distillations, we test:
+        - zero distillations
+            (0, 0), 
+        - one distillation
+            (0, 0, 1), (0, 1, 0), (1, 0, 0),
+        - two distillations
+            (0, 0, 1, 1), (0, 1, 0, 1), (0, 1, 1, 0), (1, 0, 0, 1), (1, 0, 1, 0), (1, 1, 0, 0)
+    """
+    space = OrderedDict()
+    for number_of_dists in range(min_dists, max_dists + 1):
+        distillations = [1] * number_of_dists
+        swaps = [0] * number_of_swaps
+        for perm in itertools.permutations(distillations + swaps):
+            if perm.count(1) == number_of_dists:
+                space[perm] = None
+    space = list(space.keys())
+
+    analytical_permutations = int(sum([binom(number_of_swaps + dists, dists) for dists in range(min_dists, max_dists + 1)]))
+    assert len(space) == analytical_permutations, f"Expected max. {analytical_permutations} permutations, got {len(space)}"
+
+    return space
+
+
+def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, min_dists, max_dists, filename):
     """
     This function is used to test the performance of different distillation strategies
     by bruteforcing all the possible configurations and returning the maximum rate achieved.
@@ -234,32 +261,34 @@ def brute_force_optimization(parameters_set, space, min_swaps, max_swaps, min_di
         for number_of_swaps in range(min_swaps, max_swaps+1):
             print(f"\n\nNumber of swaps: {number_of_swaps}")
 
-            if space == "one_level":
+            space = []
+            if space_type == "one_level":
                 for number_of_dists in range(min_dists, max_dists+1):
                     for where_to_distill in range(number_of_swaps+1):
-                        try:
-                            parameters["protocol"] = get_protocol(number_of_swaps=number_of_swaps, 
-                                                                  number_of_dists=number_of_dists, 
-                                                                  where_to_distill=where_to_distill)
-                            
-                            secret_key_rate, pmf, _ = sim_distillation_strategies(parameters, number_of_swaps, 
-                                                                                number_of_dists, where_to_distill)
-                            
-                            cdf_coverage = pmf_to_cdf(pmf)[-1]
-                            if cdf_coverage < cdf_threshold:
-                                raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})
-                            
-                            if (number_of_swaps not in best_results or 
-                                best_results[number_of_swaps][1] is None 
-                                or secret_key_rate > best_results[number_of_swaps][1]):
-                                best_results[number_of_swaps] = ((number_of_dists, where_to_distill), secret_key_rate, None)
-                        
-                        except ThresholdExceededError as e:
-                            best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
-                            break
+                        space.append(get_protocol(number_of_swaps, number_of_dists, where_to_distill))
+            elif space_type == "permute":
+                space = get_permutation_space(min_dists, max_dists, number_of_swaps)
             else: 
                 raise ValueError("Invalid space")
-        
+            
+            for protocol in space:
+                try:
+                    parameters["protocol"] = protocol
+                    secret_key_rate, pmf, _ = sim_distillation_strategies(parameters)
+                    
+                    cdf_coverage = pmf_to_cdf(pmf)[-1]
+                    if cdf_coverage < cdf_threshold:
+                        raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})
+                    
+                    if (number_of_swaps not in best_results or 
+                        best_results[number_of_swaps][1] is None 
+                        or secret_key_rate > best_results[number_of_swaps][1]):
+                        best_results[number_of_swaps] = (protocol, secret_key_rate, None)
+                
+                except ThresholdExceededError as e:
+                    best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
+                    break
+
         write_results(filename, parameters, best_results)
 
 
@@ -277,8 +306,7 @@ def objective_key_rate(space, number_of_swaps, parameters):
                                 number_of_dists=number_of_dists, 
                                 where_to_distill=where_to_distill)
 
-    secret_key_rate, pmf, _ = sim_distillation_strategies(parameters, number_of_swaps, 
-                                                            number_of_dists, where_to_distill)
+    secret_key_rate, pmf, _ = sim_distillation_strategies(parameters)
     
     cdf_coverage = pmf_to_cdf(pmf)[-1]
     if cdf_coverage < cdf_threshold:
@@ -332,8 +360,13 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
                 best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
                 continue
                 
-            # Get the best parameters and score from results 
-            best_results[number_of_swaps] = (result.x, result.fun, None)
+            # Get the best parameters and score from results
+            best_number_of_dists = result.x[0]
+            best_where_to_distill = result.x[1]
+            best_protocol = get_protocol(number_of_swaps, best_number_of_dists, best_where_to_distill)
+            best_score = result.fun
+
+            best_results[number_of_swaps] = (best_protocol, best_score, None)
         
         write_results(filename, parameters, best_results)
 
@@ -342,11 +375,11 @@ if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
-    parser.add_argument("--max_swaps", type=int, default=5, help="Maximum number of swaps")
+    parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=10, help="Maximum amount of distillations to be performed")
-    parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
-    parser.add_argument("--space", type=str, default="one_level", help="Space to be tested")
+    parser.add_argument("--max_dists", type=int, default=3, help="Maximum amount of distillations to be performed")
+    parser.add_argument("--optimizer", type=str, default="bf", help="Optimizer to be used")
+    parser.add_argument("--space", type=str, default="permute", help="Space to be tested")
     parser.add_argument("--gp_shots", type=int, default=100, help="Number of shots for Gaussian Process")
     parser.add_argument("--gp_initial_points", type=int, default=20, help="Number of initial points for Gaussian Process")
     parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
@@ -376,7 +409,7 @@ if __name__ == "__main__":
 
     if optimizer == "gp":
         gaussian_optimization(parameters_set, space, min_swaps, max_swaps, min_dists, max_dists, gp_shots, gp_initial_points, filename)
-    elif optimizer == "bruteforce":
+    elif optimizer == "bf":
         brute_force_optimization(parameters_set, space, min_swaps, max_swaps, min_dists, max_dists, filename)
     else:
         raise ValueError("Invalid optimizer")
