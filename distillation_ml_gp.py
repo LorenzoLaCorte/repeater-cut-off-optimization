@@ -28,7 +28,7 @@ import copy
 import numpy as np
 
 from skopt import gp_minimize, dummy_minimize
-from skopt.space import Integer
+from skopt.space import Integer, Categorical
 from skopt.utils import use_named_args
 
 from distillation_ml_plots import plot_objective, plot_convergence
@@ -135,7 +135,7 @@ def sim_distillation_strategies(parameters):
     pmf, w_func = repeater_sim(parameters)
 
     rate = secret_key_rate(pmf, w_func, parameters["t_trunc"])
-    print(f"Protocol {parameters['protocol']},\t r = {rate}")
+    print(f"Protocol {parameters['protocol']},\t r = {rate}\n")
     return rate, pmf, w_func
 
 
@@ -227,7 +227,7 @@ def plot_results(min_dists, max_dists, parameters, number_of_swaps, result):
     fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_ml.png')
 
 
-def get_permutation_space(min_dists, max_dists, number_of_swaps):
+def get_permutation_space(min_dists, max_dists, number_of_swaps, skopt_space=False):
     """
     The permutation space is used to test all the possible combinations of distillations for a fixed number of swaps.
     For each number of distillation tested, we test all the possible permutations of distillations. 
@@ -251,6 +251,10 @@ def get_permutation_space(min_dists, max_dists, number_of_swaps):
     analytical_permutations = int(sum([binom(number_of_swaps + dists, dists) for dists in range(min_dists, max_dists + 1)]))
     assert len(space) == analytical_permutations, f"Expected max. {analytical_permutations} permutations, got {len(space)}"
 
+    if skopt_space:
+        space = [
+            Categorical([''.join(str(tup)) for tup in space], name='protocol')
+        ]
     return space
 
 
@@ -300,20 +304,24 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
         write_results(filename, parameters, best_results)
 
 
-def objective_key_rate(space, number_of_swaps, parameters):
+def objective_key_rate(space, space_type, number_of_swaps, parameters):
     """
     Objective function, consider the whole space of actions,
         returning a negative secret key rate
         in order for the optimizer to maximize the function.
     """
-    number_of_dists = space['rounds of distillation']
-    where_to_distill = space['after how many swaps we distill']
-
-    parameters["protocol"] = get_protocol(
-                                number_of_swaps=number_of_swaps, 
-                                number_of_dists=number_of_dists, 
-                                where_to_distill=where_to_distill)
-
+    if space_type == "one_level":
+        number_of_dists = space['rounds of distillation']
+        where_to_distill = space['after how many swaps we distill']
+        parameters["protocol"] = get_protocol(
+                                    number_of_swaps=number_of_swaps, 
+                                    number_of_dists=number_of_dists, 
+                                    where_to_distill=where_to_distill)
+    
+    elif space_type == "permute":
+        import ast
+        parameters["protocol"] = ast.literal_eval(space['protocol'])
+    
     secret_key_rate, pmf, _ = sim_distillation_strategies(parameters)
     
     cdf_coverage = pmf_to_cdf(pmf)[-1]
@@ -348,10 +356,14 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
                 ]
                 @use_named_args(space)
                 def wrapped_objective(**space_params):
-                    return objective_key_rate(space_params, number_of_swaps, parameters)
+                    return objective_key_rate(space_params, space_type, number_of_swaps, parameters)
+            
             elif space_type == "permute":
-                # TODO: implement the permutation space
-                pass 
+                space = get_permutation_space(min_dists, max_dists, number_of_swaps, skopt_space=True)
+                @use_named_args(space)
+                def wrapped_objective(**space_params):
+                    return objective_key_rate(space_params, space_type, number_of_swaps, parameters)
+            
             else: 
                 raise ValueError("Invalid space")
 
@@ -361,7 +373,8 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
                 # Adjust the results to be positive
                 result.fun = -result.fun
                 result.func_vals = [-val for val in result.func_vals]
-                
+                # TODO: make an ordered list of results tuples (key_rate, protocol)
+
                 plot_results(min_dists, max_dists, parameters, number_of_swaps, result)
             
             except ThresholdExceededError as e:
@@ -386,7 +399,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=3, help="Maximum amount of distillations to be performed")
-    parser.add_argument("--optimizer", type=str, default="bf", help="Optimizer to be used")
+    parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
     parser.add_argument("--space", type=str, default="permute", help="Space to be tested")
     parser.add_argument("--gp_shots", type=int, default=100, help="Number of shots for Gaussian Process")
     parser.add_argument("--gp_initial_points", type=int, default=20, help="Number of initial points for Gaussian Process")
