@@ -54,7 +54,7 @@ def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     """
     Removes unstable Werner parameters where the probability mass is below a specified threshold
     and returns a new Werner parameter array without modifying the input array.
-    
+
     Parameters:
     - pmf (np.array): The probability mass function array.
     - w_func (np.array): The input Werner parameter array.
@@ -62,6 +62,8 @@ def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     
     Returns:
     - np.array: A new Werner parameter array with unstable parameters removed.
+
+     note: it is used in plots to remove oscillations in the plot.
     """
     new_w_func = w_func.copy()
     for t in range(len(pmf)):
@@ -164,6 +166,9 @@ class ThresholdExceededError(Exception):
 
 
 def write_results(filename, parameters, best_results):
+    """
+    Write optimization results to file.
+    """
     with open(filename, 'a') as file:
         output = (
                     f"\nProtocol parameters:\n"
@@ -195,6 +200,9 @@ def write_results(filename, parameters, best_results):
 
 
 def plot_results(min_dists, max_dists, parameters, number_of_swaps, result):
+    """
+    Invoke skopt plot functions to visualize the optimization results.
+    """
     fig = plt.figure(figsize=(12, 6))
     ax1 = fig.add_subplot(1, 2, 1)
     ax2 = fig.add_subplot(1, 2, 2)
