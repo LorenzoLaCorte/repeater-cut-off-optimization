@@ -1,0 +1,25 @@
+From 1 to 3 swaps
+From 0 to 7 distillations
+Gaussian process with [53, 62, 83] evaluations and 50 initial points
+
+
+Protocol parameters:
+{
+    't_coh': 120,
+    'p_gen': 0.9,
+    'p_swap': 0.9,
+    'w0': 0.867
+}
+
+Best configuration for 1 swaps:
+    Best Protocol: 0.19789096377416104
+    Best secret key rate: (1, 0)
+
+Best configuration for 2 swaps:
+    Best Protocol: 0.05174876320725858
+    Best secret key rate: (1, 1, 1, 1, 0, 0)
+
+Best configuration for 3 swaps:
+    Best Protocol: 0.005850884935815455
+    Best secret key rate: (1, 1, 1, 0, 1, 0, 1, 0)
+
