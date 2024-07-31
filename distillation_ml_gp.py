@@ -202,53 +202,87 @@ def write_results(filename, parameters, best_results):
         file.write(output)
 
 
-def plot_results(ordered_results, parameters, number_of_swaps, title, best_protocol, restrict_x_ticks=False):
+def plot_results(results, parameters, number_of_swaps, title, 
+                 maximum: Tuple[np.float64, Tuple[int]], maxima: List[Tuple[np.float64, Tuple[int]]]):
     """
     This function plots the results of the brute force optimization.
     It creates a scatter plot where the y-axis represents the secret key rate,
     and the x-axis represents the protocol. X-axis ticks only show protocols starting with (0,.
     """
-    key_rates = [result[0] for result in ordered_results]
-    protocols = [result[1] for result in ordered_results]
+    key_rates = [result[0] for result in results]
+    protocols = [result[1] for result in results]
+
     protocol_labels = [str(protocol) for protocol in protocols]
+    
+    best_protocol = maximum[1]
     best_protocol_label = str(best_protocol)
 
     plt.figure(figsize=(24, 8))
     plt.scatter(protocol_labels, key_rates, color='b', marker='o')
     plt.plot(protocol_labels, key_rates, color='b', linestyle='-', label='Secret Key Rate')
-    plt.axvline(x=best_protocol_label, color='r', linestyle='--', label='Best protocol')
+    
+    to_label = True
+    for _, maxima_protocol in maxima:
+        if to_label:
+            plt.axvline(x=str(maxima_protocol), color='g', linestyle='--', label='Local Maxima')
+            to_label = False
+        else:
+            plt.axvline(x=str(maxima_protocol), color='g', linestyle='--')
+    
+    plt.axvline(x=best_protocol_label, color='r', linestyle='--', label='Global Maximum')
 
-    plt.title(title)
+    plt.title(title, pad=20)
     plt.xlabel('Protocol')
     plt.ylabel('Secret Key Rate')
     plt.legend()
 
-    if restrict_x_ticks:
-        # TODO: separate the ticks in top and bottom
-        # Show only protocols ending with all swaps (zeros)
-        plt.xticks(
-            ticks=[i for i, p in enumerate(protocol_labels) 
-                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps
-                    or p == best_protocol_label],
-            # labels=[p for p in protocol_labels if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
-            rotation=45,
-        )
-        
-    else:
-        plt.xticks(rotation=45)
+    maxima_labels = [str(maxima_protocol) for _, maxima_protocol in maxima]
     
-    plt.grid(True)
+    # Show only protocols ending with all swaps (zeros)
+    if number_of_swaps != 1:
+        plt.xticks(
+            ticks = [i for i, p in enumerate(protocol_labels) 
+                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+            labels = [p for i, p in enumerate(protocol_labels) 
+                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+        )
+    else:
+        plt.xticks(ticks = range(len(protocol_labels)), labels = protocol_labels)
+    
+    for i, txt in enumerate(protocol_labels):
+        if txt in maxima_labels:
+            plt.text(i, key_rates[i]*1.035, txt, fontsize=9, ha='center', c='g')
+
+    plt.gcf().autofmt_xdate()
+    plt.grid(True, axis='y')
     plt.tight_layout()
-    plt.subplots_adjust(bottom=0.2)
+    plt.subplots_adjust(bottom=0.225)
     plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_bests.png')
 
 
-def plot_process(min_dists, max_dists, parameters, number_of_swaps, results, gp_result:OptimizeResult=None):
+def get_all_maxima(ordered_results: List[Tuple[np.float64, Tuple[int]]], min_dists, max_dists) -> List[Tuple[np.float64, Tuple[int]]]:
+    """
+    Get all the maxima from the results: the secret key rate and the protocol
+        for the best secret key rate for each distillation number
+    """
+    maxima = []
+    for number_of_dists in range(min_dists, max_dists + 1):
+        maximum = max([result for result in ordered_results if result[1].count(1) == number_of_dists], key=lambda x: x[0])
+        # Do not append if the maximum is zero
+        if maximum[0] > 0:
+            maxima.append(maximum)
+    return maxima
+
+
+def plot_process(min_dists, max_dists, parameters, number_of_swaps, 
+                 results: List[Tuple[np.float64, Tuple[int]]], gp_result:OptimizeResult=None):
     """
     Invoke skopt plot functions to visualize the optimization results.
     """
-    ordered_results = sorted(results, key=lambda x: x[0], reverse=True)
-    best_key_rate, best_protocol = ordered_results[0][0], ordered_results[0][1]
+    ordered_results: List[Tuple[np.float64, Tuple[int]]] = sorted(results, key=lambda x: x[0], reverse=True)
+
+    maximum: Tuple[np.float64, Tuple[int]]  = (ordered_results[0][0], ordered_results[0][1])
+    maxima: List[Tuple[np.float64, Tuple[int]]] = get_all_maxima(ordered_results, min_dists, max_dists)
 
     title = (
         f"Protocols with {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
@@ -257,7 +291,7 @@ def plot_process(min_dists, max_dists, parameters, number_of_swaps, results, gp_
         f"p_{{swap}} = {parameters['p_swap']}, "
         f"w_0 = {parameters['w0']}, "
         f"t_{{coh}} = {parameters['t_coh']}$"
-        f"\nBest secret-key-rate: {best_key_rate:.6f}, Protocol: {best_protocol}"
+        f"\nBest secret-key-rate: {maximum[0]:.6f}, Protocol: {maximum[1]}"
     )   
 
     if gp_result is not None:
@@ -274,7 +308,7 @@ def plot_process(min_dists, max_dists, parameters, number_of_swaps, results, gp_
         fig.suptitle(title)
         fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_gp.png')
     
-    plot_results(results, parameters, number_of_swaps, title, best_protocol, restrict_x_ticks=True)
+    plot_results(results, parameters, number_of_swaps, title, maximum, maxima)
 
 
 def get_no_of_permutations_per_swap(min_dists, max_dists, s):
@@ -340,7 +374,7 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
 
         for number_of_swaps in range(min_swaps, max_swaps+1):
             print(f"\n\nNumber of swaps: {number_of_swaps}")
-            ordered_results: List[Tuple[np.float64, Tuple[int]]] = []
+            results: List[Tuple[np.float64, Tuple[int]]] = []
 
             space = []
             if space_type == "one_level":
@@ -361,18 +395,15 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
                     if cdf_coverage < cdf_threshold:
                         raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})
                     
-                    # if (number_of_swaps not in best_results or 
-                    #     best_results[number_of_swaps][1] is None 
-                    #     or secret_key_rate > best_results[number_of_swaps][1]):
-                    #     best_results[number_of_swaps] = (protocol, secret_key_rate, None)
-                    ordered_results.append((secret_key_rate, protocol))
+                    results.append((secret_key_rate, protocol))
                 
                 except ThresholdExceededError as e:
                     best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
                     break
                 
-            plot_process(min_dists, max_dists, parameters, number_of_swaps, ordered_results)
-            ordered_results = sorted(ordered_results, key=lambda x: x[0], reverse=True)
+            plot_process(min_dists, max_dists, parameters, number_of_swaps, results)
+
+            ordered_results: List[Tuple[np.float64, Tuple[int]]] = sorted(results, key=lambda x: x[0], reverse=True)
             best_results[number_of_swaps] = (ordered_results[0][0], ordered_results[0][1], None)
 
         write_results(filename, parameters, best_results)
@@ -487,7 +518,7 @@ if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
-    parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of swaps")
+    parser.add_argument("--max_swaps", type=int, default=1, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=7, help="Maximum amount of distillations to be performed")
     parser.add_argument("--optimizer", type=str, default="bf", help="Optimizer to be used")
@@ -512,10 +543,28 @@ if __name__ == "__main__":
 
     parameters_set = [
         {
-            't_coh': 120,
-            'p_gen': 0.9,
-            'p_swap': 0.9,
+            't_coh': 10**4,
+            'p_gen': 0.5,
+            'p_swap': 0.5,
             'w0': 0.867
+        },
+        {
+            't_coh': 10**4,
+            'p_gen': 0.5,
+            'p_swap': 0.5,
+            'w0': 0.9
+        },
+        {
+            't_coh': 10**4,
+            'p_gen': 0.5,
+            'p_swap': 0.5,
+            'w0': 0.98
+        },
+        {
+            't_coh': 10**4,
+            'p_gen': 0.5,
+            'p_swap': 0.5,
+            'w0': 1.0
         },
     ]
 
