@@ -30,7 +30,7 @@ import copy
 import numpy as np
 
 from skopt import gp_minimize, dummy_minimize
-from skopt.space import Integer, Categorical
+from skopt.space import Integer, Categorical, Real
 from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 
@@ -84,7 +84,66 @@ def get_protocol_rate(parameters):
     return secret_key_rate(pmf, w_func, parameters["t_trunc"])
 
 
-def get_protocol(number_of_swaps, number_of_dists, where_to_distill=None):
+def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
+    """
+    Returns 0 (swap) or 1 (distillation) based on the input parameters.
+    """
+    dists_so_far = protocol.count(1)
+    dists_remaining = dists_target - dists_so_far
+    slots_remaining = len(protocol) - idx
+
+    # TODO: Check that weight and dists_so_far impact correctly on both the three strategies
+
+    # Scenario 1: I miss 3 slots and I have 3 distillations missing
+    # Thus, I distill with p = 100% 
+    # (i.e., the first coin is depending on what is missing: 3 distillations / 3 slots)
+    
+    # Scenario 2: I still have 3 slots and I have 1 distillation missing
+    # First of all, I throw a coin
+    # With 1/3 probability I distill
+    # While, the 2/3 remaining are distributed as it follows:
+    #   - if I am dists_first, I distill with a prob. of strategy_weight
+    #   - if I am swaps_first, I swap with a prob. of strategy_weight 
+    #   - if I am alternate, 
+    #      - if the previous was swap, I distill with a prob. of strategy_weight
+    #      - if the previous was distill, I swap with a prob. of strategy_weight
+
+    # Modeling the impact of the distillations applied so far on the decision
+    first_coin = np.random.choice([0, 1], p=[1 - dists_remaining/slots_remaining, dists_remaining/slots_remaining])
+    if first_coin == 1:
+        return 1
+    
+    else: # Modeling the impact of the strategies on the decision
+        if strategy == "dists_first":
+            return np.random.choice([0, 1], p=[1 - strategy_weight, strategy_weight])
+        
+        elif strategy == "swaps_first":
+            return np.random.choice([0, 1], p=[strategy_weight, 1 - strategy_weight])
+        
+        elif strategy == "alternate":
+            if idx == 0:
+                return np.random.choice([0, 1])
+            if protocol[idx-1] == 1:
+                return np.random.choice([0, 1], p=[1 - strategy_weight, strategy_weight])
+            if protocol[idx-1] == 0:
+                return np.random.choice([0, 1], p=[strategy_weight, 1 - strategy_weight])
+        
+    return 0
+
+def get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, number_of_dists):
+    """
+    Returns the protocol to be tested based on the input parameters.
+    """
+    protocol = [None] * (number_of_swaps + number_of_dists)
+
+    for idx, _ in enumerate(protocol):
+        protocol[idx] = sample_outcome(strategy, strategy_weight, protocol, idx, number_of_dists)
+
+    assert protocol.count(1) == number_of_dists, f"Expected {number_of_dists} distillations, got {protocol.count(1)}"
+    return tuple(protocol)
+
+
+def get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_distill=None):
     """
     Returns the protocol to be tested based on the input parameters.
     
@@ -380,7 +439,7 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
             if space_type == "one_level":
                 for number_of_dists in range(min_dists, max_dists+1):
                     for where_to_distill in range(number_of_swaps+1):
-                        space.append(get_protocol(number_of_swaps, number_of_dists, where_to_distill))
+                        space.append(get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_distill))
             elif space_type == "enumerate":
                 space = get_permutation_space(min_dists, max_dists, number_of_swaps)
             else: 
@@ -420,7 +479,7 @@ def objective_key_rate(space, space_type, number_of_swaps, parameters):
     if space_type == "one_level":
         number_of_dists = space['rounds of distillation']
         where_to_distill = space['after how many swaps we distill']
-        parameters["protocol"] = get_protocol(
+        parameters["protocol"] = get_protocol_from_distillations(
                                     number_of_swaps=number_of_swaps, 
                                     number_of_dists=number_of_dists, 
                                     where_to_distill=where_to_distill)
@@ -428,6 +487,12 @@ def objective_key_rate(space, space_type, number_of_swaps, parameters):
     elif space_type == "enumerate":
         parameters["protocol"] = ast.literal_eval(space['protocol'])
     
+    elif space_type == "strategy":
+        number_of_dists = space['rounds of distillation']
+        strategy = space['strategy']
+        strategy_weight = space['strategy weight']
+        parameters["protocol"] = get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, number_of_dists)
+
     secret_key_rate, pmf, _ = sim_distillation_strategies(parameters)
     
     cdf_coverage = pmf_to_cdf(pmf)[-1]
@@ -483,16 +548,27 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
                 def wrapped_objective(**space_params):
                     return objective_key_rate(space_params, space_type, number_of_swaps, parameters)
             
+            elif space_type == "strategy":
+                space = [
+                    Integer(min_dists, max_dists, name='rounds of distillation'), 
+                    Categorical(["dists_first", "swaps_first", "alternate"], name='strategy'),
+                    Real(0.0, 1.0, name='strategy weight'),
+                ]
+                @use_named_args(space)
+                def wrapped_objective(**space_params):
+                    return objective_key_rate(space_params, space_type, number_of_swaps, parameters)
+
             elif space_type == "enumerate":
                 space = get_permutation_space(min_dists, max_dists, number_of_swaps, skopt_space=True)
                 @use_named_args(space)
                 def wrapped_objective(**space_params):
                     return objective_key_rate(space_params, space_type, number_of_swaps, parameters)
-            
+
             else: 
                 raise ValueError("Invalid space")
 
             try:
+                # Define a reasonable number of default shots for the Gaussian Process
                 if gp_shots is None:
                     gp_shots_def = gp_initial_points + get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)//10
 
