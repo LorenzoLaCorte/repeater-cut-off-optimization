@@ -9,10 +9,12 @@ import itertools
 import logging
 import ast
 from typing import List, Tuple
+from collections import defaultdict
 
 from matplotlib import cm
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.gaussian_process import GaussianProcessRegressor
 colorblind_palette = [
     "#0072B2",
     "#E69F00",
@@ -75,6 +77,19 @@ def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     return new_w_func
 
 
+def get_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps):
+    """
+    Returns the total number of protocols to be tested 
+        for a specific space type and number of swaps.
+    """
+    if space_type == "one_level":
+        return (max_dists - min_dists) * (number_of_swaps + 1) + (1 if min_dists == 0 else 0)
+    elif space_type == "enumerate" or space_type == "strategy":
+        return get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)
+    else:
+        raise ValueError("Invalid space")
+    
+
 def get_protocol_rate(parameters):
     """
     Returns the secret key rate for the input parameters.
@@ -127,8 +142,10 @@ def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
                 return np.random.choice([0, 1], p=[1 - strategy_weight, strategy_weight])
             if protocol[idx-1] == 0:
                 return np.random.choice([0, 1], p=[strategy_weight, 1 - strategy_weight])
+
+        else:
+            raise ValueError("Invalid strategy")
         
-    return 0
 
 def get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, number_of_dists):
     """
@@ -168,15 +185,18 @@ def get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_d
 
 def get_t_trunc(p_gen, p_swap, t_coh, swaps, dists, epsilon=0.01):
     """
-    TODO: this is very unprecise and should be improved, especially in the distillation case.
-    Returns the truncation time based on a lower bound of what is sufficient to reach 99% of the simulation cdf.
+    This function is derived from Brand et. al, with an adjustment for distillation.
+    TODO: it is a very lossy bound, it should be improved, to get the simulation going faster (mantaining cdf coverage).
+    Returns the truncation time based on a lower bound of what is sufficient to reach (1-epsilon) of the simulation cdf.
     """
     t_trunc = int((2/p_swap)**(swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
 
     p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
     t_trunc *= (1/p_dist)**(dists) # considering distillation, but very unprecise
 
-    t_trunc = min(max(t_coh, t_trunc//10), t_coh * 300)
+    # Introduce a factor to reduce the truncation time, as the previous bound is very lossy
+    reduce_factor = 10
+    t_trunc = min(max(t_coh, t_trunc//reduce_factor), t_coh * 300)
     return int(t_trunc)
 
 
@@ -209,12 +229,12 @@ def single_test():
     """
     parameters = {
                     "t_coh": 10000,
-                    "p_gen": 0.999,
-                    "p_swap": 0.999,
-                    "w0": 0.999,
-                    "t_trunc": 10000*300
+                    "p_gen": 0.5,
+                    "p_swap": 0.5,
+                    "w0": 0.867,
+                    "t_trunc": 10000*30
                 }
-    parameters["protocol"] = (0,0,0,0,1,1,1,1,1,1,1,1,1,1,0)
+    parameters["protocol"] = (1,0,1,0,1,0)
     print(get_protocol_rate(parameters))    
 
 
@@ -243,9 +263,6 @@ def write_results(filename, parameters, best_results):
             
         for number_of_swaps, (best_protocol, best_score, error_coverage) in best_results.items():
             if best_protocol is None:
-                logging.warning(
-                        "Maximal number of attempts arrived. "
-                        "Optimization fails.")
                 print(f"CDF under threshold for {number_of_swaps} swaps")
                 output += (
                         f"CDF under threshold for {number_of_swaps} swaps:\n"
@@ -262,12 +279,18 @@ def write_results(filename, parameters, best_results):
 
 
 def plot_results(results, parameters, number_of_swaps, title, 
-                 maximum: Tuple[np.float64, Tuple[int]], maxima: List[Tuple[np.float64, Tuple[int]]]):
+                 maximum: Tuple[np.float64, Tuple[int]], maxima: List[Tuple[np.float64, Tuple[int]]],
+                 is_gp=False):
     """
     This function plots the results of the brute force optimization.
     It creates a scatter plot where the y-axis represents the secret key rate,
     and the x-axis represents the protocol. X-axis ticks only show protocols starting with (0,.
     """
+    optimizer = "gp" if is_gp else "bf"
+
+    results = list(set(results))
+    results = sorted(results, key=lambda x: (-len(x[1]), x[1]), reverse=True)
+
     key_rates = [result[0] for result in results]
     protocols = [result[1] for result in results]
 
@@ -316,7 +339,7 @@ def plot_results(results, parameters, number_of_swaps, title,
     plt.grid(True, axis='y')
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.225)
-    plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_bests.png')
+    plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_{optimizer}.png')
 
 
 def get_all_maxima(ordered_results: List[Tuple[np.float64, Tuple[int]]], min_dists, max_dists) -> List[Tuple[np.float64, Tuple[int]]]:
@@ -326,7 +349,11 @@ def get_all_maxima(ordered_results: List[Tuple[np.float64, Tuple[int]]], min_dis
     """
     maxima = []
     for number_of_dists in range(min_dists, max_dists + 1):
-        maximum = max([result for result in ordered_results if result[1].count(1) == number_of_dists], key=lambda x: x[0])
+        evaluations = [result for result in ordered_results if result[1].count(1) == number_of_dists]
+        # Skip if there are no evaluations for the number of distillations
+        if len(evaluations) == 0:
+            continue
+        maximum = max(evaluations, key=lambda x: x[0])
         # Do not append if the maximum is zero
         if maximum[0] > 0:
             maxima.append(maximum)
@@ -338,6 +365,7 @@ def plot_process(min_dists, max_dists, parameters, number_of_swaps,
     """
     Invoke skopt plot functions to visualize the optimization results.
     """
+    is_gp = gp_result is not None
     ordered_results: List[Tuple[np.float64, Tuple[int]]] = sorted(results, key=lambda x: x[0], reverse=True)
 
     maximum: Tuple[np.float64, Tuple[int]]  = (ordered_results[0][0], ordered_results[0][1])
@@ -353,7 +381,7 @@ def plot_process(min_dists, max_dists, parameters, number_of_swaps,
         f"\nBest secret-key-rate: {maximum[0]:.6f}, Protocol: {maximum[1]}"
     )   
 
-    if gp_result is not None:
+    if is_gp:
         fig = plt.figure(figsize=(12, 6))
         ax1 = fig.add_subplot(1, 2, 1)
         ax2 = fig.add_subplot(1, 2, 2)
@@ -365,9 +393,9 @@ def plot_process(min_dists, max_dists, parameters, number_of_swaps,
         plt.subplots_adjust(top=0.75, wspace=0.25)
 
         fig.suptitle(title)
-        fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_gp.png')
+        fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_skopt.png')
     
-    plot_results(results, parameters, number_of_swaps, title, maximum, maxima)
+    plot_results(results, parameters, number_of_swaps, title, maximum, maxima, is_gp)
 
 
 def get_no_of_permutations_per_swap(min_dists, max_dists, s):
@@ -437,14 +465,22 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
 
             space = []
             if space_type == "one_level":
-                for number_of_dists in range(min_dists, max_dists+1):
+                if min_dists == 0:
+                    space.append(tuple([0]*number_of_swaps))
+                for number_of_dists in range(max(1, min_dists), max_dists+1):
                     for where_to_distill in range(number_of_swaps+1):
                         space.append(get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_distill))
             elif space_type == "enumerate":
                 space = get_permutation_space(min_dists, max_dists, number_of_swaps)
+            elif space_type == "strategy":
+                raise ValueError("Bruteforce not supported for strategy space, use 'enumerate'")
             else: 
                 raise ValueError("Invalid space")
             
+            protocol_space_size = get_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
+            assert len(space) == protocol_space_size, \
+                f"Expected {protocol_space_size} protocols, got {len(space)}"
+
             for protocol in space:
                 try:
                     parameters["protocol"] = protocol
@@ -467,15 +503,16 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
 
         write_results(filename, parameters, best_results)
 
+
+# Cache results of the objective function to avoid re-evaluating the same point and speed up the optimization
+cache_results = defaultdict(np.float64)
+
 def objective_key_rate(space, space_type, number_of_swaps, parameters):
     """
     Objective function, consider the whole space of actions,
         returning a negative secret key rate
         in order for the optimizer to maximize the function.
     """
-    # TODO: if the point has already been evaluated, evaluate another one (cache)
-    # TODO: if all points have been evaluated, terminate the simulation
-
     if space_type == "one_level":
         number_of_dists = space['rounds of distillation']
         where_to_distill = space['after how many swaps we distill']
@@ -493,34 +530,62 @@ def objective_key_rate(space, space_type, number_of_swaps, parameters):
         strategy_weight = space['strategy weight']
         parameters["protocol"] = get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, number_of_dists)
 
+
+    if parameters["protocol"] in cache_results:
+        logging.warning("Already evaluated point, returning cached result")
+        return -cache_results[parameters["protocol"]]
+    
     secret_key_rate, pmf, _ = sim_distillation_strategies(parameters)
     
     cdf_coverage = pmf_to_cdf(pmf)[-1]
     if cdf_coverage < cdf_threshold:
         raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})                
-    
+
+    cache_results[parameters["protocol"]] = secret_key_rate
+
     # The gaussian process minimizes the function, so return the negative of the key rate 
     return -secret_key_rate
 
 
-def get_ordered_results(result: OptimizeResult, space_type) -> List[Tuple[np.float64, Tuple[int]]]:
+def get_ordered_results(result: OptimizeResult, space_type, number_of_swaps) -> List[Tuple[np.float64, Tuple[int]]]:
     """
     This function adjust the results to be positive and returns an ordered list of (key_rate, protocol)
     """
     result.fun = -result.fun
     result.func_vals = [-val for val in result.func_vals]
-    
     assert len(result.x_iters) == len(result.func_vals)
     
     if space_type == "one_level":
-        # TODO: use get_protocol here
-        result_tuples = [(result.func_vals[i], result.x_iters[i]) for i in range(len(result.func_vals))]
+        result_tuples = [(  result.func_vals[i], 
+                            get_protocol_from_distillations(
+                                number_of_swaps=number_of_swaps,
+                                number_of_dists=result.x_iters[i][0], 
+                                where_to_distill=result.x_iters[i][1])
+                         )  
+                        for i in range(len(result.func_vals))]
+
     elif space_type == "enumerate":
         result_tuples = [(result.func_vals[i], ast.literal_eval(result.x_iters[i][0])) for i in range(len(result.func_vals))]
 
     ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)
     return ordered_results
 
+
+def is_gp_done(result: OptimizeResult):
+    """
+    Callback function to stop the optimization if all the points have been evaluated.
+    """
+    # TODO: maybe, I can result.space.bounds to substitute protocol_space_size
+    protocols_evaluated = len(list(set([ast.literal_eval(r[0]) for r in result.x_iters])))
+    assert protocols_evaluated == len(cache_results), f"Expected {protocols_evaluated} protocols, got {len(cache_results)}"
+    if protocols_evaluated == protocol_space_size:
+        logging.warning(f"All protocols evaluated ({len(cache_results)}/{protocol_space_size}), stopping optimization")
+        
+        if len(result.models) == 0:
+            logging.warning(f"Evaluation terminated within initial points: protocol space is too small or initial points are too many")
+            result.models = [GaussianProcessRegressor] # Use a random model for the partial dependence plot
+        return True
+    
 
 def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_dists, max_dists, gp_shots, gp_initial_points, filename):
     """
@@ -539,6 +604,9 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
         for number_of_swaps in range(min_swaps, max_swaps+1):
             print(f"\n\nNumber of swaps: {number_of_swaps}")
             
+            global protocol_space_size # TODO: refactor in order to avoid using global variables
+            protocol_space_size = get_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
+
             if space_type == "one_level":
                 space = [
                     Integer(min_dists, max_dists, name='rounds of distillation'), 
@@ -567,23 +635,33 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
             else: 
                 raise ValueError("Invalid space")
 
-            try:
-                # Define a reasonable number of default shots for the Gaussian Process
-                if gp_shots is None:
-                    gp_shots_def = gp_initial_points + get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)//10
+            # Define reasonable default values (15 and 30 percent of the protocol space size)
+            if gp_initial_points is None:
+                gp_initial_points_def = 20 + int(protocol_space_size * .15)
+            if gp_shots is None:
+                gp_shots_def = (gp_initial_points or gp_initial_points_def) + int(protocol_space_size * .30)
 
+            try:
+                # TODO: potentially, I think it maybe a good idea to give all-dists-first as initial points, but it maybe introduce bias
+                # Give only swap protocol as initial point
+                x0 = [str(get_protocol_from_distillations(number_of_swaps, 0))]
+
+                # Perform the optimization
                 result: OptimizeResult = gp_minimize(wrapped_objective, space, 
                                                      n_calls=(gp_shots or gp_shots_def), 
-                                                     n_initial_points=gp_initial_points)
+                                                     n_initial_points=(gp_initial_points or gp_initial_points_def),
+                                                     callback=[is_gp_done],
+                                                    #  x0=x0,
+                                                     kappa=1.96*5) # Set high kappa, to prefer exploration
                 
-                ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(result, space_type)
-
+                ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(result, space_type, number_of_swaps)
                 plot_process(min_dists, max_dists, parameters, number_of_swaps, ordered_results, result)
-            
+                cache_results.clear()
+
             except ThresholdExceededError as e:
                 best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
-                continue
-                
+                continue          
+        
             # Get the best parameters and score from results
             best_results[number_of_swaps] = (ordered_results[0][0], ordered_results[0][1], None)
         
@@ -594,13 +672,13 @@ if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
-    parser.add_argument("--max_swaps", type=int, default=1, help="Maximum number of swaps")
+    parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=7, help="Maximum amount of distillations to be performed")
-    parser.add_argument("--optimizer", type=str, default="bf", help="Optimizer to be used")
+    parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
     parser.add_argument("--space", type=str, default="enumerate", help="Space to be tested")
     parser.add_argument("--gp_shots", type=int, help="Number of shots for Gaussian Process")
-    parser.add_argument("--gp_initial_points", type=int, default=50, help="Number of initial points for Gaussian Process")
+    parser.add_argument("--gp_initial_points", type=int, help="Number of initial points for Gaussian Process")
     parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
     
     args: Namespace = parser.parse_args()
@@ -624,29 +702,15 @@ if __name__ == "__main__":
             'p_swap': 0.5,
             'w0': 0.867
         },
-        {
-            't_coh': 10**4,
-            'p_gen': 0.5,
-            'p_swap': 0.5,
-            'w0': 0.9
-        },
-        {
-            't_coh': 10**4,
-            'p_gen': 0.5,
-            'p_swap': 0.5,
-            'w0': 0.98
-        },
-        {
-            't_coh': 10**4,
-            'p_gen': 0.5,
-            'p_swap': 0.5,
-            'w0': 1.0
-        },
     ]
 
-    # TODO: encode "optimizer" parameter in "shots" parameter
-    # which means, if the gp shots are enough to bruteforce the solutions, use a bf algorithm
-    # allow also a value "-1", which means bf regardless of the shots
+    # If the gp shots are enough to bruteforce the solutions, use a bf algorithm
+    if gp_shots is not None and gp_shots >= get_protocol_space_size(space, min_dists, max_dists, max_swaps):
+        logging.warning("GP shots are enough to bruteforce the solutions, using brute force algorithm")
+        optimizer = "bf"
+        gp_shots = None
+    
+    # Start the optimization process
     if optimizer == "gp":
         gaussian_optimization(parameters_set, space, min_swaps, max_swaps, min_dists, max_dists, gp_shots, gp_initial_points, filename)
     elif optimizer == "bf":
