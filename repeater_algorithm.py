@@ -534,13 +534,14 @@ class RepeaterChainSimulation():
 
         total_step_size = 1
         # protocol unit level by level
+        # TODO: I am quite sure we can cache here all the intermediate results
         for i, operation in enumerate(protocol):
             if "cutoff" in parameters and isinstance(cutoff, Iterable):
                 parameters["cutoff"] = cutoff[i]
             parameters["mt_cut"] = mt_cut[i]
             parameters["w_cut"] = w_cut[i]
             parameters["rt_cut"] = rt_cut[i]
-        
+
             if operation == 0:
                 pmf, w_func = self.compute_unit(
                     parameters, pmf, w_func, unit_kind="swap", step_size=total_step_size)
