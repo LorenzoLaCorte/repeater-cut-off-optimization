@@ -124,7 +124,11 @@ def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
     #      - if the previous was distill, I swap with a prob. of strategy_weight
 
     # Modeling the impact of the distillations applied so far on the decision
-    first_coin = np.random.choice([0, 1], p=[1 - dists_remaining/slots_remaining, dists_remaining/slots_remaining])
+    if dists_remaining == 0:
+        return 0
+    
+    dist_prob = dists_remaining/slots_remaining
+    first_coin = np.random.choice([0, 1], p=[1 - dist_prob, dist_prob])
     if first_coin == 1:
         return 1
     
@@ -154,7 +158,7 @@ def get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, numbe
     protocol = [None] * (number_of_swaps + number_of_dists)
 
     for idx, _ in enumerate(protocol):
-        protocol[idx] = sample_outcome(strategy, strategy_weight, protocol, idx, number_of_dists)
+        protocol[idx] = int(sample_outcome(strategy, strategy_weight, protocol, idx, number_of_dists))
 
     assert protocol.count(1) == number_of_dists, f"Expected {number_of_dists} distillations, got {protocol.count(1)}"
     return tuple(protocol)
@@ -228,14 +232,15 @@ def single_test():
      ```py -c "from distillation_ml_gp import single_test; single_test()"```
     """
     parameters = {
-                    "t_coh": 10000,
-                    "p_gen": 0.5,
-                    "p_swap": 0.5,
-                    "w0": 0.867,
-                    "t_trunc": 10000*30
-                }
-    parameters["protocol"] = (1,0,1,0,1,0)
-    print(get_protocol_rate(parameters))    
+        't_coh': 120,
+        'p_gen': 0.9,
+        'p_swap': 0.9,
+        'w0': 0.867,
+        "t_trunc": 120*300
+    }
+    
+    parameters["protocol"] = (0, 1)
+    print(get_protocol_rate(parameters))
 
 
 class ThresholdExceededError(Exception):
@@ -288,6 +293,7 @@ def plot_results(results, parameters, number_of_swaps, title,
     """
     optimizer = "gp" if is_gp else "bf"
 
+    tmp = results.copy()
     results = list(set(results))
     results = sorted(results, key=lambda x: (-len(x[1]), x[1]), reverse=True)
 
@@ -530,9 +536,11 @@ def objective_key_rate(space, space_type, number_of_swaps, parameters):
         strategy_weight = space['strategy weight']
         parameters["protocol"] = get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, number_of_dists)
 
-
+    else:
+        raise ValueError("Invalid space")
+    
     if parameters["protocol"] in cache_results:
-        logging.warning("Already evaluated point, returning cached result")
+        logging.warning("Already evaluated protocol, returning cached result")
         return -cache_results[parameters["protocol"]]
     
     secret_key_rate, pmf, _ = sim_distillation_strategies(parameters)
@@ -567,6 +575,18 @@ def get_ordered_results(result: OptimizeResult, space_type, number_of_swaps) -> 
     elif space_type == "enumerate":
         result_tuples = [(result.func_vals[i], ast.literal_eval(result.x_iters[i][0])) for i in range(len(result.func_vals))]
 
+    # BUG: if I call this function, it is not deterministic, I have to store the information about the protocol in result struct
+    elif space_type == "strategy":
+        result_tuples = [(  result.func_vals[i], 
+                            get_protocol_from_strategy(
+                                number_of_dists=result.x_iters[i][0],
+                                strategy=result.x_iters[i][1], 
+                                strategy_weight=result.x_iters[i][2], 
+                                number_of_swaps=number_of_swaps
+                                )
+                         )  
+                        for i in range(len(result.func_vals))]
+
     ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)
     return ordered_results
 
@@ -576,9 +596,11 @@ def is_gp_done(result: OptimizeResult):
     Callback function to stop the optimization if all the points have been evaluated.
     """
     # TODO: maybe, I can result.space.bounds to substitute protocol_space_size
-    protocols_evaluated = len(list(set([ast.literal_eval(r[0]) for r in result.x_iters])))
-    assert protocols_evaluated == len(cache_results), f"Expected {protocols_evaluated} protocols, got {len(cache_results)}"
-    if protocols_evaluated == protocol_space_size:
+    # protocols_evaluated = len(list(set([ast.literal_eval(r[0]) for r in result.x_iters])))
+    # assert protocols_evaluated == len(cache_results), f"Expected {protocols_evaluated} protocols, got {len(cache_results)}"
+    
+    # BUG: Here, add protocol to result dict, to then retrieve it later
+    if len(cache_results) == protocol_space_size:
         logging.warning(f"All protocols evaluated ({len(cache_results)}/{protocol_space_size}), stopping optimization")
         
         if len(result.models) == 0:
@@ -620,7 +642,7 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
                 space = [
                     Integer(min_dists, max_dists, name='rounds of distillation'), 
                     Categorical(["dists_first", "swaps_first", "alternate"], name='strategy'),
-                    Real(0.0, 1.0, name='strategy weight'),
+                    Real(0.5, 1.0, name='strategy weight'),
                 ]
                 @use_named_args(space)
                 def wrapped_objective(**space_params):
@@ -635,11 +657,11 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
             else: 
                 raise ValueError("Invalid space")
 
-            # Define reasonable default values (15 and 30 percent of the protocol space size)
+            # Define reasonable default values (in terms of a percentage of the protocol space size)
             if gp_initial_points is None:
-                gp_initial_points_def = 20 + int(protocol_space_size * .15)
+                gp_initial_points_def = 20 + int(protocol_space_size * .10)
             if gp_shots is None:
-                gp_shots_def = (gp_initial_points or gp_initial_points_def) + int(protocol_space_size * .30)
+                gp_shots_def = (gp_initial_points or gp_initial_points_def) + int(protocol_space_size * .20)
 
             try:
                 # TODO: potentially, I think it maybe a good idea to give all-dists-first as initial points, but it maybe introduce bias
@@ -652,7 +674,9 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
                                                      n_initial_points=(gp_initial_points or gp_initial_points_def),
                                                      callback=[is_gp_done],
                                                     #  x0=x0,
-                                                     kappa=1.96*5) # Set high kappa, to prefer exploration
+                                                     kappa=1.96*5, # Set high kappa, to prefer exploration
+                                                     noise=1e-10, # No noise
+                                                     ) 
                 
                 ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(result, space_type, number_of_swaps)
                 plot_process(min_dists, max_dists, parameters, number_of_swaps, ordered_results, result)
@@ -676,7 +700,7 @@ if __name__ == "__main__":
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=7, help="Maximum amount of distillations to be performed")
     parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
-    parser.add_argument("--space", type=str, default="enumerate", help="Space to be tested")
+    parser.add_argument("--space", type=str, default="strategy", help="Space to be tested")
     parser.add_argument("--gp_shots", type=int, help="Number of shots for Gaussian Process")
     parser.add_argument("--gp_initial_points", type=int, help="Number of initial points for Gaussian Process")
     parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
@@ -697,9 +721,9 @@ if __name__ == "__main__":
 
     parameters_set = [
         {
-            't_coh': 10**4,
-            'p_gen': 0.5,
-            'p_swap': 0.5,
+            't_coh': 120,
+            'p_gen': 0.9,
+            'p_swap': 0.9,
             'w0': 0.867
         },
     ]
