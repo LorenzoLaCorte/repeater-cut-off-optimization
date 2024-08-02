@@ -663,16 +663,21 @@ def gaussian_optimization(parameters_set, space_type, min_swaps, max_swaps, min_
             try:
                 # TODO: potentially, I think it maybe a good idea to give all-dists-first as initial points, but it maybe introduce bias
                 # Give only swap protocol as initial point
-                x0 = [str(get_protocol_from_distillations(number_of_swaps, 0))]
+                x0 = [
+                    0, 
+                    "dists_first",
+                    1.0,
+                ]
 
                 # Perform the optimization
                 result: OptimizeResult = gp_minimize(wrapped_objective, space, 
                                                      n_calls=(gp_shots or gp_shots_def), 
                                                      n_initial_points=(gp_initial_points or gp_initial_points_def),
                                                      callback=[is_gp_done],
-                                                    #  x0=x0,
-                                                     kappa=1.96*5, # Set high kappa, to prefer exploration
-                                                     noise=1e-10, # No noise
+                                                     x0=x0,
+                                                     acq_func='LCB',
+                                                     kappa=1.96*2, # Double the default kappa, to prefer exploration
+                                                     noise=1e-10, # There is no noise in results
                                                      ) 
                 
                 ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(result, space_type, number_of_swaps)
@@ -696,33 +701,45 @@ if __name__ == "__main__":
     parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=7, help="Maximum amount of distillations to be performed")
+    
     parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
     parser.add_argument("--space", type=str, default="strategy", help="Space to be tested")
     parser.add_argument("--gp_shots", type=int, help="Number of shots for Gaussian Process")
     parser.add_argument("--gp_initial_points", type=int, help="Number of initial points for Gaussian Process")
     parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
     
+    parser.add_argument("--t_coh", type=int, nargs='+', default=[120], help="Coherence times")
+    parser.add_argument("--p_gen", type=float, nargs='+', default=[0.9], help="Generation probabilities")
+    parser.add_argument("--p_swap", type=float, nargs='+', default=[0.9], help="Swap probabilities")
+    parser.add_argument("--w0", type=float, nargs='+', default=[0.867], help="Initial weights")
+
     args: Namespace = parser.parse_args()
 
     min_swaps: int = args.min_swaps
     max_swaps: int = args.max_swaps
     min_dists: int = args.min_dists
     max_dists: int = args.max_dists
+    
     optimizer: str = args.optimizer
     gp_shots: int = args.gp_shots
     gp_initial_points: int = args.gp_initial_points
     filename: str = args.filename
     space: str = args.space
 
+    t_coh = args.t_coh
+    p_gen = args.p_gen
+    p_swap = args.p_swap
+    w0 = args.w0
+
     cdf_threshold = 0.99
 
     parameters_set = [
         {
-            't_coh': 120,
-            'p_gen': 0.9,
-            'p_swap': 0.9,
-            'w0': 0.867
-        },
+            't_coh': t_coh[i],
+            'p_gen': p_gen[i],
+            'p_swap': p_swap[i],
+            'w0': w0[i]
+        } for i in range(len(t_coh))
     ]
 
     # If the gp shots are enough to bruteforce the solutions, use a bf algorithm
