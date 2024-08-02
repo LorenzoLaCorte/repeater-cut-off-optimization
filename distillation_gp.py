@@ -36,7 +36,7 @@ from skopt.space import Integer, Categorical, Real
 from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 
-from distillation_ml_plots import plot_objective, plot_convergence
+from distillation_gp_plots import plot_objective, plot_convergence
 
 from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algorithm
 from logging_utilities import (
