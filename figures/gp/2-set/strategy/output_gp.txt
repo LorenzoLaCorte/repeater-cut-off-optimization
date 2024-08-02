@@ -1,7 +1,10 @@
 From 1 to 3 swaps
 From 0 to 7 distillations
-Bruteforce process for all the possible evaluations
+Gaussian process with None evaluations and None initial points
 
+real    2m57.806s
+user    15m4.237s
+sys     0m9.597s
 
 Protocol parameters:
 {
