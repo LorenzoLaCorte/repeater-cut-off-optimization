@@ -102,26 +102,26 @@ def get_protocol_rate(parameters):
 def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
     """
     Returns 0 (swap) or 1 (distillation) based on the input parameters.
+
+    Examples:
+        Scenario 1: I miss 3 slots and I have 3 distillations missing
+            Thus, I distill with p = 100% 
+            (i.e., the first coin is depending on what is missing: 3 distillations / 3 slots)
+    
+        Scenario 2: I still have 3 slots and I have 1 distillation missing
+            First of all, I throw a coin
+            With 1/3 probability I distill
+            While, the 2/3 remaining are distributed as it follows:
+            - if I am dists_first, I distill with a prob. of strategy_weight
+            - if I am swaps_first, I swap with a prob. of strategy_weight 
+            - if I am alternate, 
+                - if the previous was swap, I distill with a prob. of strategy_weight
+                - if the previous was distill, I swap with a prob. of strategy_weight
     """
     dists_so_far = protocol.count(1)
     dists_remaining = dists_target - dists_so_far
     slots_remaining = len(protocol) - idx
 
-    # TODO: Check that weight and dists_so_far impact correctly on both the three strategies
-
-    # Scenario 1: I miss 3 slots and I have 3 distillations missing
-    # Thus, I distill with p = 100% 
-    # (i.e., the first coin is depending on what is missing: 3 distillations / 3 slots)
-    
-    # Scenario 2: I still have 3 slots and I have 1 distillation missing
-    # First of all, I throw a coin
-    # With 1/3 probability I distill
-    # While, the 2/3 remaining are distributed as it follows:
-    #   - if I am dists_first, I distill with a prob. of strategy_weight
-    #   - if I am swaps_first, I swap with a prob. of strategy_weight 
-    #   - if I am alternate, 
-    #      - if the previous was swap, I distill with a prob. of strategy_weight
-    #      - if the previous was distill, I swap with a prob. of strategy_weight
 
     # Modeling the impact of the distillations applied so far on the decision
     if dists_remaining == 0:
@@ -131,7 +131,6 @@ def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
     first_coin = np.random.choice([0, 1], p=[1 - dist_prob, dist_prob])
     if first_coin == 1:
         return 1
-    
     else: # Modeling the impact of the strategies on the decision
         if strategy == "dists_first":
             return np.random.choice([0, 1], p=[1 - strategy_weight, strategy_weight])
@@ -512,6 +511,7 @@ def brute_force_optimization(parameters_set, space_type, min_swaps, max_swaps, m
 
 # Cache results of the objective function to avoid re-evaluating the same point and speed up the optimization
 cache_results = defaultdict(np.float64)
+strategy_to_protocol = {}
 
 def objective_key_rate(space, space_type, number_of_swaps, parameters):
     """
@@ -535,6 +535,7 @@ def objective_key_rate(space, space_type, number_of_swaps, parameters):
         strategy = space['strategy']
         strategy_weight = space['strategy weight']
         parameters["protocol"] = get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, number_of_dists)
+        strategy_to_protocol[(number_of_dists, strategy, strategy_weight)] = parameters["protocol"]
 
     else:
         raise ValueError("Invalid space")
@@ -550,7 +551,7 @@ def objective_key_rate(space, space_type, number_of_swaps, parameters):
         raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})                
 
     cache_results[parameters["protocol"]] = secret_key_rate
-
+    space.update({'protocol': parameters["protocol"]})
     # The gaussian process minimizes the function, so return the negative of the key rate 
     return -secret_key_rate
 
@@ -577,15 +578,7 @@ def get_ordered_results(result: OptimizeResult, space_type, number_of_swaps) -> 
 
     # BUG: if I call this function, it is not deterministic, I have to store the information about the protocol in result struct
     elif space_type == "strategy":
-        result_tuples = [(  result.func_vals[i], 
-                            get_protocol_from_strategy(
-                                number_of_dists=result.x_iters[i][0],
-                                strategy=result.x_iters[i][1], 
-                                strategy_weight=result.x_iters[i][2], 
-                                number_of_swaps=number_of_swaps
-                                )
-                         )  
-                        for i in range(len(result.func_vals))]
+        result_tuples = [(result.func_vals[i], result.x_iters[i][-1]) for i in range(len(result.func_vals))]
 
     ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)
     return ordered_results
@@ -599,7 +592,11 @@ def is_gp_done(result: OptimizeResult):
     # protocols_evaluated = len(list(set([ast.literal_eval(r[0]) for r in result.x_iters])))
     # assert protocols_evaluated == len(cache_results), f"Expected {protocols_evaluated} protocols, got {len(cache_results)}"
     
-    # BUG: Here, add protocol to result dict, to then retrieve it later
+    # Add protocol to result dict, to then retrieve it later
+    # TODO: the check can be done in some other way (type checking), in order to be more robust
+    if len(result.x_iters[-1]) == 3:
+        result.x_iters[-1].append(strategy_to_protocol[(result.x_iters[-1][0], result.x_iters[-1][1], result.x_iters[-1][2])])
+    
     if len(cache_results) == protocol_space_size:
         logging.warning(f"All protocols evaluated ({len(cache_results)}/{protocol_space_size}), stopping optimization")
         
