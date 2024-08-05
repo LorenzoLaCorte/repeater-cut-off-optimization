@@ -38,7 +38,7 @@ from skopt.utils import use_named_args
 
 from distillation_gp_plots import plot_objective, plot_convergence
 
-from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algorithm
+from repeater_algorithm import RepeaterChainSimulation
 from logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data)
 
@@ -46,7 +46,6 @@ from utility_functions import secret_key_rate
 from utility_functions import pmf_to_cdf
 
 from scipy.special import binom
-
 
 def index_lowercase_alphabet(i):
     """
@@ -95,7 +94,7 @@ def get_protocol_rate(parameters):
     Returns the secret key rate for the input parameters.
     """
     print(f"\nRunning: {parameters}")
-    pmf, w_func = repeater_sim(parameters)
+    pmf, w_func = simulator.nested_protocol(parameters)
     return secret_key_rate(pmf, w_func, parameters["t_trunc"])
 
 
@@ -192,6 +191,9 @@ def get_t_trunc(p_gen, p_swap, t_coh, swaps, dists, epsilon=0.01):
     TODO: it is a very lossy bound, it should be improved, to get the simulation going faster (mantaining cdf coverage).
     Returns the truncation time based on a lower bound of what is sufficient to reach (1-epsilon) of the simulation cdf.
     """
+    if fixed_t_trunc:
+        return t_coh*300
+
     t_trunc = int((2/p_swap)**(swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
 
     p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
@@ -217,7 +219,7 @@ def sim_distillation_strategies(parameters):
                                         parameters["protocol"].count(0), parameters["protocol"].count(1))
 
     print(f"\nRunning: {parameters}")
-    pmf, w_func = repeater_sim(parameters)
+    pmf, w_func = simulator.nested_protocol(parameters)
 
     rate = secret_key_rate(pmf, w_func, parameters["t_trunc"])
     print(f"Protocol {parameters['protocol']},\t r = {rate}\n")
@@ -702,8 +704,8 @@ if __name__ == "__main__":
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=7, help="Maximum amount of distillations to be performed")
     
-    parser.add_argument("--optimizer", type=str, default="gp", help="Optimizer to be used")
-    parser.add_argument("--space", type=str, default="strategy", help="Space to be tested")
+    parser.add_argument("--optimizer", type=str, default="bf", help="Optimizer to be used")
+    parser.add_argument("--space", type=str, default="enumerate", help="Space to be tested")
     parser.add_argument("--gp_shots", type=int, help="Number of shots for Gaussian Process")
     parser.add_argument("--gp_initial_points", type=int, help="Number of initial points for Gaussian Process")
     parser.add_argument("--filename", type=str, default='output.txt', help="Filename for output")
@@ -712,6 +714,8 @@ if __name__ == "__main__":
     parser.add_argument("--p_gen", type=float, nargs='+', default=[0.9], help="Generation probabilities")
     parser.add_argument("--p_swap", type=float, nargs='+', default=[0.9], help="Swap probabilities")
     parser.add_argument("--w0", type=float, nargs='+', default=[0.867], help="Initial weights")
+
+    parser.add_argument("--dp", action='store_true', help="Use dynamic programming to cache results and set a fixed truncation time")
 
     args: Namespace = parser.parse_args()
 
@@ -731,6 +735,16 @@ if __name__ == "__main__":
     p_swap = args.p_swap
     w0 = args.w0
 
+    dp_enabled = args.dp
+    global fixed_t_trunc
+    global simulator
+    if dp_enabled:
+        simulator = RepeaterChainSimulation(use_cache=True)
+        fixed_t_trunc = True
+    else:
+        simulator = RepeaterChainSimulation(use_cache=False)
+        fixed_t_trunc = False
+    
     cdf_threshold = 0.99
 
     parameters_set = [
