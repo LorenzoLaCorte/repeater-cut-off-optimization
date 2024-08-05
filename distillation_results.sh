@@ -3,10 +3,11 @@
 MAX_SWAPS=3
 MAX_DISTS=7
 OPTIMIZER_SPACE_COMBS=(
-    "gp strategy 120 0.9 0.9 0.867"
-    "bf enumerate 120 0.9 0.9 0.867"
-    "gp strategy 10000 0.5 0.5 0.9"
-    "bf enumerate 10000 0.5 0.5 0.9"
+    "gp strategy 24 0.002 0.5 1"
+    "bf enumerate 24 0.002 0.5 1"
+
+    "gp strategy 24 0.002 0.5 0.999"
+    "bf enumerate 24 0.002 0.5 0.999"
 )
 
 for TUPLE in "${OPTIMIZER_SPACE_COMBS[@]}"; do

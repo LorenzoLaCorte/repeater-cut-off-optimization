@@ -1,0 +1,27 @@
+From 1 to 3 swaps
+From 0 to 7 distillations
+Gaussian process with None evaluations and None initial points
+
+
+Protocol parameters:
+{
+    't_coh': 24,
+    'p_gen': 0.5,
+    'p_swap': 0.5,
+    'w0': 1.0
+}
+
+Best configuration for 1 swaps:
+    Best Protocol: 0.14210330088766698
+    Best secret key rate: (0,)
+
+CDF under threshold for 2 swaps:
+    CDF coverage: 40.64715302300622%
+
+CDF under threshold for 3 swaps:
+    CDF coverage: 85.58615348152726%
+
+Time taken:
+real	0m11.062s
+user	0m17.740s
+sys	0m0.685s
