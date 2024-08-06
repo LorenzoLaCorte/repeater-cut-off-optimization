@@ -7,7 +7,6 @@ We are trying to compare strategies for distillation, and in particular to check
 import matplotlib.pyplot as plt
 plt.style.use('tableau-colorblind10')
 
-
 import copy
 import numpy as np
 
@@ -93,8 +92,8 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
     left_space = 0.1 if row_titles is not None else 0.06
     plt.tight_layout()
     plt.subplots_adjust(left=left_space, top=(0.725 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
+    
     parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
-
     fig.savefig(f"{exp_name}_{parameters_str}.png")
     
 
