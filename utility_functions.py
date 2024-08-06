@@ -51,7 +51,7 @@ def entropy(x):
         return 0.
     elif x==1.:
         return 0.
-    return -x * np.log(x) - (1-x) * np.log(1-x)
+    return -x * np.log2(x) - (1-x) * np.log2(1-x)
 
 
 def distillable_entanglement(w_func):
