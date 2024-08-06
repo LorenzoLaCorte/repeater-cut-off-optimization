@@ -36,7 +36,7 @@ class HashableParameters():
             return frozenset(self.parameters.items()) == frozenset(other.parameters.items())
         return False
     
-    def add(self, key, value):
+    def set(self, key, value):
         self.parameters[key] = value
     
 
@@ -482,24 +482,26 @@ class RepeaterChainSimulation():
         trunc_new = parameters_new.pop("t_trunc")
 
         parameters_new_hash = HashableParameters(parameters_new)
+        cached_result = None
 
         for i in range(len(protocol_new), 0, -1):
             # check if there is a cache for the protocol under investigation
-            parameters_new_hash.add("protocol", protocol_new[:i])
+            parameters_new_hash.set("protocol", protocol_new[:i])
             if parameters_new_hash in self.cache:
-                # check also if the cached results fully cover the truncation
                 if all_level:
                     trunc_cached = len(self.cache[parameters_new_hash][-1][0]) # TODO: check if this is correct
                 else:
                     trunc_cached = len((self.cache[parameters_new_hash][0]))
+                # check also if the cached results fully cover the truncation
                 if trunc_cached >= trunc_new:
                     # start computing from i level with self.cache[parameters_hash][-1]
-                    return i, parameters_new_hash, self.cache[parameters_new_hash]
+                    cached_result = self.cache[parameters_new_hash]
+                    break
         else:
-            # if no cache found, prepare the hash for the full protocol to be cached
-            parameters_new_hash.add("protocol", protocol_new)
-            return 0, parameters_new_hash, None
-    
+            # if no cache found, start from the beginning the computation
+            i = 0
+        
+        return i, parameters_new_hash, cached_result
     
     def nested_protocol(self, parameters, all_level=False):
         """
@@ -523,7 +525,10 @@ class RepeaterChainSimulation():
         # check if there is a result cached for the parameters and one sub-protocol, starting from the longest
         i = 0
         if self.use_cache:
-            i, parameters_new_hash, cached_result = self.check_cache(parameters, all_level)
+            i, parameters_hash, cached_result = self.check_cache(parameters, all_level)
+            if cached_result is not None:
+                print(f"Using cached result:", parameters_hash.parameters['protocol'])
+            parameters_hash.set("protocol", parameters['protocol'])
 
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
@@ -567,7 +572,6 @@ class RepeaterChainSimulation():
                 full_result = cached_result
             else:
                 pmf, w_func = cached_result
-            logging.warning(f"Using cached result for {i} levels.")
         else:
             # elementary link
             t_list = np.arange(1, t_trunc)
@@ -601,11 +605,11 @@ class RepeaterChainSimulation():
         final_w_func = w_func
         if all_level:
             if self.use_cache:
-                self.cache[parameters_new_hash] = full_result
+                self.cache[parameters_hash] = full_result
             return full_result
         else:
             if self.use_cache:
-                self.cache[parameters_new_hash] = (final_pmf, final_w_func)
+                self.cache[parameters_hash] = (final_pmf, final_w_func)
             return final_pmf, final_w_func
 
 
