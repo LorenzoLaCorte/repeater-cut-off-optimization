@@ -191,9 +191,6 @@ def get_t_trunc(p_gen, p_swap, t_coh, swaps, dists, epsilon=0.01):
     TODO: it is a very lossy bound, it should be improved, to get the simulation going faster (mantaining cdf coverage).
     Returns the truncation time based on a lower bound of what is sufficient to reach (1-epsilon) of the simulation cdf.
     """
-    if fixed_t_trunc:
-        return t_coh*300
-
     t_trunc = int((2/p_swap)**(swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
 
     p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
@@ -215,8 +212,11 @@ def sim_distillation_strategies(parameters):
         by taking the number of distillations and the nesting level after which dist is applied as a parameter,
         and returning the secret key rate of the strategy.
     """
-    parameters["t_trunc"] = get_t_trunc(parameters["p_gen"], parameters["p_swap"], parameters["t_coh"],
-                                        parameters["protocol"].count(0), parameters["protocol"].count(1))
+    if fixed_t_trunc is not None:
+        parameters["t_trunc"] = fixed_t_trunc
+    else:
+        parameters["t_trunc"] = get_t_trunc(parameters["p_gen"], parameters["p_swap"], parameters["t_coh"],
+                                            parameters["protocol"].count(0), parameters["protocol"].count(1))
 
     print(f"\nRunning: {parameters}")
     pmf, w_func = simulator.nested_protocol(parameters)
@@ -713,7 +713,7 @@ if __name__ == "__main__":
     parser.add_argument("--t_coh", type=int, nargs='+', default=[120], help="Coherence times")
     parser.add_argument("--p_gen", type=float, nargs='+', default=[0.9], help="Generation probabilities")
     parser.add_argument("--p_swap", type=float, nargs='+', default=[0.9], help="Swap probabilities")
-    parser.add_argument("--w0", type=float, nargs='+', default=[0.867], help="Initial weights")
+    parser.add_argument("--w0", type=float, nargs='+', default=[0.933], help="Initial weights")
 
     parser.add_argument("--dp", action='store_true', help="Use dynamic programming to cache results and set a fixed truncation time")
 
@@ -738,12 +738,18 @@ if __name__ == "__main__":
     dp_enabled = args.dp
     global fixed_t_trunc
     global simulator
+    simulator = None
+
     if dp_enabled:
         simulator = RepeaterChainSimulation(use_cache=True)
-        fixed_t_trunc = True
+        fixed_t_trunc = get_t_trunc(
+            min(p_gen), 
+            min(p_swap),
+            min(t_coh),
+            max_swaps, max_dists)
     else:
+        fixed_t_trunc = None
         simulator = RepeaterChainSimulation(use_cache=False)
-        fixed_t_trunc = False
     
     cdf_threshold = 0.99
 
