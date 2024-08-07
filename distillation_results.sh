@@ -3,11 +3,16 @@
 MAX_SWAPS=3
 MAX_DISTS=7
 OPTIMIZER_SPACE_COMBS=(
-    "bf enumerate 120 0.9 0.9 0.933 False"
-    "gp strategy 120 0.9 0.9 0.933 False"
-    "bf enumerate 120 0.9 0.9 0.933 True"
-    "gp strategy 120 0.9 0.9 0.933 True"
+    "bf enumerate 10000 0.01 0.5 0.98 False"
+    "gp strategy 10000 0.01 0.5 0.98 False"
+    "bf enumerate 10000 0.01 0.5 0.98 True"
+    "gp strategy 10000 0.01 0.5 0.98 True"
 )
+
+# Create a general results folder
+TODAY=$(date +%F)
+GENERAL_RESULT_DIR="results_$TODAY"
+mkdir -p "$GENERAL_RESULT_DIR"
 
 for TUPLE in "${OPTIMIZER_SPACE_COMBS[@]}"; do
     OPTIMIZER=$(echo $TUPLE | awk '{print $1}')
@@ -48,4 +53,12 @@ for TUPLE in "${OPTIMIZER_SPACE_COMBS[@]}"; do
     tail -n 3 "$TMPFILE" >> "$FILENAME"
 
     rm "$TMPFILE"
+
+    # Create a folder for the results if it doesn't exist
+    RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_${SPACE}${DP_FLAG}"
+    mkdir -p "$RESULT_DIR"
+
+    # Move the output file to the results folder
+    mv "$FILENAME" "$RESULT_DIR/"
+    mv *_${OPTIMIZER}.png "$RESULT_DIR/"
 done
