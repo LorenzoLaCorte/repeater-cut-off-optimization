@@ -3,9 +3,10 @@
 MAX_SWAPS=3
 MAX_DISTS=7
 OPTIMIZER_SPACE_COMBS=(
+    "bf enumerate 120 0.9 0.9 0.933 False"
+    "gp strategy 120 0.9 0.9 0.933 False"
     "bf enumerate 120 0.9 0.9 0.933 True"
     "gp strategy 120 0.9 0.9 0.933 True"
-
 )
 
 for TUPLE in "${OPTIMIZER_SPACE_COMBS[@]}"; do
@@ -36,10 +37,10 @@ for TUPLE in "${OPTIMIZER_SPACE_COMBS[@]}"; do
         --optimizer="$OPTIMIZER" \
         --space="$SPACE" \
         --filename="$FILENAME" \
-        --t_coh "${T_COH[@]}" \
-        --p_gen "${P_GEN[@]}" \
-        --p_swap "${P_SWAP[@]}" \
-        --w0 "${W0[@]}" \
+        --t_coh="$T_COH" \
+        --p_gen="$P_GEN" \
+        --p_swap="$P_SWAP" \
+        --w0="$W0" \
         $DP_FLAG; } 2>&1 | tee -a "$TMPFILE"
 
     # Extract the time taken and append it to the output file
