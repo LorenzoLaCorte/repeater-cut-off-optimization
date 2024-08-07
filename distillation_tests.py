@@ -44,6 +44,33 @@ class DistillationType(Enum):
     NO_DISTILLATION = (0, 0, 0)
 
 
+def get_protocol_rate(parameters):
+    """
+    Returns the secret key rate for the input parameters.
+    """
+    print(f"\nRunning: {parameters}")
+    pmf, w_func = repeater_sim(parameters)
+    return secret_key_rate(pmf, w_func, parameters["t_trunc"])
+
+
+def single_test(): 
+    """
+    This function is used to test the repeater simulation with a fixed set of parameters.
+     You can call this function from command line:
+     ```py -c "from distillation_ml_gp import single_test; single_test()"```
+    """
+    parameters = {
+        't_coh': 35000,
+        'p_gen': 0.002,
+        'p_swap': 0.5,
+        'w0': 0.97,
+        "t_trunc": 350000
+    }
+    
+    parameters["protocol"] = (1,1,1,0,0,0)
+    print(get_protocol_rate(parameters))
+
+
 def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
     """
     Removes unstable Werner parameters where the probability mass is below a specified threshold

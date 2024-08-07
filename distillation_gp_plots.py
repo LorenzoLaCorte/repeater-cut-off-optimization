@@ -1,5 +1,8 @@
 """Plotting functions."""
 
+import ast
+from typing import List, Literal, Tuple, TypedDict, Optional
+
 import sys
 import warnings
 from collections import Counter
@@ -14,6 +17,8 @@ from skopt import expected_minimum, expected_minimum_random_sampling
 
 from skopt.acquisition import _gaussian_acquisition
 from skopt.space import Categorical
+
+from distillation_gp_utils import get_all_maxima
 
 # For plot tests, matplotlib must be set to headless mode early
 if 'pytest' in sys.modules:
@@ -1522,3 +1527,106 @@ def _evaluate_min_params(
     else:
         raise ValueError('Argument ´eval_min_params´ must' 'be a string or a list')
     return x_vals
+
+
+def plot_protocols_key_rates(results, parameters, number_of_swaps, title, 
+                 maximum: Tuple[np.float64, Tuple[int]], maxima: List[Tuple[np.float64, Tuple[int]]],
+                 is_gp=False):
+    """
+    This function plots the results of the optimization.
+    It creates a scatter plot where the y-axis represents the secret key rate,
+    and the x-axis represents the protocol. X-axis ticks only show protocols starting with (0,.
+    """
+    optimizer = "gp" if is_gp else "bf"
+
+    tmp = results.copy()
+    results = list(set(results))
+    results = sorted(results, key=lambda x: (-len(x[1]), x[1]), reverse=True)
+
+    key_rates = [result[0] for result in results]
+    protocols = [result[1] for result in results]
+
+    protocol_labels = [str(protocol) for protocol in protocols]
+    
+    best_protocol = maximum[1]
+    best_protocol_label = str(best_protocol)
+
+    plt.figure(figsize=(24, 8))
+    plt.scatter(protocol_labels, key_rates, color='b', marker='o')
+    plt.plot(protocol_labels, key_rates, color='b', linestyle='-', label='Secret Key Rate')
+    
+    to_label = True
+    for _, maxima_protocol in maxima:
+        if to_label:
+            plt.axvline(x=str(maxima_protocol), color='g', linestyle='--', label='Local Maxima')
+            to_label = False
+        else:
+            plt.axvline(x=str(maxima_protocol), color='g', linestyle='--')
+    
+    plt.axvline(x=best_protocol_label, color='r', linestyle='--', label='Global Maximum')
+
+    plt.title(title, pad=20)
+    plt.xlabel('Protocol')
+    plt.ylabel('Secret Key Rate')
+    plt.legend()
+
+    maxima_labels = [str(maxima_protocol) for _, maxima_protocol in maxima]
+    
+    # Show only protocols ending with all swaps (zeros)
+    if number_of_swaps != 1:
+        plt.xticks(
+            ticks = [i for i, p in enumerate(protocol_labels) 
+                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+            labels = [p for i, p in enumerate(protocol_labels) 
+                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+        )
+    else:
+        plt.xticks(ticks = range(len(protocol_labels)), labels = protocol_labels)
+    
+    for i, txt in enumerate(protocol_labels):
+        if txt in maxima_labels:
+            plt.text(i, key_rates[i]*1.035, txt, fontsize=9, ha='center', c='g')
+
+    plt.gcf().autofmt_xdate()
+    plt.grid(True, axis='y')
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.225)
+    plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_{optimizer}.png')
+
+
+def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps, 
+                 results: List[Tuple[np.float64, Tuple[int]]], gp_result:OptimizeResult=None):
+    """
+    Invoke general and (eventually) skopt plot functions to visualize the optimization results.
+    """
+    is_gp = gp_result is not None
+    ordered_results: List[Tuple[np.float64, Tuple[int]]] = sorted(results, key=lambda x: x[0], reverse=True)
+
+    maximum: Tuple[np.float64, Tuple[int]]  = (ordered_results[0][0], ordered_results[0][1])
+    maxima: List[Tuple[np.float64, Tuple[int]]] = get_all_maxima(ordered_results, min_dists, max_dists)
+
+    title = (
+        f"Protocols with {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
+        f"from {min_dists} to {max_dists} distillations\n"
+        f"$p_{{gen}} = {parameters['p_gen']}, "
+        f"p_{{swap}} = {parameters['p_swap']}, "
+        f"w_0 = {parameters['w0']}, "
+        f"t_{{coh}} = {parameters['t_coh']}$"
+        f"\nBest secret-key-rate: {maximum[0]:.6f}, Protocol: {maximum[1]}"
+    )   
+
+    if is_gp:
+        fig = plt.figure(figsize=(12, 6))
+        ax1 = fig.add_subplot(1, 2, 1)
+        ax2 = fig.add_subplot(1, 2, 2)
+
+        plot_convergence(gp_result, ax=ax1)
+        plot_objective(gp_result, ax=ax2)
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.75, wspace=0.25)
+
+        fig.suptitle(title)
+        fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_skopt.png')
+    
+    plot_protocols_key_rates(results, parameters, number_of_swaps, title, maximum, maxima, is_gp)
