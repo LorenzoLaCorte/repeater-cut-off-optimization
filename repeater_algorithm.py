@@ -38,6 +38,9 @@ class HashableParameters():
     
     def set(self, key, value):
         self.parameters[key] = value
+
+    def __repr__(self):
+        return f"HashableParameters{self.parameters['protocol'] or '()'}"
     
 
 class RepeaterChainSimulation():
@@ -528,7 +531,6 @@ class RepeaterChainSimulation():
             i, parameters_hash, cached_result = self.check_cache(parameters, all_level)
             if cached_result is not None:
                 print(f"Using cached result:", parameters_hash.parameters['protocol'])
-            parameters_hash.set("protocol", parameters['protocol'])
 
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
@@ -582,8 +584,15 @@ class RepeaterChainSimulation():
                 full_result = [(pmf, w_func)]
             
         total_step_size = 1
-        # protocol unit level by level
+
+        # Compute protocol units, eventually caching partial results
         while i < len(protocol):
+            # Prepare the hash for the caching
+            if self.use_cache:
+                curr_protocol = protocol[:i+1]
+                parameters_hash = deepcopy(parameters_hash)
+                parameters_hash.set("protocol", curr_protocol)
+
             operation = protocol[i]
             if "cutoff" in parameters and isinstance(cutoff, Iterable):
                 parameters["cutoff"] = cutoff[i]
@@ -597,19 +606,21 @@ class RepeaterChainSimulation():
             elif operation == 1:
                 pmf, w_func = self.compute_unit(
                     parameters, pmf, w_func, unit_kind="dist", step_size=total_step_size)
+            
             if all_level:
                 full_result.append((pmf, w_func))
+                if self.use_cache:
+                    self.cache[parameters_hash] = full_result
+            else:
+                if self.use_cache:
+                    self.cache[parameters_hash] = (pmf, w_func)
             i += 1
 
         final_pmf = pmf
         final_w_func = w_func
         if all_level:
-            if self.use_cache:
-                self.cache[parameters_hash] = full_result
             return full_result
         else:
-            if self.use_cache:
-                self.cache[parameters_hash] = (final_pmf, final_w_func)
             return final_pmf, final_w_func
 
 
