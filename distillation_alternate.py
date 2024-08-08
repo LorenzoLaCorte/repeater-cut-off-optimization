@@ -4,6 +4,8 @@ and visualize the performance of these protocols under various conditions.
 We are trying to compare strategies for distillation, and in particular to check at which level it is better to distill
 """
 
+import argparse
+import json
 import matplotlib.pyplot as plt
 plt.style.use('tableau-colorblind10')
 
@@ -21,8 +23,8 @@ from utility_functions import pmf_to_cdf
 from matplotlib.ticker import MaxNLocator
 import itertools
 
-include_markers = False
-markers = itertools.cycle(['.']*3+['+']*3+['x']*3)
+include_markers = True
+markers = itertools.cycle(['.']*2+['+']*2+['x']*2)
 
 from enum import Enum
 
@@ -72,7 +74,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
             axs[-1].legend()
 
     title_params = (
-        f"$n = {1+2**(parameters['protocol'].count(0))}, "
+        f"$N = {1+2**(parameters['protocol'].count(0))}, "
         f"p_{{gen}} = {parameters['p_gen']}, "
         f"p_{{swap}} = {parameters['p_swap']}, "
         f"w_0 = {parameters['w0']}, "
@@ -94,7 +96,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
     plt.subplots_adjust(left=left_space, top=(0.725 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
     
     parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
-    fig.savefig(f"{exp_name}_{parameters_str}.png")
+    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=300)
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -111,7 +113,7 @@ def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=No
     cdf = pmf_to_cdf(pmf_copy)
     
     plot_data = {
-        "PMF": pmf_copy,
+        # "PMF": pmf_copy,
         "CDF": cdf,
         "Werner parameter": remove_unstable_werner(pmf_copy, w_func_copy)
     }
@@ -151,12 +153,30 @@ def entanglement_distillation_runner(distillation_type, parameters):
     return pmf, w_func
 
 
-if __name__ == "__main__":
-    parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 1000, 
-            "t_coh": 400, "w0": 0.933}
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run entanglement distillation with specified parameters.")
+    parser.add_argument('--t_trunc', type=int, default=1200, help='Truncation time')
+    parser.add_argument('--t_coh', type=int, default=120, help='Coherence time')
+    parser.add_argument('--p_gen', type=float, default=0.5, help='Generation probability')
+    parser.add_argument('--p_swap', type=float, default=0.5, help='Swapping probability')
+    parser.add_argument('--w0', type=float, default=0.933, help='Initial Werner state parameter')
+    args = parser.parse_args()
+
+    parameters = {
+        "p_gen": args.p_gen,
+        "p_swap": args.p_swap,
+        "t_trunc": args.t_trunc,
+        "t_coh": args.t_coh,
+        "w0": args.w0
+    }
+    
     zoom = 10
-    fig, axs = plt.subplots(1, 3, figsize=(15, 4))
+    fig, axs = plt.subplots(1, 2, figsize=(9, 4))
     
     for dist_type in DistillationType:
         pmf, w_func = entanglement_distillation_runner(dist_type, parameters)
@@ -165,4 +185,4 @@ if __name__ == "__main__":
                             label=f"{dist_type.name.upper().replace('_', '-')}, R = {secret_key_rate(pmf, w_func):.5f}")
         
     save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
-              rate=None, exp_name="distillation_levels", legend=True)
+              rate=None, exp_name="alternate", legend=True)
