@@ -86,6 +86,7 @@ def secret_key_rate(pmf, w_func, extrapolation=False, show_warning=False):
     """
     coverage = np.sum(pmf)
     aver_w = get_mean_werner(pmf, w_func, extrapolation)
+    aver_w = min(aver_w, 1.) # avoid w > 1
     aver_t = get_mean_waiting_time(pmf, extrapolation, show_warning)
 
     key_rate = 1/aver_t * secret_fraction(aver_w)
