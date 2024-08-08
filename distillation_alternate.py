@@ -5,7 +5,6 @@ We are trying to compare strategies for distillation, and in particular to check
 """
 
 import argparse
-import json
 import copy
 import numpy as np
 import itertools
@@ -19,6 +18,7 @@ markers = itertools.cycle(['.']*2+['+']*2+['x']*2)
 
 from repeater_algorithm import repeater_sim
 from utility_functions import secret_key_rate, pmf_to_cdf
+from distillation_gp_utils import load_config, remove_unstable_werner
 
 from enum import Enum
 
@@ -29,25 +29,6 @@ class DistillationType(Enum):
     DIST_SWAP = (1, 0, 1, 0)
     SWAP_DIST = (0, 1, 0, 1)
     NO_DIST = (0, 0)
-
-def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
-    """
-    Removes unstable Werner parameters where the probability mass is below a specified threshold
-    and returns a new Werner parameter array without modifying the input array.
-    
-    Parameters:
-    - pmf (np.array): The probability mass function array.
-    - w_func (np.array): The input Werner parameter array.
-    - threshold (float): The threshold below which Werner parameters are considered unstable.
-    
-    Returns:
-    - np.array: A new Werner parameter array with unstable parameters removed.
-    """
-    new_w_func = w_func.copy()
-    for t in range(len(pmf)):
-        if pmf[t] < threshold:
-            new_w_func[t] = np.nan
-    return new_w_func
 
 
 def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False):
@@ -147,11 +128,6 @@ def entanglement_distillation_runner(distillation_type, parameters):
     return pmf, w_func
 
 
-def load_config(config_file):
-    with open(config_file, 'r') as file:
-        config = json.load(file)
-    return config
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run entanglement distillation with specified parameters.")
     parser.add_argument('--t_trunc', type=int, default=1200, help='Truncation time')
@@ -169,9 +145,11 @@ if __name__ == "__main__":
         "w0": args.w0
     }
     
+    config = load_config('config.json')                            
+
     zoom = 10
-    fig, axs = plt.subplots(1, 2, figsize=(9, 4))
-    
+    fig, axs = plt.subplots(1, 2, figsize=(config['figsize']['width'], config['figsize']['height']))
+
     for dist_type in DistillationType:
         pmf, w_func = entanglement_distillation_runner(dist_type, parameters)
         plot_pmf_cdf_werner(pmf=pmf, w_func=w_func, trunc=(parameters["t_trunc"]//zoom), axs=axs, row=0, 

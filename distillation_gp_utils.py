@@ -1,3 +1,4 @@
+import json
 import numpy as np
 
 from argparse import ArgumentTypeError
@@ -321,3 +322,9 @@ def write_results(filename, parameters, best_results):
                     )
             
         file.write(output)
+
+
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config

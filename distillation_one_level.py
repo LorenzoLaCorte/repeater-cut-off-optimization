@@ -3,13 +3,15 @@ This script is used to run simulations to compare different quantum repeater pro
 and visualize the performance of these protocols under various conditions. 
 We are trying to compare strategies for distillation, which include distill-as-fast-as-possible and swap-as-fast-as-possible
 """
-import argparse
+import copy
+import numpy as np
 import itertools
-import json
+
+from matplotlib.ticker import MaxNLocator
 import matplotlib.pyplot as plt
 colorblind_palette = [
     "#0072B2",
-    # "#009E73",
+    "#009E73",
     "#E69F00",
     "#56B4E9",
     "#D55E00",
@@ -18,46 +20,12 @@ colorblind_palette = [
     "#000000",
 ]
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=colorblind_palette)
-# plt.style.use('tableau-colorblind10')
-
-import copy
-import numpy as np
-
-from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algorithm
-from repeater_mc import repeater_mc, plot_mc_simulation
-from logging_utilities import (
-    log_init, log_params, log_finish, create_iter_kwargs, save_data)
-from utility_functions import secret_key_rate
-
-from utility_functions import pmf_to_cdf
-from matplotlib.ticker import MaxNLocator
 
 markers = itertools.cycle(['.', '+', 'x'])
 
-def index_lowercase_alphabet(i):
-    """
-    Takes in input an integer i and returns the corresponding lowercase letter in the alphabet.
-    """
-    return chr(i + 97)
-
-def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
-    """
-    Removes unstable Werner parameters where the probability mass is below a specified threshold
-    and returns a new Werner parameter array without modifying the input array.
-    
-    Parameters:
-    - pmf (np.array): The probability mass function array.
-    - w_func (np.array): The input Werner parameter array.
-    - threshold (float): The threshold below which Werner parameters are considered unstable.
-    
-    Returns:
-    - np.array: A new Werner parameter array with unstable parameters removed.
-    """
-    new_w_func = w_func.copy()
-    for t in range(len(pmf)):
-        if pmf[t] < threshold:
-            new_w_func[t] = np.nan
-    return new_w_func
+from repeater_algorithm import repeater_sim
+from utility_functions import secret_key_rate, pmf_to_cdf
+from distillation_gp_utils import load_config, index_lowercase_alphabet, remove_unstable_werner
 
 
 def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False, general_title=None):
@@ -171,7 +139,7 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
     config = load_config('config.json')
 
     SWAPS = range(1, 3)
-    DISTS = range(1, 6, 2)
+    DISTS = range(1, 4)
     fig, axs = plt.subplots(len(parameters_set), len(SWAPS), 
                             figsize=(config['figsize']['width'], config['figsize']['height']*len(parameters_set)))
 
@@ -230,15 +198,12 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
     save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
               rate=None, exp_name="one_level", general_title="")
 
-def load_config(config_file):
-    with open(config_file, 'r') as file:
-        config = json.load(file)
-    return config
+
 
 if __name__ == "__main__":
     parameters_set = [
-        # {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
-        {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
+        {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
+        # {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
     ]
     
     sim_distillation_strategies(parameters_set)
