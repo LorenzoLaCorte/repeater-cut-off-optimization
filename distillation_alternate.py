@@ -6,25 +6,19 @@ We are trying to compare strategies for distillation, and in particular to check
 
 import argparse
 import json
-import matplotlib.pyplot as plt
-plt.style.use('tableau-colorblind10')
-
 import copy
 import numpy as np
-
-from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algorithm
-from repeater_mc import repeater_mc, plot_mc_simulation
-from optimize_cutoff import CutoffOptimizer
-from logging_utilities import (
-    log_init, log_params, log_finish, create_iter_kwargs, save_data)
-from utility_functions import secret_key_rate
-
-from utility_functions import pmf_to_cdf
-from matplotlib.ticker import MaxNLocator
 import itertools
 
-include_markers = True
+import matplotlib.pyplot as plt
+plt.style.use('tableau-colorblind10')
+from matplotlib.ticker import MaxNLocator
+
+include_markers = False
 markers = itertools.cycle(['.']*2+['+']*2+['x']*2)
+
+from repeater_algorithm import repeater_sim
+from utility_functions import secret_key_rate, pmf_to_cdf
 
 from enum import Enum
 
