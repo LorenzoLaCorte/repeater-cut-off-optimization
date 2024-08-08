@@ -3,11 +3,13 @@ This script is used to run simulations to compare different quantum repeater pro
 and visualize the performance of these protocols under various conditions. 
 We are trying to compare strategies for distillation, which include distill-as-fast-as-possible and swap-as-fast-as-possible
 """
-
+import argparse
+import itertools
+import json
 import matplotlib.pyplot as plt
 colorblind_palette = [
     "#0072B2",
-    "#009E73",
+    # "#009E73",
     "#E69F00",
     "#56B4E9",
     "#D55E00",
@@ -16,6 +18,7 @@ colorblind_palette = [
     "#000000",
 ]
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=colorblind_palette)
+# plt.style.use('tableau-colorblind10')
 
 import copy
 import numpy as np
@@ -29,6 +32,7 @@ from utility_functions import secret_key_rate
 from utility_functions import pmf_to_cdf
 from matplotlib.ticker import MaxNLocator
 
+markers = itertools.cycle(['.', '+', 'x'])
 
 def index_lowercase_alphabet(i):
     """
@@ -81,10 +85,12 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
             ax.text(1.075, 0.5, row_title, transform=ax.transAxes, ha="left", va="center", rotation=-90, fontsize=14)
 
     right_space = 0.95 if row_titles is not None else 0.975
-    plt.tight_layout()
-    plt.subplots_adjust(right=right_space, top=(0.75 + axs.shape[0]*0.075), hspace=0.25*axs.shape[0])
+    if axs.ndim == 2:
+        plt.subplots_adjust(right=right_space, top=(0.75 + axs.shape[0]*0.075), hspace=0.25*axs.shape[0])
 
-    fig.savefig(f"{exp_name}.png")
+    plt.tight_layout(pad=1.75)
+    parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
+    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=300)
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -131,6 +137,7 @@ def get_protocol_rate(parameters):
     pmf, w_func = repeater_sim(parameters)
     return secret_key_rate(pmf, w_func)
 
+
 def get_protocol(number_of_swaps, number_of_dists, where_to_distill=None):
     """
     Returns the protocol to be tested based on the input parameters.
@@ -161,9 +168,12 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
         On the y-axis we have the rate for the protocol.
         A costant line is added to benchmark the protocol in the case where no distillation is applied.
     """
+    config = load_config('config.json')
+
     SWAPS = range(1, 3)
-    DISTS = range(1, 4)
-    fig, axs = plt.subplots(len(parameters_set), len(SWAPS), figsize=(15, 4*len(parameters_set)))
+    DISTS = range(1, 6, 2)
+    fig, axs = plt.subplots(len(parameters_set), len(SWAPS), 
+                            figsize=(config['figsize']['width'], config['figsize']['height']*len(parameters_set)))
 
     for i, parameters in enumerate(parameters_set):
         print(f"\nParameters: {parameters}")
@@ -174,11 +184,9 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
             f"w_{{0}} = {parameters['w0']},"
             f"t_{{coh}} = {parameters['t_coh']}$"
         )
-        # axs[i, 0].set_title(title_params, fontsize=14, loc='right', pad=1)
-        title_y = 1 - (0.05 + i * 0.50)
+        title_y = 1 - (0.06 + i * 0.50)
 
         fig.text(0.5, title_y, title_params, ha='center', fontsize=14, transform=fig.transFigure)
-
         
         for j, number_of_swaps in enumerate(SWAPS):
             print(f"\n{number_of_swaps}-level(s) of swapping...")
@@ -204,25 +212,33 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
 
                     plot_results.append(get_protocol_rate(parameters))
                     print(f"Protocol {protocol},\t r = {get_protocol_rate(parameters)}") # DEBUG
-            
+    
+                marker = next(markers)
                 ax.plot(np.arange(number_of_swaps+1), np.array(plot_results), 
-                            label=f"{number_of_dists} {'distillations' if number_of_dists > 1 else 'distillation'}",
-                            marker="x")
+                            label=f"{number_of_dists} {'round' if number_of_dists > 1 else 'rounds'} of DIST",
+                            marker=marker)
 
             ax.axhline(y=benchmark, color='r', linestyle='--', label="No distillation")
             ax.set_xlabel("After how many swap(s) we distill")
             if j == 0:
                 ax.set_ylabel("Secret Key Rate")
-            ax.set_title(f"{number_of_swaps} {'swaps' if number_of_swaps > 1 else 'swap'}")
+            ax.set_title(
+                f"{number_of_swaps} {'swaps' if number_of_swaps > 1 else 'swap'}, "
+                f"$N = {1+2**number_of_swaps}$")
             ax.legend()
 
     save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
-              rate=None, exp_name="distillation_strategies", general_title="")
-    
+              rate=None, exp_name="one_level", general_title="")
+
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
+
 if __name__ == "__main__":
     parameters_set = [
-            {"p_gen": 0.9, "p_swap": 0.5, "t_trunc": 40*300, "t_coh": 40, "w0": 0.867},
-            {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 40*300, "t_coh": 40, "w0": 0.867},
-        ]
+        # {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
+        {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
+    ]
     
     sim_distillation_strategies(parameters_set)

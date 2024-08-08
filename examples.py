@@ -35,7 +35,7 @@ from optimize_cutoff import CutoffOptimizer
 from logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data, load_data)
 from utility_functions import secret_key_rate, pmf_to_cdf
-from distillation_levels import save_plot, plot_pmf_cdf_werner
+from distillation_alternate import save_plot, plot_pmf_cdf_werner
 
 from matplotlib.ticker import MaxNLocator
 import itertools

@@ -4,18 +4,10 @@ and visualize the performance of these protocols under various conditions.
 We are trying to compare strategies for distillation, and in particular to check at which level it is better to distill
 """
 
+import argparse
+import json
 import matplotlib.pyplot as plt
-colorblind_palette = [
-    "#0072B2",
-    "#E69F00",
-    "#009E73",
-    "#56B4E9",
-    "#D55E00",
-    "#CC79A7",
-    "#F0E442",
-    "#000000",
-]
-plt.rcParams['axes.prop_cycle'] = plt.cycler(color=colorblind_palette)
+plt.style.use('tableau-colorblind10')
 
 import copy
 import numpy as np
@@ -31,15 +23,17 @@ from utility_functions import pmf_to_cdf
 from matplotlib.ticker import MaxNLocator
 import itertools
 
-from enum import Enum
+include_markers = True
+markers = itertools.cycle(['.']*2+['+']*2+['x']*2)
 
+from enum import Enum
 
 class DistillationType(Enum):
     """
     Enum class for the distillation type.
     """
-    DIST_SWAP = (1, 0, 0)
-    SWAP_DIST = (0, 1, 0)
+    DIST_SWAP = (1, 0, 1, 0)
+    SWAP_DIST = (0, 1, 0, 1)
     NO_DIST = (0, 0)
 
 def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
@@ -80,7 +74,8 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
             axs[-1].legend()
 
     title_params = (
-        f"$p_{{gen}} = {parameters['p_gen']}, "
+        f"$N = {1+2**(parameters['protocol'].count(0))}, "
+        f"p_{{gen}} = {parameters['p_gen']}, "
         f"p_{{swap}} = {parameters['p_swap']}, "
         f"w_0 = {parameters['w0']}, "
         f"t_{{coh}} = {parameters['t_coh']}$"
@@ -99,8 +94,9 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
     left_space = 0.1 if row_titles is not None else 0.06
     plt.tight_layout()
     plt.subplots_adjust(left=left_space, top=(0.725 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
-
-    fig.savefig(f"{exp_name}.png")
+    
+    parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
+    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=300)
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -117,19 +113,25 @@ def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=No
     cdf = pmf_to_cdf(pmf_copy)
     
     plot_data = {
-        "PMF": pmf_copy,
+        # "PMF": pmf_copy,
         "CDF": cdf,
         "Werner parameter": remove_unstable_werner(pmf_copy, w_func_copy)
     }
     
     plot_axs = axs[row] if axs.ndim == 2 else axs  # handle both 1D and 2D axes arrays
     
+    
     for title, data in plot_data.items():
+        if include_markers:
+            marker = next(markers)
+        
         ax = plot_axs[list(plot_data.keys()).index(title)]
+        
         if label is not None and title == "Werner parameter":
-            ax.plot(np.arange(trunc), data, label=label)
+            ax.plot(np.arange(trunc), data, label=label, marker=(marker if include_markers else None))
         else:
-            ax.plot(np.arange(trunc), data)
+            ax.plot(np.arange(trunc), data, marker=(marker if include_markers else None), markersize=4)
+        
         ax.set_xlabel("Waiting Time")
         ax.set_title(title)
         if title == "Werner parameter":
@@ -151,18 +153,36 @@ def entanglement_distillation_runner(distillation_type, parameters):
     return pmf, w_func
 
 
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
+
 if __name__ == "__main__":
-    parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 300, 
-            "t_coh": 40, "w0": 1.}
+    parser = argparse.ArgumentParser(description="Run entanglement distillation with specified parameters.")
+    parser.add_argument('--t_trunc', type=int, default=1200, help='Truncation time')
+    parser.add_argument('--t_coh', type=int, default=120, help='Coherence time')
+    parser.add_argument('--p_gen', type=float, default=0.5, help='Generation probability')
+    parser.add_argument('--p_swap', type=float, default=0.5, help='Swapping probability')
+    parser.add_argument('--w0', type=float, default=0.933, help='Initial Werner state parameter')
+    args = parser.parse_args()
+
+    parameters = {
+        "p_gen": args.p_gen,
+        "p_swap": args.p_swap,
+        "t_trunc": args.t_trunc,
+        "t_coh": args.t_coh,
+        "w0": args.w0
+    }
     
     zoom = 10
-    fig, axs = plt.subplots(1, 3, figsize=(15, 4))
+    fig, axs = plt.subplots(1, 2, figsize=(9, 4))
     
     for dist_type in DistillationType:
         pmf, w_func = entanglement_distillation_runner(dist_type, parameters)
         plot_pmf_cdf_werner(pmf=pmf, w_func=w_func, trunc=(parameters["t_trunc"]//zoom), axs=axs, row=0, 
                             full_werner=False, 
-                            label=f"{dist_type.name.upper().replace('_', '-')}, r = {secret_key_rate(pmf, w_func):.5f}")
+                            label=f"{dist_type.name.upper().replace('_', '-')}, R = {secret_key_rate(pmf, w_func):.5f}")
         
     save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
-              rate=None, exp_name="distillation_levels", legend=True)
+              rate=None, exp_name="alternate", legend=True)
