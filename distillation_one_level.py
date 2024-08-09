@@ -138,8 +138,8 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
         On the y-axis we have the rate for the protocol.
         A costant line is added to benchmark the protocol in the case where no distillation is applied.
     """
-    SWAPS = range(1, 3)
-    DISTS = range(1, 4)
+    SWAPS = range(2, 4)
+    DISTS = range(1, 6, 2)
     fig, axs = plt.subplots(len(parameters_set), len(SWAPS), 
                             figsize=(config['figsize']['width'], config['figsize']['height']*len(parameters_set)))
 
@@ -202,8 +202,8 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
 
 if __name__ == "__main__":
     parameters_set = [
-        {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
-        # {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
+        # {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
+        {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 4000, "t_coh": 400, "w0": 0.933},
     ]
     
     sim_distillation_strategies(parameters_set)

@@ -1,0 +1,19 @@
+Gaussian process with 105 evaluations and 48 initial points
+
+
+Protocol parameters:
+{
+    't_coh': 400,
+    'p_gen': 0.9,
+    'p_swap': 0.9,
+    'w0': 0.933
+}
+
+Best configuration for 2 swaps:
+    Best Protocol: 0.111750754067425
+    Best secret key rate: (1, 1, 1, 1, 0, 0)
+
+Time taken:
+real	1m28.086s
+user	6m24.027s
+sys	0m9.325s

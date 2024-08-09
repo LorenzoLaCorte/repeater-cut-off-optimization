@@ -8,7 +8,9 @@ GP=True
 # Define the general result directory
 GENERAL_RESULT_DIR="./results"
 
-MAX_SWAPS=4
+MIN_SWAPS=2
+MAX_SWAPS=2
+MIN_DISTS=0
 MAX_DISTS=10
 
 # Tuples of t_trunc, t_coh, p_gen, p_swap, w0
@@ -33,8 +35,7 @@ elif [ "$ONE_LEVEL" = "True" ]; then
 
 elif [ "$GP" = "True" ]; then
     OPTIMIZER_SPACE_DP_COMBS=(
-        "bf one_level"
-        "gp one_level"
+        "gp strategy"
     )
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
         IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"
@@ -56,7 +57,9 @@ elif [ "$GP" = "True" ]; then
 
             # Run the Python script with the specified parameters and append the output to TMPFILE
             { time python distillation_gp.py \
+                --min_swaps="$MIN_SWAPS" \
                 --max_swaps="$MAX_SWAPS" \
+                --min_dists="$MIN_DISTS" \
                 --max_dists="$MAX_DISTS" \
                 --optimizer="$OPTIMIZER" \
                 --space="$SPACE" \

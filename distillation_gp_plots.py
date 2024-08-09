@@ -1575,15 +1575,12 @@ def plot_protocols_key_rates(results, parameters, number_of_swaps, title,
     maxima_labels = [str(maxima_protocol) for _, maxima_protocol in maxima]
     
     # Show only protocols ending with all swaps (zeros)
-    if number_of_swaps != 1:
-        plt.xticks(
-            ticks = [i for i, p in enumerate(protocol_labels) 
-                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
-            labels = [p for i, p in enumerate(protocol_labels) 
-                   if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
-        )
-    else:
-        plt.xticks(ticks = range(len(protocol_labels)), labels = protocol_labels)
+    plt.xticks(
+        ticks = [i for i, p in enumerate(protocol_labels) 
+                if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+        labels = [p for i, p in enumerate(protocol_labels) 
+                if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+    )
     
     for i, txt in enumerate(protocol_labels):
         if txt in maxima_labels:
