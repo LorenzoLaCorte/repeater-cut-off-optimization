@@ -2,5 +2,15 @@
     "figsize": {
         "width": 9,
         "height": 4
-    }
+    },
+    "figsize_skopt_2D": {
+        "width": 12,
+        "height": 6
+    },
+    "figsize_key_rates": {
+        "width": 16,
+        "height": 6
+    },
+    "dpi": 300,
+    "high_dpi": 600
 }
