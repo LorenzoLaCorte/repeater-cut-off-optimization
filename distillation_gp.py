@@ -238,6 +238,7 @@ def gaussian_optimization(parameters: SimParameters, space_type: SpaceType,
                 return objective_key_rate(space_params, space_type, number_of_swaps, parameters)
 
         try:
+            # TODO: if min_dist > 0, I clearly wanna skip this
             # Give NO-DIST (only swaps) protocol as initial point
             if space_type == "one_level":
                 x0 = [0, 0]
@@ -275,13 +276,13 @@ if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of levels of SWAP to be performed")
-    parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of levels of SWAP to be performed")
+    parser.add_argument("--max_swaps", type=int, default=4, help="Maximum number of levels of SWAP to be performed")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum round of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=7, help="Maximum round of distillations to be performed")
+    parser.add_argument("--max_dists", type=int, default=10, help="Maximum round of distillations to be performed")
     
     parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--space", type=spaceType, default="strategy", 
+    parser.add_argument("--space", type=spaceType, default="one_level", 
                         help="Space to be tested {one_level, enumerate, strategy}")
     
     parser.add_argument("--gp_shots", type=int,
@@ -297,7 +298,7 @@ if __name__ == "__main__":
                         help=("Threshold for CDF coverage. If one configuration goes below this threshold, "
                               "the simulation is discarded"))
 
-    parser.add_argument("--t_coh", type=int, default=120, help="Coherence time")
+    parser.add_argument("--t_coh", type=int, default=400, help="Coherence time")
     parser.add_argument("--p_gen", type=float, default=0.9, help="Generation success probability")
     parser.add_argument("--p_swap", type=float, default=0.9, help="Swapping probability")
     parser.add_argument("--w0", type=float, default=0.933, help="Werner parameter")
