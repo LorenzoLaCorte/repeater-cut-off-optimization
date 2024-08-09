@@ -18,7 +18,7 @@ from skopt import expected_minimum, expected_minimum_random_sampling
 from skopt.acquisition import _gaussian_acquisition
 from skopt.space import Categorical
 
-from distillation_gp_utils import get_all_maxima
+from distillation_gp_utils import get_all_maxima, load_config
 
 # For plot tests, matplotlib must be set to headless mode early
 if 'pytest' in sys.modules:
@@ -30,6 +30,8 @@ from matplotlib import gridspec
 from matplotlib import pyplot as plt
 from matplotlib.pyplot import cm
 from matplotlib.ticker import FuncFormatter, LogLocator, MaxNLocator  # noqa: E402
+
+config = load_config('config.json')
 
 
 def plot_convergence(*args, true_maximum=None, yscale=None, ax=None):
@@ -1551,7 +1553,7 @@ def plot_protocols_key_rates(results, parameters, number_of_swaps, title,
     best_protocol = maximum[1]
     best_protocol_label = str(best_protocol)
 
-    plt.figure(figsize=(24, 8))
+    plt.figure(figsize=(config['figsize_key_rates']['width'], config['figsize_key_rates']['height']+number_of_swaps*0.5))
     plt.scatter(protocol_labels, key_rates, color='b', marker='o')
     plt.plot(protocol_labels, key_rates, color='b', linestyle='-', label='Secret Key Rate')
     
@@ -1591,7 +1593,7 @@ def plot_protocols_key_rates(results, parameters, number_of_swaps, title,
     plt.grid(True, axis='y')
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.225)
-    plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_{optimizer}.png')
+    plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_{optimizer}.png', dpi=config['high_dpi'])
 
 
 def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps, 
@@ -1616,7 +1618,7 @@ def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps,
     )   
 
     if is_gp:
-        fig = plt.figure(figsize=(12, 6))
+        fig = plt.figure(figsize=(config['figsize_skopt_2D']['width'], config['figsize_skopt_2D']['height']))
         ax1 = fig.add_subplot(1, 2, 1)
         ax2 = fig.add_subplot(1, 2, 2)
 
@@ -1627,6 +1629,6 @@ def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps,
         plt.subplots_adjust(top=0.75, wspace=0.25)
 
         fig.suptitle(title)
-        fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_skopt.png')
+        fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_skopt_gp.png', dpi=config['high_dpi'])
     
     plot_protocols_key_rates(results, parameters, number_of_swaps, title, maximum, maxima, is_gp)

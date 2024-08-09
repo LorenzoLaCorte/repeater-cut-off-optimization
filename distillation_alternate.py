@@ -22,6 +22,8 @@ from distillation_gp_utils import load_config, remove_unstable_werner
 
 from enum import Enum
 
+config = load_config('config.json')                            
+
 class DistillationType(Enum):
     """
     Enum class for the distillation type.
@@ -71,7 +73,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
     plt.subplots_adjust(left=left_space, top=(0.725 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
     
     parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
-    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=300)
+    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=config['dpi'])
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -145,8 +147,6 @@ if __name__ == "__main__":
         "w0": args.w0
     }
     
-    config = load_config('config.json')                            
-
     zoom = 10
     fig, axs = plt.subplots(1, 2, figsize=(config['figsize']['width'], config['figsize']['height']))
 

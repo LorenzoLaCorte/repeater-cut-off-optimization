@@ -27,6 +27,8 @@ from repeater_algorithm import repeater_sim
 from utility_functions import secret_key_rate, pmf_to_cdf
 from distillation_gp_utils import load_config, index_lowercase_alphabet, remove_unstable_werner
 
+config = load_config('config.json')
+
 
 def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False, general_title=None):
     """
@@ -58,7 +60,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
 
     plt.tight_layout(pad=1.75)
     parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
-    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=300)
+    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=config['dpi'])
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -136,8 +138,6 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
         On the y-axis we have the rate for the protocol.
         A costant line is added to benchmark the protocol in the case where no distillation is applied.
     """
-    config = load_config('config.json')
-
     SWAPS = range(1, 3)
     DISTS = range(1, 4)
     fig, axs = plt.subplots(len(parameters_set), len(SWAPS), 
