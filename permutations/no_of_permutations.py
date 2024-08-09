@@ -17,9 +17,9 @@ if __name__ == '__main__':
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
-    parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of swaps")
+    parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=7, help="Maximum amount of distillations to be performed")
+    parser.add_argument("--max_dists", type=int, default=5, help="Maximum amount of distillations to be performed")
       
     args: Namespace = parser.parse_args()
 

@@ -1,0 +1,9 @@
+classic
+real    39m27.957s
+user    25m38.785s
+sys     13m49.105s
+
+--dp
+real    22m21.316s
+user    14m34.810s
+sys     7m32.309s
