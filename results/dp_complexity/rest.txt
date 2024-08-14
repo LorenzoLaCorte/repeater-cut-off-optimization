@@ -1,0 +1,30 @@
+R(swaps=1, max_dists=1):	1
+R(swaps=1, max_dists=2):	2
+R(swaps=1, max_dists=3):	3
+R(swaps=1, max_dists=4):	4
+R(swaps=1, max_dists=5):	5
+
+R(swaps=2, max_dists=1):	4
+R(swaps=2, max_dists=2):	8
+R(swaps=2, max_dists=3):	13
+R(swaps=2, max_dists=4):	19
+R(swaps=2, max_dists=5):	26
+
+R(swaps=3, max_dists=1):	8
+R(swaps=3, max_dists=2):	18
+R(swaps=3, max_dists=3):	33
+R(swaps=3, max_dists=4):	54
+R(swaps=3, max_dists=5):	82
+
+R(swaps=4, max_dists=1):	13
+R(swaps=4, max_dists=2):	33
+R(swaps=4, max_dists=3):	68
+R(swaps=4, max_dists=4):	124
+R(swaps=4, max_dists=5):	208
+
+R(swaps=5, max_dists=1):	19
+R(swaps=5, max_dists=2):	54
+R(swaps=5, max_dists=3):	124
+R(swaps=5, max_dists=4):	250
+R(swaps=5, max_dists=5):	460
+
