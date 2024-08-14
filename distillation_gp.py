@@ -212,7 +212,7 @@ def gaussian_optimization(parameters: SimParameters, space_type: SpaceType,
         if gp_initial_points is None:
             gp_initial_points_def = 20 + int(protocol_space_size * .10)
         if gp_shots is None:
-            gp_shots_def = (gp_initial_points or gp_initial_points_def) + int(protocol_space_size * .20)
+            gp_shots_def = (gp_initial_points or gp_initial_points_def) + 1 + int(protocol_space_size * .20)
 
         with open(filename, 'w') as file:
             file.write((f"Gaussian process with {gp_shots or gp_shots_def} evaluations "
@@ -275,10 +275,10 @@ def gaussian_optimization(parameters: SimParameters, space_type: SpaceType,
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of levels of SWAP to be performed")
-    parser.add_argument("--max_swaps", type=int, default=4, help="Maximum number of levels of SWAP to be performed")
+    parser.add_argument("--min_swaps", type=int, default=2, help="Minimum number of levels of SWAP to be performed")
+    parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of levels of SWAP to be performed")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum round of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=10, help="Maximum round of distillations to be performed")
+    parser.add_argument("--max_dists", type=int, default=7, help="Maximum round of distillations to be performed")
     
     parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
@@ -298,10 +298,10 @@ if __name__ == "__main__":
                         help=("Threshold for CDF coverage. If one configuration goes below this threshold, "
                               "the simulation is discarded"))
 
-    parser.add_argument("--t_coh", type=int, default=400, help="Coherence time")
-    parser.add_argument("--p_gen", type=float, default=0.9, help="Generation success probability")
-    parser.add_argument("--p_swap", type=float, default=0.9, help="Swapping probability")
-    parser.add_argument("--w0", type=float, default=0.933, help="Werner parameter")
+    parser.add_argument("--t_coh", type=int, default=600, help="Coherence time")
+    parser.add_argument("--p_gen", type=float, default=0.1, help="Generation success probability")
+    parser.add_argument("--p_swap", type=float, default=0.4, help="Swapping probability")
+    parser.add_argument("--w0", type=float, default=0.98, help="Werner parameter")
 
     parser.add_argument("--dp", action='store_true', default=False, 
                         help="Use dynamic programming to cache results and set a fixed truncation time")

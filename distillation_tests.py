@@ -60,14 +60,14 @@ def single_test():
      ```py -c "from distillation_ml_gp import single_test; single_test()"```
     """
     parameters = {
-        't_coh': 400,
-        'p_gen': 0.5,
-        'p_swap': 0.5,
-        'w0': 0.933,
-        "t_trunc": 1000
+        't_coh': 12000,
+        'p_gen': 0.1,
+        'p_swap': 0.4,
+        'w0': 0.98,
+        "t_trunc": 12000
     }
     
-    parameters["protocol"] = (0,1,0,1)
+    parameters["protocol"] = (1,1,0,0)
     print(get_protocol_rate(parameters))
 
 

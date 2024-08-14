@@ -1,0 +1,5 @@
+swaps=2, max_dists=1, time=0m9.893s
+swaps=2, max_dists=2, time=0m33.899s
+swaps=2, max_dists=3, time=2m51.714s
+swaps=2, max_dists=4, time=12m40.579s
+swaps=2, max_dists=5, time=39m27.957s
