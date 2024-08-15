@@ -132,7 +132,7 @@ def get_analytical_permutations(min_dists, max_dists, min_swaps, max_swaps):
     return total_permutations
 
 
-def get_permutation_space(min_dists, max_dists, number_of_swaps, skopt_space=False):
+def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=False):
     """
     The permutation space is used to test all the possible combinations of distillations for a fixed number of swaps.
     For each number of distillation tested, we test all the possible permutations of distillations. 

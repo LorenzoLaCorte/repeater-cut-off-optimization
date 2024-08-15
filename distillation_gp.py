@@ -35,7 +35,7 @@ from distillation_gp_plots import plot_optimization_process
 from distillation_gp_utils import (
     spaceType, SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
     index_lowercase_alphabet, remove_unstable_werner, write_results, # Utils
-    get_permutation_space, get_protocol_space_size,  # Getters for Spaces
+    get_protocol_enum_space, get_protocol_space_size,  # Getters for Spaces
     get_protocol_from_distillations, get_protocol_from_strategy, # Getters for Protocols
     get_all_maxima, get_t_trunc, get_ordered_results, # Other Getters
 ) 
@@ -96,7 +96,7 @@ def brute_force_optimization(parameters: SimParameters, space_type: SpaceType,
                 for where_to_distill in range(number_of_swaps+1):
                     space.append(get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_distill))
         elif space_type == "enumerate":
-            space = get_permutation_space(min_dists, max_dists, number_of_swaps)
+            space = get_protocol_enum_space(min_dists, max_dists, number_of_swaps)
         
         protocol_space_size = get_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
         assert len(space) == protocol_space_size, \
