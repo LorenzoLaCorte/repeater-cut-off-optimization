@@ -26,14 +26,15 @@ from repeater_mc import repeater_mc, plot_mc_simulation
 from optimize_cutoff import CutoffOptimizer
 from logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data)
-from utility_functions import secret_key_rate
+from utility_functions import secret_key_rate, pmf_to_cdf, get_mean_werner, get_mean_waiting_time
+from distillation_gp_utils import get_protocol_enum_space, load_config
 
-from utility_functions import pmf_to_cdf
 from matplotlib.ticker import MaxNLocator
 import itertools
 
 from enum import Enum
 
+config = load_config('config.json')
 
 class DistillationType(Enum):
     """
@@ -174,25 +175,33 @@ def entanglement_distillation_runner(distillation_type, parameters):
     return pmf, w_func
 
 
-def distillation_step(pmf, w_func, parameters, unit_kind="dist"):
+def distillation_step(parameters, pmf, w_func, pmf2= None, w_func2=None):
     """
     Distills the entanglement between two qubits pairs, given the input PMF and Werner parameter arrays.
     Returns the new PMF and Werner parameter arrays after distillation.
     """
     simulator = RepeaterChainSimulation()
-    new_pmf, new_w_func = simulator.compute_unit(
-        parameters, pmf, w_func, unit_kind="dist")
+    if pmf2 is not None and w_func2 is not None:
+        new_pmf, new_w_func = simulator.compute_unit(
+            parameters, pmf, w_func, pmf2, w_func2, unit_kind="dist")
+    else:
+        new_pmf, new_w_func = simulator.compute_unit(
+            parameters, pmf, w_func, unit_kind="dist")
     return new_pmf, new_w_func
 
 
-def swapping_step(pmf, w_func, parameters):
+def swapping_step(parameters, pmf, w_func, pmf2=None, w_func2=None):
     """
     Swaps the entanglement between two qubits pairs, given the input PMF and Werner parameter arrays.
     Returns the new PMF and Werner parameter arrays after swapping.
     """
     simulator = RepeaterChainSimulation()
-    new_pmf, new_w_func = simulator.compute_unit(
-        parameters, pmf, w_func, unit_kind="swap")
+    if pmf2 is not None and w_func2 is not None:
+        new_pmf, new_w_func = simulator.compute_unit(
+            parameters, pmf, w_func, pmf2, w_func2, unit_kind="swap")
+    else:
+        new_pmf, new_w_func = simulator.compute_unit(
+            parameters, pmf, w_func, unit_kind="swap")
     return new_pmf, new_w_func
 
 
@@ -233,21 +242,21 @@ def entanglement_distillation_manual(distillation_type, parameters, intermediate
     if distillation_type == DistillationType.DISTILLATION_FIRST:
         # Distill the entanglement between A and B
         pmf_dist, w_dist = distillation_step(
-            pmf_gen, w_gen, parameters)
+            parameters, pmf_gen, w_gen)
         # And then perform the swapping between A and B
         pmf_swap1, w_swap1 = swapping_step(
-            pmf_dist, w_dist, parameters)
+            parameters, pmf_dist, w_dist)
     elif distillation_type == DistillationType.SWAPPING_FIRST:
         # Swap the entanglement between A and B
         pmf_swap_nodist, w_swap_nodist = swapping_step(
-            pmf_gen, w_gen, parameters)
+            parameters, pmf_gen, w_gen)
         # And then perform the distillation between A and B
         pmf_swap1, w_swap1 = distillation_step(
-            pmf_swap_nodist, w_swap_nodist, parameters)
+            parameters, pmf_swap_nodist, w_swap_nodist)
     elif distillation_type == DistillationType.NO_DISTILLATION:
         # Perform the swapping between A and B    
         pmf_swap1, w_swap1 = swapping_step(
-            pmf_gen, w_gen, parameters)
+            parameters, pmf_gen, w_gen)
     else:
         raise ValueError("Invalid distillation type")
     
@@ -328,16 +337,228 @@ def run_distillation_types():
               exp_name="distillation_types", legend=True)
 
 
-if __name__ == "__main__":
-    parameters = {"p_gen": 0.1, "p_swap": 0.5, "t_trunc": 20000, 
-                "t_coh": 400, "w0": 0.999}
+def tuple_to_bitstring(tup):
+    # Call recursively if it is a tuple of tuples
+    if isinstance(tup[0], tuple):
+        return ", ".join(tuple_to_bitstring(t) for t in tup)
+    else:
+        return "".join([str(i) for i in tup])
+
+
+def plot_protocols(results, parameters, metric):
+    """
+    This function plots the results of the optimization.
+    It creates a scatter plot where the y-axis represents the secret key rate,
+    and the x-axis represents the protocol. X-axis ticks only show protocols starting with (0,.
+    """
+    # Transform the tuples of protocols into bit strings
+    results = [(data, tuple_to_bitstring(protocol)) for data, protocol in results]
+    results = sorted(results, key=lambda x: (len(results[1])), reverse=False)
+
+    metric_values = [result[0] for result in results]
+    protocols = [result[1] for result in results]
+
+    protocol_labels = [str(protocol) for protocol in protocols]
     
-    zoom = 10
-    rows = 5
-    fig, axs = plt.subplots(rows, 3, figsize=(15, 4*rows), sharex=True)
+    plt.figure(figsize=(config['figsize_key_rates']['width'], config['figsize_key_rates']['height']))
+    plt.scatter(protocol_labels, metric_values, color='b', marker='o')
+    plt.plot(protocol_labels, metric_values, color='b', linestyle='-', label=f'{metric}')
+    
 
-    for dist_type in DistillationType:
-        pmfs, w_funcs = entanglement_distillation_manual(dist_type, parameters, intermediate=True)
-        plot_steps(fig, axs, pmfs, w_funcs, (parameters["t_trunc"]//zoom), dist_type.name.lower())
+    plt.title(f"{metric} for Protocols in the Space", pad=20)
+    plt.xlabel('Protocol')
+    plt.ylabel(f'{metric}')
+    plt.legend()
 
-    save_plot(fig, axs, None, parameters, rate=None, exp_name="distillation_steps", legend=True)
+    # # Show only protocols ending with all swaps (zeros)
+    # plt.xticks(
+    #     ticks = [i for i, p in enumerate(protocol_labels) 
+    #             if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+    #     labels = [p for i, p in enumerate(protocol_labels) 
+    #             if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+    # )
+    
+    plt.gcf().autofmt_xdate()
+    plt.grid(True, axis='y')
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.225)
+    plt.savefig(f"dist_{str(metric).replace(' ', '').lower()}_protocols.png", dpi=config['high_dpi'])
+
+
+def calculate_benchmark(parameters):
+    def calculate_subblock_benchmark(parameters, protocol):
+        parameters["protocol"] = protocol
+        benchmark = {
+            "pmf": repeater_sim(parameters)[0],
+            "w_func": repeater_sim(parameters)[1]
+        }
+        return benchmark
+
+    b1_benchmark = calculate_subblock_benchmark(parameters, (0,0))
+    b2_benchmark = calculate_subblock_benchmark(parameters, (0,))
+
+    bm_pmf, bm_w_func = swapping_step(parameters, b1_benchmark["pmf"], b1_benchmark["w_func"],
+                              b2_benchmark["pmf"], b2_benchmark["w_func"])
+
+    return {
+        "pmf": bm_pmf,
+        "w_func": bm_w_func
+    }
+
+
+def optimality_test_seven_nodes_protocols(parameters, min_dists, max_dists):
+    """
+    Runs the entanglement distillation experiment 
+        with the specified parameters for the seven nodes protocol.
+
+    We consider two blocks: one of five nodes (B1), intersecting with one of three nodes (B2)
+        B1 performs two SWAPs to reach an entangled link
+        B2 performs one SWAP  to reach an entangled link
+        Then a further SWAP links the end nodes of the two blocks
+
+    Distillation can be performed at each level for B1, B2 and before or after the SWAP linking the two
+    
+    Thus,
+        for B1 we run: (0,0), (0,0,1), (0,1,0), (1,0,0), (0,0,1,1), (0,1,0,1), (0,1,1,0), (1,0,0,1), (1,0,1,0), (1,1,0,0), ...
+        i.e. the whole space of protocols for n=2 and k in the range from min_dists to max_dists]
+        for B2 we run: (0), (0,1), (1,0), (0,1,1), (1,0,1), (1,1,0), ...
+        the same, but for n=1
+    
+    We then test out the performance of all the possible combinations of these protocols
+    Also, we can distill the entanglement between the two blocks, before or after the SWAP, or not at all (3 possibilities)
+    """
+
+    # Get the permutation spaces for the two blocks
+    b1_space = [(0,0), (0,1,0), (1,0,0)] # get_protocol_enum_space(min_dists, max_dists, number_of_swaps=2)
+    b2_space = [(0,), (1,0), (0,1)] # get_protocol_enum_space(min_dists, max_dists, number_of_swaps=1)
+
+    b1_results = {}
+    b2_results = {}
+
+    def collect_block_results(protocol_space, parameters, results):
+        for protocol in protocol_space:
+            parameters["protocol"] = protocol
+            pmf, w_func = repeater_sim(parameters)
+            results[protocol] = {"pmf": pmf, "w_func": w_func}
+
+    collect_block_results(b1_space, parameters, b1_results)
+    collect_block_results(b2_space, parameters, b2_results)
+
+    # Now, combine the results of the two blocks
+    combined_results = {}
+    for b1_protocol, b1_data in b1_results.items():
+        for b2_protocol, b2_data in b2_results.items():
+            pmf, w_func = swapping_step(parameters, b1_data["pmf"], b1_data["w_func"], b2_data["pmf"], b2_data["w_func"])
+            combined_results[(b1_protocol, b2_protocol)] = {"pmf": pmf, "w_func": w_func}
+
+    waiting_times = [(get_mean_waiting_time(data["pmf"]), protocol) for protocol, data in combined_results.items()]
+    werner_params = [(get_mean_werner(data["pmf"], data["w_func"]), protocol) for protocol, data in combined_results.items()]
+
+    plot_protocols(waiting_times, parameters, "Waiting Time")
+    plot_protocols(werner_params, parameters, "Werner Parameter")
+
+    benchmark = calculate_benchmark(parameters)
+
+    # Compute the ratio of the average waiting time without distillation to the average waiting time with distillation
+    waiting_times_improv = [(data/get_mean_waiting_time(benchmark["pmf"]), protocol) for data, protocol in waiting_times]
+    werner_params_improv = [(data/get_mean_werner(benchmark["pmf"], benchmark["w_func"]), protocol) for data, protocol in werner_params]
+
+    plot_protocols(waiting_times_improv, parameters, "Waiting Time Ratio (to Benchmark)")
+    plot_protocols(werner_params_improv, parameters, "Werner Parameter Ratio (to Benchmark)")        
+
+
+def hw_varying_experiment(hw_param_name: str, hw_param_val_range,
+                          parameters, min_dists, max_dists, number_of_swaps=2):
+    """
+    Perform variant simulations with the hw parameter in range (param/gen_variants, param+param/gen_variants, param/gen_variants)
+    and plots the results for the different protocols for different metrics
+    """
+    parameters = copy.deepcopy(parameters)
+    protocol_space = get_protocol_enum_space(min_dists, max_dists, number_of_swaps)
+    val_range = hw_param_val_range
+
+    results = {}
+    for protocol in protocol_space:
+        results[protocol] = {}
+        for hw_param_data in val_range:
+            parameters["protocol"] = protocol
+            parameters[f"{hw_param_name}"] = hw_param_data
+            pmf, w_func = repeater_sim(parameters)
+
+            results[protocol][f"{hw_param_data}"] = {
+                "avg_waiting_time": get_mean_waiting_time(pmf),
+                "avg_werner": get_mean_werner(pmf, w_func),
+                "secret_key_rate": secret_key_rate(pmf, w_func)
+            }
+
+    metrics = {
+        "avg_waiting_time": "Average Waiting Time",
+        "avg_werner": "Average Werner",
+        "secret_key_rate": "Secret Key Rate"
+    }
+
+    for metric_abbr, metric_full in metrics.items():
+        plt.figure(figsize=(config["figsize_hw_varying"]["width"], config["figsize_hw_varying"]["height"]))
+
+        highest_protocol = None
+        highest_metric_value = float('-inf')
+        lowest_protocol = None
+        lowest_metric_value = float('inf')
+
+        for protocol, hw_param_data in results.items():
+            hw_param_points = list(hw_param_data.keys())
+            metric_values = [data[metric_abbr] for data in hw_param_data.values()]
+            plt.plot(hw_param_points, metric_values, marker='o', label=f"Protocol {protocol}")
+
+            max_value = max(metric_values)
+            min_value = min(metric_values)
+            if max_value > highest_metric_value:
+                highest_metric_value = max_value
+                highest_protocol = protocol
+            if min_value < lowest_metric_value:
+                lowest_metric_value = min_value
+                lowest_protocol = protocol
+
+        plt.xlabel(f"${hw_param_name.replace('0', '_0').replace('_', '_{')+'}'}$")
+        plt.ylabel(metric_full)
+
+        title = (
+            f"Protocols with {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
+            f"from {min_dists} to {max_dists} distillations\n"
+            + (f"$p_{{gen}} = {parameters['p_gen']}$, " if hw_param_name != 'p_gen' else "$p_{gen}$ varying, ")
+            + (f"$p_{{swap}} = {parameters['p_swap']}$, " if hw_param_name != 'p_swap' else "$p_{swap}$ varying, ")
+            + (f"$w_0 = {parameters['w0']}$, " if hw_param_name != 'w0' else "$w_{0}$ varying, ")
+            + (f"$t_{{coh}} = {parameters['t_coh']}$\n" if hw_param_name != 't_coh' else "$t_{coh}$ varying\n")
+            + f"Highest {metric_full}: {highest_metric_value:.5f} for protocol {highest_protocol}\n"
+            + f"Lowest {metric_full}: {lowest_metric_value:.5f} for protocol {lowest_protocol}"
+        )
+        plt.title(title)
+        plt.legend()
+        plt.savefig(f"hw_{hw_param_name}_{metric_abbr}_protocols.png")
+            
+
+if __name__ == "__main__":
+    parameters = {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 80*300, 
+                "t_coh": 80, "w0": 0.933}
+    
+    # zoom = 10
+    # rows = 5
+    # fig, axs = plt.subplots(rows, 3, figsize=(15, 4*rows), sharex=True)
+
+    # for dist_type in DistillationType:
+    #     pmfs, w_funcs = entanglement_distillation_manual(dist_type, parameters, intermediate=True)
+    #     plot_steps(fig, axs, pmfs, w_funcs, (parameters["t_trunc"]//zoom), dist_type.name.lower())
+
+    # save_plot(fig, axs, None, parameters, rate=None, exp_name="distillation_steps", legend=True)
+
+    # optimality_test_seven_nodes_protocols(parameters, 0, 2, gen_variants=2)
+
+    for hw_param in ["p_gen", "p_swap", "w0", "t_coh"]:
+        if hw_param == "t_coh":
+            val_range = [2**i for i in range(10, 16)]
+        else:
+            max_param_val = 1
+            variants = 10
+            val_range = np.round(np.arange(max_param_val / variants, max_param_val + max_param_val / variants, max_param_val / variants), 2)
+
+        hw_varying_experiment(hw_param, val_range, parameters, min_dists=0, max_dists=1, number_of_swaps=2)

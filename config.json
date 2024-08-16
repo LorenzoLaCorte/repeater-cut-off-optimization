@@ -11,6 +11,10 @@
         "width": 16,
         "height": 6
     },
+    "figsize_hw_varying": {
+        "width": 16,
+        "height": 8
+    },
     "dpi": 300,
-    "high_dpi": 600
+    "high_dpi": 400
 }
