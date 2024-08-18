@@ -493,72 +493,113 @@ def hw_varying_experiment(hw_param_name: str, hw_param_val_range,
 
     metrics = {
         "avg_waiting_time": "Average Waiting Time",
-        "avg_werner": "Average Werner",
+        "avg_werner": "Average Werner Parameter",
         "secret_key_rate": "Secret Key Rate"
     }
 
+    consider_improvement = True
+    if consider_improvement:
+
+        for protocol in protocol_space:
+            no_dist_protocol = (0,) * protocol.count(0)
+            for hw_param_data in val_range:
+                for metric_abbr, metric_full in metrics.items():
+                    no_dist_data = results[no_dist_protocol][f"{hw_param_data}"][metric_abbr]
+                    with_dist_data = results[protocol][f"{hw_param_data}"][metric_abbr]
+                    if metric_abbr == "avg_werner":
+                        improv_data = (with_dist_data / no_dist_data) if no_dist_data != 0. else 0.
+                    else:
+                        improv_data = (no_dist_data / with_dist_data) if with_dist_data != 0. else 0.
+                    results[protocol][f"{hw_param_data}"][f"{metric_abbr}_improv"] = improv_data
+
+        metrics.update({f"{metric_abbr}_improv": f"{metric_full} Ratio (no-dist to dist)" for metric_abbr, metric_full in metrics.items()})
+    
+    num_dists = max_dists - min_dists + 1
+    fig, axes = plt.subplots(1, num_dists, figsize=(config["figsize_hw_varying"]["width"], config["figsize_hw_varying"]["height"]), sharey=True)
+
     for metric_abbr, metric_full in metrics.items():
-        plt.figure(figsize=(config["figsize_hw_varying"]["width"], config["figsize_hw_varying"]["height"]))
+        
+        for i, num_dist in enumerate(range(min_dists, max_dists + 1)):
 
-        highest_protocol = None
-        highest_metric_value = float('-inf')
-        lowest_protocol = None
-        lowest_metric_value = float('inf')
+            sub_results = {protocol: data for protocol, data in results.items() if protocol.count(1) == num_dist}
 
-        for protocol, hw_param_data in results.items():
-            hw_param_points = list(hw_param_data.keys())
-            metric_values = [data[metric_abbr] for data in hw_param_data.values()]
-            plt.plot(hw_param_points, metric_values, marker='o', label=f"Protocol {protocol}")
+            ax = axes[i]
+            for protocol, hw_param_data in sub_results.items():
+                hw_param_points = list(hw_param_data.keys())
+                metric_values = [data[metric_abbr] for data in hw_param_data.values()]
+                ax.plot(hw_param_points, metric_values, marker='o', label=f"Protocol {protocol}")
 
-            max_value = max(metric_values)
-            min_value = min(metric_values)
-            if max_value > highest_metric_value:
-                highest_metric_value = max_value
-                highest_protocol = protocol
-            if min_value < lowest_metric_value:
-                lowest_metric_value = min_value
-                lowest_protocol = protocol
-
-        plt.xlabel(f"${hw_param_name.replace('0', '_0').replace('_', '_{')+'}'}$")
-        plt.ylabel(metric_full)
+            ax.set_title(f"{num_dist} distillation{'s' if num_dist != 1 else ''}")
+            ax.set_xlabel(f"${hw_param_name.replace('0', '_0').replace('_', '_{')+'}'}$")
+            if i == 0:
+                ax.set_ylabel(metric_full)
+            ax.legend()
 
         title = (
-            f"Protocols with {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
-            f"from {min_dists} to {max_dists} distillations\n"
-            + (f"$p_{{gen}} = {parameters['p_gen']}$, " if hw_param_name != 'p_gen' else "$p_{gen}$ varying, ")
-            + (f"$p_{{swap}} = {parameters['p_swap']}$, " if hw_param_name != 'p_swap' else "$p_{swap}$ varying, ")
-            + (f"$w_0 = {parameters['w0']}$, " if hw_param_name != 'w0' else "$w_{0}$ varying, ")
-            + (f"$t_{{coh}} = {parameters['t_coh']}$\n" if hw_param_name != 't_coh' else "$t_{coh}$ varying\n")
-            + f"Highest {metric_full}: {highest_metric_value:.5f} for protocol {highest_protocol}\n"
-            + f"Lowest {metric_full}: {lowest_metric_value:.5f} for protocol {lowest_protocol}"
+            f"{metric_full}\n"
+            f"Protocols with $N = {1+2**number_of_swaps}$, i.e. {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
+            f"and from {min_dists} to {max_dists} distillations\n"
+            + (f"$p_{{gen}} = {parameters['p_gen']}$, " if hw_param_name != 'p_gen' else "varying $p_{gen}$, ")
+            + (f"$p_{{swap}} = {parameters['p_swap']}$, " if hw_param_name != 'p_swap' else "varying $p_{swap}$, ")
+            + (f"$w_0 = {parameters['w0']}$, " if hw_param_name != 'w0' else "varying $w_{0}$, ")
+            + (f"$t_{{coh}} = {parameters['t_coh']}$\n" if hw_param_name != 't_coh' else "varying $t_{coh}$\n")
         )
-        plt.title(title)
+
+        plt.suptitle(title)
         plt.legend()
+        plt.tight_layout(w_pad=2, h_pad=0.5)
         plt.savefig(f"hw_{hw_param_name}_{metric_abbr}_protocols.png")
-            
+        
+        for ax in axes:
+            ax.clear()
 
 if __name__ == "__main__":
-    parameters = {"p_gen": 0.9, "p_swap": 0.9, "t_trunc": 80*300, 
-                "t_coh": 80, "w0": 0.933}
+    # Set the parameters for the experiment
+    t_coh = 8
+    parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": t_coh*300, 
+                "t_coh": t_coh, "w0": 0.88}
     
-    # zoom = 10
-    # rows = 5
-    # fig, axs = plt.subplots(rows, 3, figsize=(15, 4*rows), sharex=True)
 
-    # for dist_type in DistillationType:
-    #     pmfs, w_funcs = entanglement_distillation_manual(dist_type, parameters, intermediate=True)
-    #     plot_steps(fig, axs, pmfs, w_funcs, (parameters["t_trunc"]//zoom), dist_type.name.lower())
+    # Distillation steps experiment
+    DISTILLATION_STEPS = False
+    # Optimality test for seven nodes protocols
+    OPTIMALITY_TEST = False
+    # Hardware varying experiment
+    HW_VARYING = True
+    
 
-    # save_plot(fig, axs, None, parameters, rate=None, exp_name="distillation_steps", legend=True)
+    if DISTILLATION_STEPS:
+        zoom = 10
+        rows = 5
+        fig, axs = plt.subplots(rows, 3, figsize=(15, 4*rows), sharex=True)
 
-    # optimality_test_seven_nodes_protocols(parameters, 0, 2, gen_variants=2)
+        for dist_type in DistillationType:
+            pmfs, w_funcs = entanglement_distillation_manual(dist_type, parameters, intermediate=True)
+            plot_steps(fig, axs, pmfs, w_funcs, (parameters["t_trunc"]//zoom), dist_type.name.lower())
 
-    for hw_param in ["p_gen", "p_swap", "w0", "t_coh"]:
-        if hw_param == "t_coh":
-            val_range = [2**i for i in range(10, 16)]
+        save_plot(fig, axs, None, parameters, rate=None, exp_name="distillation_steps", legend=True)
+
+    if OPTIMALITY_TEST:
+        optimality_test_seven_nodes_protocols(parameters, 0, 2, gen_variants=2)
+
+    # Run the experiment with specific values range and harware parameters
+    # or run the experiment with all hardware parameters
+    SPECIFIC_EXPERIMENT = True
+
+    if HW_VARYING:
+        if SPECIFIC_EXPERIMENT:
+            hw_param = "p_gen"
+            hw_param_val_range = [np.round((0.1) * i, 1) for i in range(1, 11)]
+            min_dists, max_dists, number_of_swaps = 0, 2, 2
+            hw_varying_experiment(hw_param, hw_param_val_range, parameters, min_dists, max_dists, number_of_swaps)
+
         else:
-            max_param_val = 1
-            variants = 10
-            val_range = np.round(np.arange(max_param_val / variants, max_param_val + max_param_val / variants, max_param_val / variants), 2)
+            for hw_param in ["p_gen", "p_swap", "w0", "t_coh"]:
+                if hw_param == "t_coh":
+                    val_range = [2**i for i in range(10, 16)]
+                else:
+                    max_param_val = 1
+                    variants = 10
+                    val_range = np.round(np.arange(max_param_val / variants, max_param_val + max_param_val / variants, max_param_val / variants), 2)
 
-        hw_varying_experiment(hw_param, val_range, parameters, min_dists=0, max_dists=1, number_of_swaps=2)
+                hw_varying_experiment(hw_param, val_range, parameters, min_dists=0, max_dists=1, number_of_swaps=2)
