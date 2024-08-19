@@ -10,13 +10,13 @@ DP_COMPLEXITY=False
 GENERAL_RESULT_DIR="./results_gp"
 
 MIN_SWAPS=2
-MAX_SWAPS=2
+MAX_SWAPS=3
 MIN_DISTS=0
 MAX_DISTS=7
 
 # Tuples of t_trunc, t_coh, p_gen, p_swap, w0
 PARAMETER_SETS=(
-    "-1 35000 0.5 0.9 0.78"
+    "-1 120 0.9 0.9 0.933"
     # "-1 3500 0.02 0.5 0.98"
     # "-1 600 0.1 0.4 0.98"
     # "-1 4000 0.5 0.01 0.98"
@@ -39,8 +39,10 @@ elif [ "$ONE_LEVEL" = "True" ]; then
 
 elif [ "$GP" = "True" ]; then
     OPTIMIZER_SPACE_DP_COMBS=(
-        "bf enumerate --dp"
-        "gp strategy --dp"
+        "bf enumerate"
+        "gp strategy"
+        "gp centerspace"
+        "gp centerspace --dp"
     )
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
         IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"
