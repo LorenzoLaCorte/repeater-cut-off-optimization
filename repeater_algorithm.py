@@ -530,7 +530,7 @@ class RepeaterChainSimulation():
         if self.use_cache:
             i, parameters_hash, cached_result = self.check_cache(parameters, all_level)
             if cached_result is not None:
-                print(f"Using cached result:", parameters_hash.parameters['protocol'])
+                logging.info(f"Using cached result:", parameters_hash.parameters['protocol'])
 
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
