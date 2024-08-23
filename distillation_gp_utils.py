@@ -143,6 +143,7 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
             (0, 0, 1), (0, 1, 0), (1, 0, 0),
         - two distillations
             (0, 0, 1, 1), (0, 1, 0, 1), (0, 1, 1, 0), (1, 0, 0, 1), (1, 0, 1, 0), (1, 1, 0, 0)
+    TODO: this function can be really be a bottleneck, we need another implementation.
     """
     space = OrderedDict()
     for number_of_dists in range(min_dists, max_dists + 1):
@@ -152,7 +153,6 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
             if perm.count(1) == number_of_dists:
                 space[perm] = None
     space = list(space.keys())
-
     
     analytical_permutations = get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)
     assert len(space) == analytical_permutations, f"Expected max. {analytical_permutations} permutations, got {len(space)}"
