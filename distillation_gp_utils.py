@@ -1,4 +1,5 @@
 import json
+import logging
 import numpy as np
 
 from argparse import ArgumentTypeError
@@ -12,6 +13,7 @@ from typing import List, Literal, Tuple, TypedDict, Optional
 from scipy.special import binom
 from scipy.optimize import OptimizeResult
 from skopt.space import Integer, Categorical, Real
+from scipy.stats import norm
 
 # Define the exception for the CDF coverage
 class ThresholdExceededError(Exception):
@@ -41,11 +43,11 @@ def optimizerType(value: str) -> OptimizerType:
     return value
 
 # Define the type for space_type
-SpaceType = Literal["one_level", "strategy", "enumerate"]
+SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace"]
 
 # Validation function for the space type
 def spaceType(value: str) -> SpaceType:
-    valid_options = ("one_level", "strategy", "enumerate")
+    valid_options = ("one_level", "strategy", "enumerate", "centerspace")
     if value not in valid_options:
         raise ArgumentTypeError(f"Invalid space type: {value}. Available options are: {', '.join(valid_options)}")
     return value
@@ -98,7 +100,6 @@ def get_all_maxima(ordered_results: List[Tuple[np.float64, Tuple[int]]], min_dis
     return maxima
 
 
-
 def get_protocol_space_size(space_type: SpaceType, min_dists, max_dists, number_of_swaps):
     """
     Returns the total number of protocols to be tested 
@@ -109,9 +110,8 @@ def get_protocol_space_size(space_type: SpaceType, min_dists, max_dists, number_
             return (max_dists - min_dists) * (number_of_swaps + 1) + 1
         else:
             return (max_dists - min_dists + 1) * (number_of_swaps + 1)
-    elif space_type == "enumerate" or space_type == "strategy":
+    elif space_type == "enumerate" or space_type == "strategy" or space_type == "centerspace":
         return get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)
-    
 
 
 def get_no_of_permutations_per_swap(min_dists, max_dists, s):
@@ -226,6 +226,57 @@ def get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, numbe
     return tuple(protocol)
 
 
+def get_protocol_from_center_and_spacing(eta, tau, n, k):
+    """
+    Generates a protocol for distillation based on a normal distribution.
+    The protocol is determined by sampling from the distribution and setting specific
+        positions to 1, indicating where distillations should occur.
+
+    Parameters:
+    - eta: Center of mass, between -1 and 1.
+    - tau: Spacing of the distribution, between 0 and 1.
+    - n: Number of SWAPs.
+    - k: Number of distillations.
+    """
+    l = n + k
+
+    # Compute the mean and standard deviation of the normal distribution
+    mu = (eta + 1) * (l + 1) / 2 
+    sigma = l * tau
+    dist = norm(loc=mu, scale=sigma)
+
+    # Compute the PDF for a range of values from 0 to l
+    pdf_values = dist.pdf(range(0, l))
+
+    for i, pdf in enumerate(pdf_values):
+        logging.debug(f"PDF at index {i}: {pdf}")
+
+    # Sample from the normal distribution n times
+    dist_idxs = []
+    for i in range(k):
+        uniform_sample = np.random.uniform(low=0, high=sum(pdf_values))
+        idx = np.searchsorted(np.cumsum(pdf_values), uniform_sample)
+
+        assert (idx >= 0 and idx < l), f"Sampled index {idx} is out of bounds."
+        dist_idxs.append(int(idx))
+
+        # Avoid sampling the same value again
+        pdf_values[idx] = 0
+
+    dist_idxs.sort()
+
+    # Generate the protocol based on sampled indices
+    protocol = [0] * l
+    for idx in dist_idxs:
+        protocol[idx] = 1
+
+    logging.debug(f"Generated protocol: {tuple(protocol)}")
+
+    assert protocol.count(0) == n, f"Expected {n} swapping, got {protocol.count(0)}"
+    assert protocol.count(1) == k, f"Expected {k} distillations, got {protocol.count(1)}"
+    return tuple(protocol)
+
+
 def get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_distill=None):
     """
     Returns the protocol to be tested based on the input parameters.
@@ -286,7 +337,7 @@ def get_ordered_results(result: OptimizeResult, space_type: SpaceType, number_of
     elif space_type == "enumerate":
         result_tuples = [(result.func_vals[i], ast.literal_eval(result.x_iters[i][0])) for i in range(len(result.func_vals))]
 
-    elif space_type == "strategy":
+    elif space_type == "strategy" or space_type == "centerspace":
         result_tuples = [(result.func_vals[i], result.x_iters[i][-1]) for i in range(len(result.func_vals))]
 
     ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)

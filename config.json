@@ -15,6 +15,10 @@
         "width": 16,
         "height": 8
     },
+    "figsize_gp_efficiency": {
+        "width": 10,
+        "height": 6
+    },
     "dpi": 300,
     "high_dpi": 400
 }

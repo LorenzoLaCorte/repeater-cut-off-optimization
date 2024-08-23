@@ -31,6 +31,9 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import cm
 from matplotlib.ticker import FuncFormatter, LogLocator, MaxNLocator  # noqa: E402
 
+import pandas as pd
+import seaborn as sns
+
 config = load_config('config.json')
 
 
@@ -449,9 +452,10 @@ def _format_scatter_plot_axes(ax, space, ylabel, plot_dims, dim_labels=None):
                 # for all rows except ...
                 if i < n_dims - 1:
                     ax_.set_xticklabels([])
+                    ax_.set_xlabel("")
                 # ... the bottom row
                 else:
-                    [label.set_rotation(45) for label in ax_.get_xticklabels()]
+                    # [label.set_rotation(45) for label in ax_.get_xticklabels()]
                     ax_.set_xlabel(dim_labels[j])
 
                 # configure plot for linear vs log-scale
@@ -470,6 +474,14 @@ def _format_scatter_plot_axes(ax, space, ylabel, plot_dims, dim_labels=None):
                     )
 
             else:  # diagonal plots
+                # for all rows except ...
+                if i < n_dims - 1:
+                    ax_.set_xticklabels([])
+                # ... the bottom row
+                else:
+                    # [label.set_rotation(45) for label in ax_.get_xticklabels()]
+                    ax_.set_xlabel(dim_labels[j])
+
                 ax_.set_ylim(*diagonal_ylim)
                 if not iscat[i]:
                     low, high = dim_i.bounds
@@ -516,6 +528,7 @@ def _make_subgrid(ax, n_rows, n_cols=None, fig_kwargs_=None, **gridspec_kwargs):
     for i in range(n_rows):
         for j in range(n_cols):
             axes[i, j] = fig.add_subplot(grid_spec[i, j])
+    
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     for spine in ax.spines.values():
@@ -809,7 +822,7 @@ def plot_objective(
     ax, axes = _make_subgrid(
         ax, n_dims, fig_kwargs_=fig_kwargs, wspace=wspace, hspace=hspace
     )
-
+    
     for i in range(n_dims):
         for j in range(n_dims):
             if i == j:
@@ -1629,3 +1642,37 @@ def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps,
         fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_skopt_gp.png', dpi=config['high_dpi'])
     
     plot_protocols_key_rates(results, parameters, number_of_swaps, title, maximum, maxima, is_gp)
+
+
+def plot_gp_optimization_efficiency(gp_shots_percentages, results, parameters, plot_info, metric):
+    """
+    Plot GP Optimization Results
+    """
+    plt.figure(figsize=(config['figsize_gp_efficiency']['width'], config['figsize_gp_efficiency']['height']))
+    
+    data = []
+    for space, values in results.items():
+        for i, percentage in enumerate(gp_shots_percentages):
+            for value in values[i]:
+                data.append([space, percentage, value])
+    
+    df = pd.DataFrame(data, columns=['Space', 'Percentage', metric])
+    
+    sns.boxplot(x='Percentage', y=metric, hue='Space', data=df, palette='viridis')
+    
+    title_params = (
+        f"{plot_info[metric]['title']} for {plot_info['tries']} Simulations\n"
+        f"$N = {1 + 2**(plot_info['swaps'])}, "
+        f"p_{{gen}} = {parameters['p_gen']}, "
+        f"p_{{swap}} = {parameters['p_swap']}, "
+        f"w_0 = {parameters['w0']}, "
+        f"t_{{coh}} = {parameters['t_coh']}$\n"
+        f"BF maximum secret-key-rate: {plot_info['bf_maximum']:5f}, found in {plot_info['bf_time']:2f}s"
+    )
+    plt.title(title_params, pad=15)
+
+    plt.xlabel(plot_info[metric]['xlabel'])
+    plt.ylabel(plot_info[metric]['ylabel'])
+    plt.legend(title=plot_info[metric]['legend_title'])
+    plt.tight_layout()
+    plt.savefig(plot_info[metric]['filename'])
