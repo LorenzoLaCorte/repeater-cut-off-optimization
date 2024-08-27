@@ -624,6 +624,72 @@ class RepeaterChainSimulation():
             return final_pmf, final_w_func
 
 
+    def heterogeneus_protocol(self, parameters):
+        """
+        Compute the waiting time and the Werner parameter of a heterogeneus and asymmetric protocol.
+        Parameters
+        ----------
+        parameters: dict
+            A dictionary contains the parameters of
+            the repeater and the simulation.
+            In this case
+                protocol["protocol"] = ((...), (...)) is a tuple of the (symmetric) sub-protocols 
+                protocol["p_gen"] = [p_gen1, p_gen2, ...] is a list of the generation probabilities for each sub-protocol
+                protocol["w0"] = [w01, w02, ...] is a list of the Werner parameters for each sub-protocol
+                protocol["t_coh"] = [t_coh1, t_coh2, ...] is a list of the coherence times for each sub-protocol
+                
+            Truncation time and swap and distillation probabilities are the same for all segments
+            Cutoffs are not supported for this protocol type.
+        Returns
+        -------
+        t_pmf, w_func: array-like 1-D
+            The output waiting time and Werner parameters
+        """
+        pmfs = []
+        w_funcs = []
+        for (subprotocol, p_gen, w0, t_coh) in zip(
+            parameters["protocol"], parameters["p_gen"], parameters["w0"], parameters["t_coh"]):
+            
+            # Compute the waiting time and the Werner parameter of the sub-protocol
+            pmf, w_func = self.nested_protocol(
+                {"protocol": subprotocol, "p_gen": p_gen, "w0": w0, 
+                 "t_coh": t_coh, "t_trunc": parameters["t_trunc"], "p_swap": parameters["p_swap"]})
+            
+            pmfs.append(pmf)
+            w_funcs.append(w_func)
+        
+        # Merge the results by swapping adjacent segments
+        while len(pmfs) > 1:
+            for i in range(0, len(pmfs)-1, 2):
+                pmf1, pmf2 = pmfs[i], pmfs[i + 1]
+                w_func1, w_func2 = w_funcs[i], w_funcs[i + 1]
+
+                pmf, w_func = self.entanglement_swap(
+                        pmf1, w_func1, pmf2, w_func2, parameters["p_swap"],
+                        t_coh=min(parameters["t_coh"][i], parameters["t_coh"][i+1]), 
+                        cutoff=np.iinfo(int).max, cut_type="memory_time")
+
+                # erase ridiculous Werner parameters,
+                # it can happen when the probability is too small ~1.0e-20.
+                w_func = np.where(np.isnan(w_func), 1., w_func)
+                w_func[w_func > 1.0] = 1.0
+                w_func[w_func < 0.] = 0.
+
+                # TODO: there is a check missing, and in general the code can be refactored
+                # check probability coverage
+                if np.sum(pmf) < 0.99:
+                    logging.warning(
+                        "The truncation time only covers {:.2f}% of the distribution, "
+                        "please increase t_trunc.\n".format(
+                            np.sum(pmf)*100))
+                
+                pmfs[i], pmfs[i + 1] = pmf, None
+                w_funcs[i], w_funcs[i + 1] = w_func, None
+            pmfs = [pmf for pmf in pmfs if pmf is not None]
+            w_funcs = [w_func for w_func in w_funcs if w_func is not None]
+
+        return pmfs[0], w_funcs[0]
+    
 def compute_unit(
         parameters, pmf1, w_func1, pmf2=None, w_func2=None,
         unit_kind="swap", step_size=1):
@@ -640,7 +706,12 @@ def repeater_sim(parameters, all_level=False):
     Functional warpper for nested_protocol
     """
     simulator = RepeaterChainSimulation()
-    return simulator.nested_protocol(parameters=parameters, all_level=all_level)
+    if isinstance(parameters["p_gen"], list):
+        assert isinstance(parameters["w0"], list) and isinstance(parameters["t_coh"], list)
+        assert all_level is False, "all_level is not supported for heterogeneus protocol"
+        return simulator.heterogeneus_protocol(parameters)
+    else:
+        return simulator.nested_protocol(parameters=parameters, all_level=all_level)
 
 
 def plot_algorithm(pmf, fid_func, axs=None, t_trunc=None, legend=None):
