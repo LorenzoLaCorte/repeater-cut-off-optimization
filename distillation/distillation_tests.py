@@ -21,6 +21,10 @@ plt.rcParams['axes.prop_cycle'] = plt.cycler(color=colorblind_palette)
 import copy
 import numpy as np
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+
 from repeater_algorithm import RepeaterChainSimulation, repeater_sim, plot_algorithm
 from repeater_mc import repeater_mc, plot_mc_simulation
 from optimize_cutoff import CutoffOptimizer

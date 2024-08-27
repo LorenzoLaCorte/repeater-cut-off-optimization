@@ -7,6 +7,10 @@ import copy
 import numpy as np
 import itertools
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+
 from matplotlib.ticker import MaxNLocator
 import matplotlib.pyplot as plt
 colorblind_palette = [
