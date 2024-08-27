@@ -7,7 +7,7 @@
 CONFIG_FILE="config.json"
 REQUIREMENTS_FILE="requirements.txt"
 SETUP_SCRIPT_NAME="deigo/deigo_remote_setup.sh"
-RUNNER_SCRIPT_NAME="distillation_results.sh"
+RUNNER_SCRIPT_NAME="gp_runner.sh"
 
 RUN_SCRIPT_NAME="deigo/deigo_remote_run.sh"
 

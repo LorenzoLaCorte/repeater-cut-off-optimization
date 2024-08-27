@@ -1,47 +1,48 @@
 #!/bin/bash
 
-# Define what simulation you want to run
-ALTERNATE=False
-ONE_LEVEL=False
-GP=True
-DP_COMPLEXITY=False
+SCRIPT="gp_homogeneus.py"
+PY_ALIAS="python3.10"
+
+# Define what simulation you want to run {True, False}
+GP=False
+DP_COMPLEXITY=True
 
 # Define the general result directory
-GENERAL_RESULT_DIR="./results_cmp"
+GENERAL_RESULT_DIR="./results"
 
-# MIN_SWAPS=1
-# MAX_SWAPS=3
+# Define the space of rounds of distillation to be simulated
 MIN_DISTS=0
 MAX_DISTS=5
 
-# Tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
+# Define parameters as tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
 PARAMETER_SETS=(
     "-1 1440000 0.0026 0.85 0.9577 3" # 20 km, 3 SWAP, rate is non-zero only with dist. and optimal for k=4
     "-1 720000 0.0009187 0.85 0.9524 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
     "-1 360000 0.0000150 0.85 0.867 1"  # 100 km, 1 SWAP, rate is 0 whatsoever
     # "-1 180000 0.000000096 0.85 0.36" # 200 km, 0 SWAP, hard to simulate
-    # -----------------------------------------
 )
 
-if [ "$ALTERNATE" = "True" ]; then
-    for PARAMETERS in "${PARAMETER_SETS[@]}"; do
-        IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"
-        
-        python distillation_alternate.py \
-            --t_trunc "${PARAM_ARRAY[0]}" \
-            --t_coh "${PARAM_ARRAY[1]}" \
-            --p_gen "${PARAM_ARRAY[2]}" \
-            --p_swap "${PARAM_ARRAY[3]}" \
-            --w0 "${PARAM_ARRAY[4]}"
-    done
+# -----------------------------------------
+# GP: Parameter Set Testing with Various Optimizers and Spaces
+# -----------------------------------------
+# This section of the script is responsible for testing different parameter sets
+# using various optimizers and search spaces. The goal is to evaluate the performance
+# and effectiveness of each combination
+#
+# Follow these steps to run the script:
+# 1. Define the parameter sets to be tested (above).
+# 2. Specify the optimizers and search spaces to be used for testing (below).
+#
+# Note: Ensure that all necessary dependencies and environment variables are set
+# before running this section of the script, and to choose the Python alias of your environment.
+# -----------------------------------------
 
-elif [ "$ONE_LEVEL" = "True" ]; then
-    exit # TODO: implement
-
-elif [ "$GP" = "True" ]; then
+if [ "$GP" = "True" ]; then
+    # Define the optimizers and spaces to test
     OPTIMIZER_SPACE_DP_COMBS=(
         "bf enumerate"
     )
+
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
         IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"
         
@@ -62,7 +63,7 @@ elif [ "$GP" = "True" ]; then
             echo "Running distillation with optimizer $OPTIMIZER and space $SPACE..."
 
             # Run the Python script with the specified parameters and append the output to TMPFILE
-            { time python3.10 distillation_gp.py \
+            { time $PY_ALIAS $SCRIPT \
                 --min_swaps="$SWAPS" \
                 --max_swaps="$SWAPS" \
                 --min_dists="$MIN_DISTS" \
@@ -87,12 +88,26 @@ elif [ "$GP" = "True" ]; then
 
             # Move the output file to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
-            mv *_${OPTIMIZER}.png "$RESULT_DIR/"
+            if ls *_${OPTIMIZER}.png 1> /dev/null 2>&1; then
+                mv *_${OPTIMIZER}.png "$RESULT_DIR/"
+            else
+                echo "No plots yielded for optimizer $OPTIMIZER"
+            fi
         done
     done
 
+# -----------------------------------------
+# DP: Parameter Set Testing with Various Optimizers and Spaces
+# -----------------------------------------
+# This section of the script is responsible for evaluating experimental complexity
+# of simulations involving Memoization (dp).
+#
+# Again:
+# 1. Define the parameter sets to be tested (above).
+# 2. Specify the optimizers and search spaces to be used for testing (below).
+# -----------------------------------------
+
 elif [ "$DP_COMPLEXITY" = "True" ]; then
-    MIN_SWAPS=$MAX_SWAPS # Only one value for swaps
     START_DISTS=$MIN_DISTS
     LIMIT_DISTS=$MAX_DISTS
     GENERAL_RESULT_DIR="./results_dp_complexity"
@@ -109,7 +124,8 @@ elif [ "$DP_COMPLEXITY" = "True" ]; then
             P_GEN="${PARAM_ARRAY[2]}"
             P_SWAP="${PARAM_ARRAY[3]}"
             W0="${PARAM_ARRAY[4]}"
-            
+            SWAPS="${PARAM_ARRAY[5]}"
+
             for TUPLE in "${OPTIMIZER_SPACE_DP_COMBS[@]}"; do
                 OPTIMIZER=$(echo $TUPLE | awk '{print $1}')
                 SPACE=$(echo $TUPLE | awk '{print $2}')
@@ -121,9 +137,9 @@ elif [ "$DP_COMPLEXITY" = "True" ]; then
                 echo "Running distillation with optimizer $OPTIMIZER, space $SPACE and max_dists $MAX_DISTS..."
 
                 # Run the Python script with the specified parameters and append the output to TMPFILE
-                { time python distillation_gp.py \
-                    --min_swaps="$MIN_SWAPS" \
-                    --max_swaps="$MAX_SWAPS" \
+                { time $PY_ALIAS $SCRIPT \
+                    --min_swaps="$SWAPS" \
+                    --max_swaps="$SWAPS" \
                     --min_dists="$MIN_DISTS" \
                     --max_dists="$MAX_DISTS" \
                     --optimizer="$OPTIMIZER" \
