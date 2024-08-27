@@ -16,8 +16,8 @@ def compute_no_of_permutations(min_dists, max_dists, min_swaps, max_swaps):
 if __name__ == '__main__':
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--min_swaps", type=int, default=1, help="Minimum number of swaps")
-    parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of swaps")
+    parser.add_argument("--min_swaps", type=int, default=3, help="Minimum number of swaps")
+    parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of swaps")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum amount of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=5, help="Maximum amount of distillations to be performed")
       

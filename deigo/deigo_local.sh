@@ -2,13 +2,18 @@
 
 # Note: to be called from the root directory of the project
 # Description:
-# This script is used to run the distillation_ml_gp.py script on the Deigo cluster.
+# This script is used to move the required scripts on the Deigo cluster.
 
+CONFIG_FILE="config.json"
 REQUIREMENTS_FILE="requirements.txt"
-SCRIPT_NAME="distillation_ml_gp.py"
-BASH_SCRIPT_NAME="deigo/deigo_remote.sh"
+SETUP_SCRIPT_NAME="deigo/deigo_remote_setup.sh"
+RUNNER_SCRIPT_NAME="distillation_results.sh"
+
+RUN_SCRIPT_NAME="deigo/deigo_remote_run.sh"
+
 REMOTE_HOST="deigo"
 REMOTE_DIR="experiments/cluster-sim-1"
 
 pip freeze > $REQUIREMENTS_FILE
-scp -r $REQUIREMENTS_FILE $SCRIPT_NAME $BASH_SCRIPT_NAME $REMOTE_HOST:$REMOTE_DIR
+scp -r $CONFIG_FILE $REQUIREMENTS_FILE $RUNNER_SCRIPT_NAME $SETUP_SCRIPT_NAME $RUN_SCRIPT_NAME $REMOTE_HOST:$REMOTE_DIR
+scp -r *.py $REMOTE_HOST:$REMOTE_DIR

@@ -1,0 +1,11 @@
+time py distillation_gp.py --gp_initial_points=5 --gp_shots=20
+
+real    13m17.482s
+user    8m40.537s
+sys     4m45.448s
+
+time py distillation_gp.py
+
+real    8m44.224s
+user    6m21.089s
+sys     2m56.345s

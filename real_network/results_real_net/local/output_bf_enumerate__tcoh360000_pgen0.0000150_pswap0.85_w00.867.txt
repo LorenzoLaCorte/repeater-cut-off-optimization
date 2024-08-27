@@ -1,0 +1,8 @@
+From 1 to 1 swaps
+From 0 to 5 distillations
+Bruteforce process for all the possible evaluations
+
+Time taken:
+real	101m39.404s
+user	44m10.905s
+sys	44m52.779s
