@@ -2,6 +2,11 @@ import logging
 import numpy as np
 from scipy.special import binom
 from argparse import ArgumentParser, Namespace
+import sys
+import os
+
+# Add the parent directory to the system path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
 from distillation_gp_utils import get_protocol_enum_space, get_no_of_permutations_per_swap
 import matplotlib.pyplot as plt
