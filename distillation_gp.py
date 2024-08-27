@@ -225,7 +225,7 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
 
         # Define reasonable default values (in terms of a percentage of the protocol space size)
         if gp_initial_points is None:
-            gp_initial_points_def = 20 + int(protocol_space_size * .10)
+            gp_initial_points_def = 10 + int(protocol_space_size * .10)
         if gp_shots is None:
             gp_shots_def = (gp_initial_points or gp_initial_points_def) + 1 + int(protocol_space_size * .20)
 
@@ -308,14 +308,14 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--min_swaps", type=int, default=2, help="Minimum number of levels of SWAP to be performed")
+    parser.add_argument("--min_swaps", type=int, default=3, help="Minimum number of levels of SWAP to be performed")
     parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of levels of SWAP to be performed")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum round of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=10, help="Maximum round of distillations to be performed")
+    parser.add_argument("--max_dists", type=int, default=5, help="Maximum round of distillations to be performed")
     
-    parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
+    parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--space", type=spaceType, default="enumerate", 
+    parser.add_argument("--space", type=spaceType, default="centerspace", 
                         help="Space to be tested {one_level, enumerate, strategy, centerspace}")
     
     parser.add_argument("--gp_shots", type=int,
@@ -331,10 +331,10 @@ if __name__ == "__main__":
                         help=("Threshold for CDF coverage. If one configuration goes below this threshold, "
                               "the simulation is discarded"))
 
-    parser.add_argument("--t_coh", type=int, default=35000, help="Coherence time")
-    parser.add_argument("--p_gen", type=float, default=0.1, help="Generation success probability")
-    parser.add_argument("--p_swap", type=float, default=0.4, help="Swapping probability")
-    parser.add_argument("--w0", type=float, default=0.933, help="Werner parameter")
+    parser.add_argument("--t_coh", type=int, default=1440000, help="Coherence time")
+    parser.add_argument("--p_gen", type=float, default=0.0026, help="Generation success probability")
+    parser.add_argument("--p_swap", type=float, default=0.85, help="Swapping probability")
+    parser.add_argument("--w0", type=float, default=0.9577, help="Werner parameter")
 
     parser.add_argument("--dp", action='store_true', default=False, 
                         help="Use dynamic programming to cache results and set a fixed truncation time")
