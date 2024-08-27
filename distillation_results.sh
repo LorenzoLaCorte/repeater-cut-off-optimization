@@ -7,19 +7,20 @@ GP=True
 DP_COMPLEXITY=False
 
 # Define the general result directory
-GENERAL_RESULT_DIR="./results_gp"
+GENERAL_RESULT_DIR="./results_cmp"
 
-MIN_SWAPS=2
-MAX_SWAPS=3
+# MIN_SWAPS=1
+# MAX_SWAPS=3
 MIN_DISTS=0
-MAX_DISTS=7
+MAX_DISTS=5
 
-# Tuples of t_trunc, t_coh, p_gen, p_swap, w0
+# Tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
 PARAMETER_SETS=(
-    "-1 120 0.9 0.9 0.933"
-    # "-1 3500 0.02 0.5 0.98"
-    # "-1 600 0.1 0.4 0.98"
-    # "-1 4000 0.5 0.01 0.98"
+    "-1 1440000 0.0026 0.85 0.9577 3" # 20 km, 3 SWAP, rate is non-zero only with dist. and optimal for k=4
+    "-1 720000 0.0009187 0.85 0.9524 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
+    "-1 360000 0.0000150 0.85 0.867 1"  # 100 km, 1 SWAP, rate is 0 whatsoever
+    # "-1 180000 0.000000096 0.85 0.36" # 200 km, 0 SWAP, hard to simulate
+    # -----------------------------------------
 )
 
 if [ "$ALTERNATE" = "True" ]; then
@@ -40,9 +41,6 @@ elif [ "$ONE_LEVEL" = "True" ]; then
 elif [ "$GP" = "True" ]; then
     OPTIMIZER_SPACE_DP_COMBS=(
         "bf enumerate"
-        "gp strategy"
-        "gp centerspace"
-        "gp centerspace --dp"
     )
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
         IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"
@@ -51,6 +49,7 @@ elif [ "$GP" = "True" ]; then
         P_GEN="${PARAM_ARRAY[2]}"
         P_SWAP="${PARAM_ARRAY[3]}"
         W0="${PARAM_ARRAY[4]}"
+        SWAPS="${PARAM_ARRAY[5]}"
         
         for TUPLE in "${OPTIMIZER_SPACE_DP_COMBS[@]}"; do
             OPTIMIZER=$(echo $TUPLE | awk '{print $1}')
@@ -63,9 +62,9 @@ elif [ "$GP" = "True" ]; then
             echo "Running distillation with optimizer $OPTIMIZER and space $SPACE..."
 
             # Run the Python script with the specified parameters and append the output to TMPFILE
-            { time python distillation_gp.py \
-                --min_swaps="$MIN_SWAPS" \
-                --max_swaps="$MAX_SWAPS" \
+            { time python3.10 distillation_gp.py \
+                --min_swaps="$SWAPS" \
+                --max_swaps="$SWAPS" \
                 --min_dists="$MIN_DISTS" \
                 --max_dists="$MAX_DISTS" \
                 --optimizer="$OPTIMIZER" \
