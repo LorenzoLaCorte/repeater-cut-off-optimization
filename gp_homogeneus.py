@@ -30,8 +30,8 @@ from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-from distillation_gp_plots import plot_optimization_process
-from distillation_gp_utils import (
+from gp_plots import plot_optimization_process
+from gp_utils import (
     spaceType, SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
     index_lowercase_alphabet, remove_unstable_werner, write_results, # Utils
     get_protocol_enum_space, get_protocol_space_size,  # Getters for Spaces

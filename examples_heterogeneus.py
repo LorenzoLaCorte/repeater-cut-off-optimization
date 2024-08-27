@@ -5,7 +5,7 @@ from pprint import pprint
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import numpy as np
-from distillation_gp_utils import get_protocol_enum_space
+from gp_utils import get_protocol_enum_space
 from repeater_algorithm import repeater_sim
 from utility_functions import pmf_to_cdf, secret_key_rate, get_mean_waiting_time, get_mean_werner, secret_key_rate
 

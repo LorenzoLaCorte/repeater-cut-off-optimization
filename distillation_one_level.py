@@ -25,7 +25,7 @@ markers = itertools.cycle(['.', '+', 'x'])
 
 from repeater_algorithm import repeater_sim
 from utility_functions import secret_key_rate, pmf_to_cdf
-from distillation_gp_utils import load_config, index_lowercase_alphabet, remove_unstable_werner
+from gp_utils import load_config, index_lowercase_alphabet, remove_unstable_werner
 
 config = load_config('config.json')
 

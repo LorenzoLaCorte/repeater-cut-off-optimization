@@ -18,7 +18,7 @@ from skopt import expected_minimum, expected_minimum_random_sampling
 from skopt.acquisition import _gaussian_acquisition
 from skopt.space import Categorical
 
-from distillation_gp_utils import get_all_maxima, load_config
+from gp_utils import get_all_maxima, load_config
 
 # For plot tests, matplotlib must be set to headless mode early
 if 'pytest' in sys.modules:

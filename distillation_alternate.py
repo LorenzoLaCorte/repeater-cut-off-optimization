@@ -18,7 +18,7 @@ markers = itertools.cycle(['.']*2+['+']*2+['x']*2)
 
 from repeater_algorithm import repeater_sim
 from utility_functions import secret_key_rate, pmf_to_cdf
-from distillation_gp_utils import load_config, remove_unstable_werner
+from gp_utils import load_config, remove_unstable_werner
 
 from enum import Enum
 

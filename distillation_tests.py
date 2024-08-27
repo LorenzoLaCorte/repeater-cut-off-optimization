@@ -27,7 +27,7 @@ from optimize_cutoff import CutoffOptimizer
 from logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data)
 from utility_functions import secret_key_rate, pmf_to_cdf, get_mean_werner, get_mean_waiting_time
-from distillation_gp_utils import get_protocol_enum_space, load_config
+from gp_utils import get_protocol_enum_space, load_config
 
 from matplotlib.ticker import MaxNLocator
 import itertools
