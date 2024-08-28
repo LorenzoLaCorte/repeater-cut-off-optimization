@@ -3,16 +3,15 @@ import logging
 import numpy as np
 
 from argparse import ArgumentTypeError
-from collections import OrderedDict
 
 import itertools
 import ast
 
-from typing import List, Literal, Tuple, TypedDict, Optional
+from typing import List, Literal, Tuple, TypedDict
 
 from scipy.special import binom
 from scipy.optimize import OptimizeResult
-from skopt.space import Integer, Categorical, Real
+from skopt.space import Categorical
 from scipy.stats import norm
 
 # Define the exception for the CDF coverage
@@ -143,23 +142,22 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
             (0, 0, 1), (0, 1, 0), (1, 0, 0),
         - two distillations
             (0, 0, 1, 1), (0, 1, 0, 1), (0, 1, 1, 0), (1, 0, 0, 1), (1, 0, 1, 0), (1, 1, 0, 0)
-    TODO: this function can be really be a bottleneck, we need another implementation.
     """
-    space = OrderedDict()
-    for number_of_dists in range(min_dists, max_dists + 1):
-        distillations = [1] * number_of_dists
-        swaps = [0] * number_of_swaps
-        for perm in itertools.permutations(distillations + swaps):
-            if perm.count(1) == number_of_dists:
-                space[perm] = None
-    space = list(space.keys())
+    space = []
+    for num_dists in range(min_dists, max_dists + 1):
+        base = [1] * num_dists + [0] * number_of_swaps
+        perm_set = set(itertools.permutations(base))
+        space.extend(perm_set)
     
+    # Order the space: first by ascending length of the protocol, then by the ascending binary representation of the protocol tuple
+    space = sorted(space, key=lambda x: (len(x), -int(''.join(map(str, x)), 2)))
+
     analytical_permutations = get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)
     assert len(space) == analytical_permutations, f"Expected max. {analytical_permutations} permutations, got {len(space)}"
+    
     if skopt_space:
-        space = [
-            Categorical([''.join(str(tup)) for tup in space], name='protocol')
-        ]
+        space = [Categorical([''.join(str(tup)) for tup in space], name='protocol')]
+    
     return space
 
 
