@@ -7,8 +7,10 @@ import logging
 import matplotlib.pyplot as plt
 import numba as nb
 import numpy as np
+
+from repeater_types import checkAsymProtocol
 try:
-    import cupy as cp
+    import cupy as cp # type: ignore
     _cupy_exist = True
 except (ImportError, ModuleNotFoundError):
     _cupy_exist = False
@@ -247,7 +249,8 @@ class RepeaterChainSimulation():
             join_links = join_links_efficient
             if self._qutip:
                 # only used for testing, very slow
-                join_links_state = join_links_matrix_qutip
+                # join_links_state = join_links_matrix_qutip
+                pass
             else:
                 join_links_state = join_links_efficient
         else:
@@ -623,13 +626,80 @@ class RepeaterChainSimulation():
         else:
             return final_pmf, final_w_func
 
-    def asymmetric_protocol(self, parameters):
+
+    def find_right_segment(self, segments, start_index):
+        r_segm = start_index + 1
+        while r_segm < len(segments) and segments[r_segm] is None:
+            r_segm += 1
+        if r_segm >= len(segments):
+            raise ValueError("No non-None segment found after index {}".format(start_index))
+        return r_segm
+
+
+    def asymmetric_protocol(self, parameters, number_of_segments):
         """
         Compute the waiting time and the Werner parameter of a heterogeneus (?) and asymmetric protocol.
-        TODO: Implement the computation of the heterogeneus protocol.
+        TODO: implement heterogeneus protocols
+        Parameters
+        ----------
+        parameters: dict
+            A dictionary contains the parameters of
+            the repeater and the simulation.
+
+        Cut-offs and 'all_level' are not implemented.
+
+        Returns
+        -------
+        t_pmf, w_func: array-like 1-D
+            The output waiting time and Werner parameters
         """
-        pass
-    
+        S = number_of_segments
+        parameters = deepcopy(parameters)
+
+        protocol = parameters["protocol"]
+        p_gen = parameters["p_gen"]
+        w0 = parameters["w0"]
+        t_trunc = parameters["t_trunc"]
+        t_list = np.arange(1, t_trunc)
+
+        # In case of 1-level protocol, ensure protocol is treated as a tuple
+        if isinstance(protocol, str): 
+            protocol = (protocol,)
+
+        # Each segment will keep a distribution for waiting time and Werner parameter
+        segments = []
+
+        # Elementary link: for each segment, generate its distribution
+        for _ in range(S):
+            pmf = p_gen * (1 - p_gen)**(t_list - 1)
+            pmf = np.concatenate((np.array([0.]), pmf))
+            w_func = np.array([w0] * t_trunc)
+            segments.append((pmf, w_func))
+
+        # Compute step by step the whole protocol
+        # Given idx as the index of the segment (or left segment in case of swap)
+        for i in range(len(protocol)):
+            step: str = protocol[i]
+            operation = step[0]
+            idx = int(step[1:]) 
+            curr_segment = segments[idx] 
+            
+            if operation == 's':
+                next_idx = self.find_right_segment(segments, idx)
+                next_segment = segments[next_idx]
+                pmf, w_func = self.compute_unit(
+                    parameters, *curr_segment, *next_segment, unit_kind="swap", step_size=1)
+                segments[idx] = None
+                segments[next_idx] = (pmf, w_func)
+
+            elif operation == 'd':
+                pmf, w_func = self.compute_unit(
+                    parameters, *curr_segment, unit_kind="dist", step_size=1)
+                segments[idx] = (pmf, w_func)
+
+        return next((segm for segm in segments if segm is not None), (None, None))
+
+
 def compute_unit(
         parameters, pmf1, w_func1, pmf2=None, w_func2=None,
         unit_kind="swap", step_size=1):
@@ -643,14 +713,20 @@ def compute_unit(
 
 def repeater_sim(parameters, all_level=False):
     """
-    Functional warpper for nested_protocol
+    Functional wrapper for nested_protocol
+    A first typecheck on the protocol is done to identify the simulation to run, i.e.
+    If the protocol is a tuple of integers, run the nested protocol
+    Otherwise, the tuples should be of strings, so run the asymmetric protocol
     """
     simulator = RepeaterChainSimulation()
-    # TODO: typecheck parameters to run the correct protocol
-    if False:
-        return simulator.asymmetric_protocol(parameters)
-    else:
+
+    if isinstance(parameters["protocol"], Iterable) and all(isinstance(i, int) for i in parameters["protocol"]):
         return simulator.nested_protocol(parameters=parameters, all_level=all_level)
+    elif isinstance(parameters["protocol"], Iterable) and all(isinstance(i, str) for i in parameters["protocol"]):
+        number_of_segments = checkAsymProtocol(parameters["protocol"])
+        return simulator.asymmetric_protocol(parameters, number_of_segments)
+    else:
+        raise ValueError("The protocol must be a tuple of integers or strings.")
 
 
 def plot_algorithm(pmf, fid_func, axs=None, t_trunc=None, legend=None):
