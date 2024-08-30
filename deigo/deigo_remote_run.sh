@@ -12,7 +12,7 @@ cat > $SLURM_SCRIPT <<- EOM
 #SBATCH -t 48:00:00
 #SBATCH --mem=256G
 #SBATCH -c 32
-./gp_runner.sh
+./gp_homogeneus_runner.sh
 EOM
 
 sbatch $SLURM_SCRIPT
