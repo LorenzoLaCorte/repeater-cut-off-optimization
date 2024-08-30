@@ -1,5 +1,6 @@
 import json
 import logging
+import math
 import numpy as np
 
 from argparse import ArgumentTypeError
@@ -42,11 +43,12 @@ def optimizerType(value: str) -> OptimizerType:
     return value
 
 # Define the type for space_type
-SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace"]
+SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace", "asymmetric"]
 
 # Validation function for the space type
 def spaceType(value: str) -> SpaceType:
-    valid_options = ("one_level", "strategy", "enumerate", "centerspace")
+    # TODO: refactor: valid_options = SpaceType.__args__
+    valid_options = ("one_level", "strategy", "enumerate", "centerspace", "asymmetric")
     if value not in valid_options:
         raise ArgumentTypeError(f"Invalid space type: {value}. Available options are: {', '.join(valid_options)}")
     return value
@@ -159,6 +161,117 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
         space = [Categorical([''.join(str(tup)) for tup in space], name='protocol')]
     
     return space
+
+
+def get_asym_protocol_space_size(nodes, max_dists):
+    """
+    Returns the space of asymmetric protocols to be tested,
+     by analytical derivation: (S-1)! * (max_dists + 1)^(S*(S+1)/2)
+     TODO: this is wrong
+    """
+    S = nodes - 1
+    gauss = (S * (S+1)) // 2
+    return math.factorial(S-1) * ((max_dists+1)**(gauss))
+
+
+def get_possible_dist_sequences(N, swapped_segments, max_dists):
+    """
+    Returns all the possible distillation sequences for a given number of nodes 
+    at a step where swapped_segments have been swapped, and thus cannot be distillated.
+    """
+    S = N - 1
+    combinations_list = []
+    elements = [f"d{i}" for i in range(S) if i not in swapped_segments]
+    
+    for r in range(len(elements)*max_dists + 1):
+        for combo in itertools.combinations_with_replacement(elements, r):
+            # Check if the sequence doesn't exceed the max_dists for any element
+            # TODO: maybe there is a more efficient way to do this
+            if all(combo.count(x) <= max_dists for x in elements):
+                combinations_list.append(list(combo))
+    
+    return combinations_list
+
+
+def get_asym_protocol_space(nodes, max_dists):
+    """
+    Returns the space of asymmetric protocols to be tested.
+    For each number of distillation tested, we test all the possible asymmetric protocols.
+        i.e. for 4 nodes (3 segments) and 1 distillation, we test:
+        - zero or one distillation
+            (A, "s0", B, "s1", C), (D, "s1", E, "s0", F)
+    where:
+        A = [(), ("d0"), ("d1"), ("d2"), ("d0", "d1"), ("d0", "d2"), ("d1", "d2"), ("d0", "d1", "d2")]
+        i.e. |A| = 8 (and also |D| = 8)
+        B = [(), ("d1"), ("d2"), ("d1", "d2")]
+        i.e. |B| = 4 (and also |E| = 4)
+        C = [(), ("d2")]
+        i.e. |C| = 2 (and also |F| = 2)
+    because I cannot distill a segment that has been swapped before
+    """
+    S = nodes - 1
+    space = []
+
+    swap_space = get_swap_space(S)
+
+    for swap_sequence in swap_space:
+        joined_sequences = list(get_possible_dist_sequences(nodes, [], max_dists))
+
+        for idx, swap in enumerate(swap_sequence):
+            # Combine all possible distillation sequences with the swap under consideration
+            curr_joined_sequences = [[f"s{swap}"] + list(dist_sequence) 
+                                     for dist_sequence in get_possible_dist_sequences(nodes, swap_sequence[:idx+1], max_dists)]
+            
+            # Combine all the sequences for the current swap sequence with the previous ones
+            new_joined_sequences = []
+            for c1, c2 in itertools.product(joined_sequences, curr_joined_sequences):
+                new_joined_sequences.append(c1 + c2)
+            joined_sequences = new_joined_sequences
+
+        space.extend([tuple(protocol) for protocol in joined_sequences])
+    
+    expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
+    # assert len(space) == expected_protocols, \
+        # f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    return space
+
+
+def get_shape(seq, S):
+    segments = {str(i) for i in range(S)}
+    shape = set()
+    for swap in seq:
+        # left_segm is the string in the set that has swap as last character
+        # right_segm is the string in the set that has left_segm+1 as first character
+        left_segm = next(segm for segm in segments if segm[-1] == str(swap))
+        right_segm = next((segm for segm in segments if segm[0] == str(int(left_segm[-1]) + 1)))
+        # delete left_segm and right_segm and join them in one
+        segments.discard(left_segm)
+        segments.discard(right_segm)
+        new_segment = left_segm + right_segm
+        segments.add(new_segment)
+        shape.add(new_segment)
+    return shape
+
+def get_swap_space(S):
+    swap_space = []
+    shapes = []
+
+    for seq in itertools.permutations(range(S-1), S-1):
+        shape = get_shape(seq, S)
+        mean_length = sum(len(s) for s in shape) / len(shape) if shape else 0
+
+        for s in shapes:
+            if s == shape:
+                break
+        else:
+            shapes.append(shape)
+            # Append a score for the simmetricity of the shape
+            swap_space.append((mean_length, seq))
+    
+    # Sort the swap_space by the score of the simmetricity
+    swap_space = sorted(swap_space, key=lambda x: x[0])
+    logging.info(f"Most symmetric shapes: {swap_space[:3]}")
+    return [x[1] for x in swap_space]
 
 
 def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
@@ -298,16 +411,16 @@ def get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_d
     return tuple(protocol)
 
 
-def get_t_trunc(p_gen, p_swap, t_coh, swaps, dists, epsilon=0.01):
+def get_t_trunc(p_gen, p_swap, t_coh, nested_swaps, nested_dists, epsilon=0.01):
     """
     This function is derived from Brand et. al, with an adjustment for distillation.
     TODO: it is a very lossy bound, it should be improved, to get the simulation going faster (mantaining cdf coverage).
     Returns the truncation time based on a lower bound of what is sufficient to reach (1-epsilon) of the simulation cdf.
     """
-    t_trunc = int((2/p_swap)**(swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
+    t_trunc = int((2/p_swap)**(nested_swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
 
     p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
-    t_trunc *= (1/p_dist)**(dists) # considering distillation, but very unprecise
+    t_trunc *= (1/p_dist)**(nested_dists) # considering distillation, but very unprecise
 
     # Introduce a factor to reduce the truncation time, as the previous bound is very lossy
     reduce_factor = 10
