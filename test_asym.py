@@ -47,7 +47,3 @@ def test_asym_repeater_sim(protocol, benchmark):
     assert skr1 == skr2, "The secret key rate is not the same."
     assert np.array_equal(pmf1, pmf2), "The pmf is not the same."
     assert np.array_equal(w_func1, w_func2), "The w_func is not the same."
-
-
-# def test_space_asym_protocols(nodes, max_dists):
-#     pass
