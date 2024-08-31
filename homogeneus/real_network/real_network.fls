@@ -1,9 +1,9 @@
-PWD /home/lax/University/OIST/repeater-cut-off-optimization/real_net
+PWD /home/lax/University/OIST/repeater-cut-off-optimization/homogeneus/real_network
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/lax/University/OIST/repeater-cut-off-optimization/real_net/real_network.tex
+INPUT /home/lax/University/OIST/repeater-cut-off-optimization/homogeneus/real_network/real_network.tex
 OUTPUT real_network.log
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
