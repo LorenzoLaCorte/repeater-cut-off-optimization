@@ -1,18 +1,49 @@
-from argparse import ArgumentParser
-from ast import Tuple
-from collections import defaultdict
-import logging
-from typing import List
+"""
+This script is used to test the performance of different distillation strategies
+ in an extensive way, by using a Gaussian Process to optimize the number of distillations.
+"""
 
+from argparse import ArgumentParser
+from collections import defaultdict
+from typing import List, Tuple, Optional
+
+import logging
 import numpy as np
-from gp_utils import OptimizerType, SimParameters, SpaceType, ThresholdExceededError, get_asym_protocol_space, get_t_trunc, optimizerType
+
+from skopt import gp_minimize
+from skopt.space import Real
+from scipy.optimize import OptimizeResult
+from skopt.utils import use_named_args
+
+from gp_plots import plot_optimization_process
+from gp_utils import (
+    optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
+    get_asym_protocol_space,  # Getters for Spaces
+    get_protocol_from_center_spacing_symmetricity, # Getters for Protocols
+    get_t_trunc, get_ordered_results, # Other Getters
+) 
+
 from repeater_algorithm import RepeaterChainSimulation
 from utility_functions import pmf_to_cdf, secret_key_rate
 
 logging.basicConfig(level=logging.INFO)
 cdf_threshold = 0.99
 
-def asym_protocol_runner(simulator, parameters, nodes, idx, space_len):
+
+def write_results(filename, ordered_results):
+    """
+    TODO: Write the docstring
+    TODO: refactor to some utils and check if its necessary the one there
+    """
+    with open(f'{filename}', 'w') as file:
+        file.write("{\n")
+        for skr, protocol in ordered_results:
+            comma = ',' if protocol != ordered_results[-1][1] else ''
+            file.write(f'  "{protocol}": {skr}{comma}\n')
+        file.write("}\n\n")
+
+
+def asym_protocol_runner(simulator, parameters, nodes, idx=None, space_len=None):
     """
         The function tests the performance of a single asymmetric protocol,
         by taking the number of distillations and the nesting level after which dist is applied as a parameter,
@@ -24,7 +55,11 @@ def asym_protocol_runner(simulator, parameters, nodes, idx, space_len):
     parameters["t_trunc"] = get_t_trunc(parameters["p_gen"], parameters["p_swap"], parameters["t_coh"],
                                         nested_swaps=np.log2(nodes+1), nested_dists=np.log2(dists+1))
     
-    logging.info(f"\n({idx+1}/{space_len}) Running: {parameters}")
+    if (idx is None) or (space_len is None):
+        logging.info(f"\nRunning: {parameters}")
+    else:
+        logging.info(f"\n({idx+1}/{space_len}) Running: {parameters}")
+    
     pmf, w_func = simulator.asymmetric_protocol(parameters, nodes-1)
 
     skr = secret_key_rate(pmf, w_func, parameters["t_trunc"])
@@ -64,16 +99,100 @@ def brute_force_optimization(simulator, parameters: SimParameters,
 
     ordered_results: List[Tuple[np.float64, Tuple[str]]] = sorted(results, key=lambda x: x[0], reverse=True)
 
-    unique_counts = defaultdict(int)
-
     if store_results:
-        with open(f'{filename}', 'w') as file:
-            file.write("{\n")
-            for skr, protocol in ordered_results:
-                unique_counts[skr] += 1
-                comma = ',' if protocol != ordered_results[-1][1] else ''
-                file.write(f'  "{protocol}": {skr}{comma}\n')
-            file.write("}\n\n")
+        write_results(filename, ordered_results)
+            
+    best_results = (ordered_results[0][0], ordered_results[0][1])
+    logging.info(f"\nBest results: {best_results}")
+
+
+# Cache results of the objective function to avoid re-evaluating the same point and speed up the optimization
+cache_results = defaultdict(np.float64)
+strategy_to_protocol = {}
+
+def objective_key_rate(space, nodes, parameters, simulator):
+    """
+    Objective function, consider the whole space of actions,
+        returning a negative secret key rate
+        in order for the optimizer to maximize the function.
+    """
+    eta = space['eta']
+    tau = space['tau']
+    sigma = space['sigma']
+    
+    logging.debug(f"\n\nGenerating a protocol with eta={eta}, tau={tau}, sigma={sigma}...")
+    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(eta, tau, sigma, nodes)
+    strategy_to_protocol[(eta, tau, sigma)] = parameters["protocol"]
+
+    if parameters["protocol"] in cache_results:
+        logging.debug("Already evaluated protocol, returning cached result")
+        return -cache_results[parameters["protocol"]]
+    
+    secret_key_rate, pmf, _ = asym_protocol_runner(simulator, parameters, nodes)
+    
+    cdf_coverage = pmf_to_cdf(pmf)[-1]
+    if cdf_coverage < cdf_threshold:
+        raise ThresholdExceededError(extra_info={'cdf_coverage': cdf_coverage})                
+
+    cache_results[parameters["protocol"]] = secret_key_rate
+    space.update({'protocol': parameters["protocol"]})
+    # The gaussian process minimizes the function, so return the negative of the key rate 
+    return -secret_key_rate
+
+
+def is_gp_done(result: OptimizeResult):
+    """
+    Callback function to stop the optimization if all the points have been evaluated.
+    """
+    # Add protocol to result dict, to then retrieve it later
+    result.x_iters[-1].append(strategy_to_protocol[(result.x_iters[-1][0], result.x_iters[-1][1], result.x_iters[-1][2])])
+    
+
+def gaussian_optimization(simulator, parameters: SimParameters, 
+                          nodes: int, max_dists: int, 
+                          gp_shots: Optional[int], gp_initial_points: Optional[int],
+                          filename: str, store_results: bool = True) -> None:
+    """
+    This function is used to test the performance of different protocols in an extensive way.
+    """
+    logging.info(f"\n\nNumber of nodes: {nodes}, max dists: {max_dists}")
+    logging.info(f"Gaussian process with {gp_shots} evaluations "
+                f"and {gp_initial_points} initial points\n\n")
+
+    space = [
+        Real(-1, 1, name='eta'), 
+        Real(0.099, 1, name='tau'),
+        Real(0, 1, name='sigma'),
+    ]
+    @use_named_args(space)
+    def wrapped_objective(**space_params):
+        return objective_key_rate(space_params, nodes, parameters, simulator)
+
+    try:
+        result: OptimizeResult = gp_minimize(
+            wrapped_objective,
+            space,
+            n_calls=gp_shots,
+            n_initial_points=gp_initial_points,
+            callback=[is_gp_done],
+            acq_func='LCB',
+            kappa=1.96 * 2, # Double the default kappa, to prefer exploration
+            noise=1e-10,    # There is no noise in results
+        )
+        
+        ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(
+            result=result, space_type="asymmetric", number_of_swaps=None)
+
+        if store_results:
+            plot_optimization_process(min_dists=0, max_dists=max_dists, parameters=parameters, 
+                                      number_of_swaps=np.log2(nodes), ordered_results=ordered_results, result=result)
+        cache_results.clear()
+    
+    except ThresholdExceededError as e:
+        logging.warn((f"Simulation under coverage for {parameters['protocol']}"))
+    
+    if store_results:
+        write_results(filename, ordered_results)
             
     best_results = (ordered_results[0][0], ordered_results[0][1])
     logging.info(f"\nBest results: {best_results}")
@@ -130,4 +249,14 @@ if __name__ == "__main__":
     }
 
     simulator = RepeaterChainSimulation()
-    brute_force_optimization(simulator, parameters, nodes, max_dists, filename)
+    
+    # Start the optimization process
+    if optimizer == "gp":
+        gaussian_optimization(simulator, parameters, 
+                              nodes, max_dists, 
+                              gp_shots, gp_initial_points, 
+                              filename)
+    elif optimizer == "bf":
+        brute_force_optimization(simulator, parameters, 
+                                 nodes, max_dists, 
+                                 filename)
