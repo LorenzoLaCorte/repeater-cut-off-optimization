@@ -209,7 +209,7 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
                           gp_shots: Optional[int], gp_initial_points: Optional[int],
                           filename: str, store_results: bool = True) -> None:
     """
-    This function is used to test the performance of different distillation strategies in an extensive way.
+    This function is used to test the performance of different protocols in an extensive way.
     """
     if store_results:
         with open(filename, 'w') as file:
