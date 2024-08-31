@@ -163,15 +163,25 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
     return space
 
 
+def catalan_number(n):
+    """
+    Returns the n-th Catalan number.
+    """
+    return math.comb(2*n, n) // (n + 1)
+
+
 def get_asym_protocol_space_size(nodes, max_dists):
     """
     Returns the space of asymmetric protocols to be tested,
-     by analytical derivation: (S-1)! * (max_dists + 1)^(S*(S+1)/2)
-     TODO: this is wrong
+     by analytical derivation.
     """
+    if nodes < 3:
+        raise ValueError("N should be at least 3")
+    swap_permutations =  catalan_number(nodes - 2)
+
     S = nodes - 1
     gauss = (S * (S+1)) // 2
-    return math.factorial(S-1) * ((max_dists+1)**(gauss))
+    return swap_permutations * ((max_dists+1)**(gauss))
 
 
 def get_possible_dist_sequences(N, swapped_segments, max_dists):
@@ -252,7 +262,13 @@ def get_shape(seq, S):
         shape.add(new_segment)
     return shape
 
+
 def get_swap_space(S):
+    """
+    Returns the swap space for a given number of nodes.
+    TODO: this is a brute force approach, it should be optimized
+            is also broken for S > 11
+    """
     swap_space = []
     shapes = []
 
@@ -269,9 +285,52 @@ def get_swap_space(S):
             swap_space.append((mean_length, seq))
     
     # Sort the swap_space by the score of the simmetricity
-    swap_space = sorted(swap_space, key=lambda x: x[0])
-    logging.info(f"Most symmetric shapes: {swap_space[:3]}")
+    swap_space = sorted(swap_space, key=lambda x: x[0], reverse=True)
+    logging.info(f"Most symmetric shapes: {swap_space[-3:]}")
     return [x[1] for x in swap_space]
+
+
+def get_protocol_from_center_spacing_symmetricity(eta, tau, sigma, nodes):
+    """
+    This function generates a protocol from the center, spacing and symmetricity parameters.
+    
+    Parameters:
+    - eta: Centering of the ro. of distillation, between -1 and 1.
+    - tau: Spacing of the ro. of distillation, between 0 and 1.
+    - sigma: Symmetricity of the protocol, between 0 and 1.
+    
+    Returns:
+    - tuple: the protocol to be tested.
+
+    I. Sample of the sequence of swaps
+    II. Sample of the sequences of distillations, before and after each swap
+
+    The protocol is generated as follows:
+        I. The set of all the possible sequences of swaps is generated.
+        They are ordered by the symmetricity of the shape of the swaps, from the least symmetric to the most symmetric.
+        The (sigma*len(swap_space)) sequence is selected;
+            if sigma = 0, the least symmetric sequence is selected;
+            if sigma = 1, the most symmetric sequence is selected.
+
+        II. For the selected sequence of swaps, the set of all the possible sequences of distillations is generated.
+            seq = (D_0, swap_0, D_1, swap_1, D_2, ..., D_S, swap_S-1, D_S)
+            where D_0, D_1, ..., D_S are the sequences of distillations.
+        Factors gamma_i, between 0 and 1, are given to each D_i, to model the sampling of the sequences.
+        They are sampled from a normal distribution with mean mu and standard deviation Sigma.
+            where mu is derived from the centering and Sigma from the spacing.
+            if eta = 0, gamma_0 = 1;
+            if eta = 1, gamma_S = 1;
+        Given Di, the sequence of distillations is picked from the set of all the possible ones,
+            with a probability proportional to gamma_i.
+            if gamma_i = 0, the first sequence of distillations, corresponding to no distillation, is picked.
+            if gamma_i = 1, the last sequence of distillations, corresponding to the maximum number of distillations, is picked.
+                            
+    TODO: implement this function
+    """
+    protocol = []
+
+    # TODO: validate the protocol
+    return protocol
 
 
 def sample_outcome(strategy, strategy_weight, protocol, idx, dists_target):
@@ -448,7 +507,7 @@ def get_ordered_results(result: OptimizeResult, space_type: SpaceType, number_of
     elif space_type == "enumerate":
         result_tuples = [(result.func_vals[i], ast.literal_eval(result.x_iters[i][0])) for i in range(len(result.func_vals))]
 
-    elif space_type == "strategy" or space_type == "centerspace":
+    elif space_type == "strategy" or space_type == "centerspace" or space_type == "asymmetric":
         result_tuples = [(result.func_vals[i], result.x_iters[i][-1]) for i in range(len(result.func_vals))]
 
     ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)

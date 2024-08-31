@@ -159,6 +159,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
     logging.info(f"Gaussian process with {gp_shots} evaluations "
                 f"and {gp_initial_points} initial points\n\n")
 
+    # TODO: Maybe sigma should be in discrete units [0, 1/len(swap_space), 2/len(swap_space), ...]
     space = [
         Real(-1, 1, name='eta'), 
         Real(0.099, 1, name='tau'),
@@ -201,10 +202,10 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--nodes", type=int, default=5, help="Maximum number of levels of SWAP to be performed")
-    parser.add_argument("--max_dists", type=int, default=5, help="Maximum round of distillations to be performed")
+    parser.add_argument("--nodes", type=int, default=11, help="Number of nodes in the chain")
+    parser.add_argument("--max_dists", type=int, default=0, help="Maximum round of distillations of each segment per level")
 
-    parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
+    parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
     
     parser.add_argument("--gp_shots", type=int,
                         help=(  "Number of shots for Gaussian Process optimization"
