@@ -34,7 +34,7 @@ def test_get_protocol_enum_space(min_dists, max_dists, number_of_swaps):
         assert s == ss, "The protocol enum space is not the same."
 
 
-@pytest.mark.parametrize("nodes, max_dists", [(3,3), (4, 2), (5, 1)])
+@pytest.mark.parametrize("nodes, max_dists", [(3,3), (4, 2), (5, 1), (6, 0)])
 def test_space_asym_protocols(nodes, max_dists):
     space = get_asym_protocol_space(nodes, max_dists)
     print(f"\nNumber of protocols for {nodes} nodes and max_dists {max_dists}: {len(space)}")
