@@ -107,25 +107,25 @@ def brute_force_optimization(simulator, parameters: SimParameters,
 
 
 # Cache results of the objective function to avoid re-evaluating the same point and speed up the optimization
+# TODO: maybe I can simply decorate the function with lru_cache
 cache_results = defaultdict(np.float64)
 strategy_to_protocol = {}
 
-def objective_key_rate(space, nodes, parameters, simulator):
+def objective_key_rate(space, nodes, max_dists, parameters, simulator):
     """
     Objective function, consider the whole space of actions,
         returning a negative secret key rate
         in order for the optimizer to maximize the function.
     """
-    eta = space['eta']
-    tau = space['tau']
-    sigma = space['sigma']
+    gamma = space['gamma']
+    zeta = space['zeta']
     
-    logging.debug(f"\n\nGenerating a protocol with eta={eta}, tau={tau}, sigma={sigma}...")
-    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(eta, tau, sigma, nodes)
-    strategy_to_protocol[(eta, tau, sigma)] = parameters["protocol"]
+    logging.info(f"\n\nGenerating a protocol with gamma={gamma}, zeta={zeta}...")
+    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
+    strategy_to_protocol[(gamma, zeta)] = parameters["protocol"]
 
     if parameters["protocol"] in cache_results:
-        logging.debug("Already evaluated protocol, returning cached result")
+        logging.info("Already evaluated protocol, returning cached result")
         return -cache_results[parameters["protocol"]]
     
     secret_key_rate, pmf, _ = asym_protocol_runner(simulator, parameters, nodes)
@@ -145,7 +145,7 @@ def is_gp_done(result: OptimizeResult):
     Callback function to stop the optimization if all the points have been evaluated.
     """
     # Add protocol to result dict, to then retrieve it later
-    result.x_iters[-1].append(strategy_to_protocol[(result.x_iters[-1][0], result.x_iters[-1][1], result.x_iters[-1][2])])
+    result.x_iters[-1].append(strategy_to_protocol[(result.x_iters[-1][0], result.x_iters[-1][1])])
     
 
 def gaussian_optimization(simulator, parameters: SimParameters, 
@@ -159,15 +159,13 @@ def gaussian_optimization(simulator, parameters: SimParameters,
     logging.info(f"Gaussian process with {gp_shots} evaluations "
                 f"and {gp_initial_points} initial points\n\n")
 
-    # TODO: Maybe sigma should be in discrete units [0, 1/len(swap_space), 2/len(swap_space), ...]
     space = [
-        Real(-1, 1, name='eta'), 
-        Real(0.099, 1, name='tau'),
-        Real(0, 1, name='sigma'),
+        Real(0, 1, name='gamma'),
+        Real(0, 1, name='zeta'), 
     ]
     @use_named_args(space)
     def wrapped_objective(**space_params):
-        return objective_key_rate(space_params, nodes, parameters, simulator)
+        return objective_key_rate(space_params, nodes, max_dists, parameters, simulator)
 
     try:
         result: OptimizeResult = gp_minimize(
@@ -186,7 +184,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 
         if store_results:
             plot_optimization_process(min_dists=0, max_dists=max_dists, parameters=parameters, 
-                                      number_of_swaps=np.log2(nodes), ordered_results=ordered_results, result=result)
+                                      number_of_swaps=int(np.log2(nodes)), results=ordered_results, gp_result=result)
         cache_results.clear()
     
     except ThresholdExceededError as e:
@@ -202,16 +200,16 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--nodes", type=int, default=11, help="Number of nodes in the chain")
-    parser.add_argument("--max_dists", type=int, default=0, help="Maximum round of distillations of each segment per level")
+    parser.add_argument("--nodes", type=int, default=5, help="Number of nodes in the chain")
+    parser.add_argument("--max_dists", type=int, default=1, help="Maximum round of distillations of each segment per level")
 
-    parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
+    parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--gp_shots", type=int,
+    parser.add_argument("--gp_shots", type=int, default=200,
                         help=(  "Number of shots for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
     
-    parser.add_argument("--gp_initial_points", type=int, 
+    parser.add_argument("--gp_initial_points", type=int, default=20,
                         help=(  "Number of initial points for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
        

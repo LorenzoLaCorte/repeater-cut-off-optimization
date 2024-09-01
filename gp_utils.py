@@ -1,3 +1,4 @@
+from functools import lru_cache
 import json
 import logging
 import math
@@ -14,6 +15,8 @@ from scipy.special import binom
 from scipy.optimize import OptimizeResult
 from skopt.space import Categorical
 from scipy.stats import norm
+
+from repeater_types import checkAsymProtocol
 
 # Define the exception for the CDF coverage
 class ThresholdExceededError(Exception):
@@ -225,36 +228,47 @@ def get_asym_protocol_space(nodes, max_dists):
     swap_space = get_swap_space(S)
 
     for swap_sequence in swap_space:
-        joined_sequences = list(get_possible_dist_sequences(nodes, [], max_dists))
-
-        for idx, swap in enumerate(swap_sequence):
-            # Combine all possible distillation sequences with the swap under consideration
-            curr_joined_sequences = [[f"s{swap}"] + list(dist_sequence) 
-                                     for dist_sequence in get_possible_dist_sequences(nodes, swap_sequence[:idx+1], max_dists)]
-            
-            # Combine all the sequences for the current swap sequence with the previous ones
-            new_joined_sequences = []
-            for c1, c2 in itertools.product(joined_sequences, curr_joined_sequences):
-                new_joined_sequences.append(c1 + c2)
-            joined_sequences = new_joined_sequences
-
+        joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
         space.extend([tuple(protocol) for protocol in joined_sequences])
     
     expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
-    # assert len(space) == expected_protocols, \
-        # f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    assert len(space) == expected_protocols, \
+        f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
     return space
 
 
+def get_joined_sequences(nodes, max_dists, swap_sequence):
+    """
+    Returns all the possible joined sequences of distillation and swap for a given swap sequence.
+    """
+    joined_sequences = list(get_possible_dist_sequences(nodes, [], max_dists))
+
+    for idx, swap in enumerate(swap_sequence):
+            # Combine all possible distillation sequences with the swap under consideration
+        curr_joined_sequences = [[f"s{swap}"] + list(dist_sequence) 
+                                     for dist_sequence in get_possible_dist_sequences(nodes, swap_sequence[:idx+1], max_dists)]
+            
+            # Combine all the sequences for the current swap sequence with the previous ones
+        new_joined_sequences = []
+        for c1, c2 in itertools.product(joined_sequences, curr_joined_sequences):
+            new_joined_sequences.append(c1 + c2)
+        joined_sequences = new_joined_sequences
+    return joined_sequences
+
+
 def get_shape(seq, S):
+    """
+    Returns ...
+    Is bugged when one of the segment has 2 digits
+    TODO: add commas to the numbers
+    """
     segments = {str(i) for i in range(S)}
     shape = set()
     for swap in seq:
         # left_segm is the string in the set that has swap as last character
         # right_segm is the string in the set that has left_segm+1 as first character
         left_segm = next(segm for segm in segments if segm[-1] == str(swap))
-        right_segm = next((segm for segm in segments if segm[0] == str(int(left_segm[-1]) + 1)))
-        # delete left_segm and right_segm and join them in one
+        right_segm = next((segm for segm in segments if segm[0] == str(int(left_segm[-1]) + 1)), None)
         segments.discard(left_segm)
         segments.discard(right_segm)
         new_segment = left_segm + right_segm
@@ -263,11 +277,11 @@ def get_shape(seq, S):
     return shape
 
 
+@lru_cache(maxsize=None)
 def get_swap_space(S):
     """
     Returns the swap space for a given number of nodes.
     TODO: this is a brute force approach, it should be optimized
-            is also broken for S > 11
     """
     swap_space = []
     shapes = []
@@ -290,14 +304,13 @@ def get_swap_space(S):
     return [x[1] for x in swap_space]
 
 
-def get_protocol_from_center_spacing_symmetricity(eta, tau, sigma, nodes):
+def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists):
     """
-    This function generates a protocol from the center, spacing and symmetricity parameters.
+    This function generates a protocol from the symmetricity (gamma) and centering of dists (zeta) parameters.
     
     Parameters:
-    - eta: Centering of the ro. of distillation, between -1 and 1.
-    - tau: Spacing of the ro. of distillation, between 0 and 1.
-    - sigma: Symmetricity of the protocol, between 0 and 1.
+    - gamma: Symmetricity of the protocol, between 0 and 1.
+    - zeta: Centering of the ro. of distillation, between 0 and 1.
     
     Returns:
     - tuple: the protocol to be tested.
@@ -308,28 +321,39 @@ def get_protocol_from_center_spacing_symmetricity(eta, tau, sigma, nodes):
     The protocol is generated as follows:
         I. The set of all the possible sequences of swaps is generated.
         They are ordered by the symmetricity of the shape of the swaps, from the least symmetric to the most symmetric.
-        The (sigma*len(swap_space)) sequence is selected;
-            if sigma = 0, the least symmetric sequence is selected;
-            if sigma = 1, the most symmetric sequence is selected.
+        The (gamma*len(swap_space)) sequence is selected;
+            if gamma = 0, the least symmetric sequence is selected;
+            if gamma = 1, the most symmetric sequence is selected.
 
         II. For the selected sequence of swaps, the set of all the possible sequences of distillations is generated.
             seq = (D_0, swap_0, D_1, swap_1, D_2, ..., D_S, swap_S-1, D_S)
             where D_0, D_1, ..., D_S are the sequences of distillations.
-        Factors gamma_i, between 0 and 1, are given to each D_i, to model the sampling of the sequences.
-        They are sampled from a normal distribution with mean mu and standard deviation Sigma.
-            where mu is derived from the centering and Sigma from the spacing.
-            if eta = 0, gamma_0 = 1;
-            if eta = 1, gamma_S = 1;
-        Given Di, the sequence of distillations is picked from the set of all the possible ones,
-            with a probability proportional to gamma_i.
-            if gamma_i = 0, the first sequence of distillations, corresponding to no distillation, is picked.
-            if gamma_i = 1, the last sequence of distillations, corresponding to the maximum number of distillations, is picked.
-                            
-    TODO: implement this function
+            The sequences of distillations are generated by considering the swaps performed so far.
+        The (zeta*len(joined_sequences)) sequence is selected;
+            if zeta = 0, the sequence with no rounds of distillation is selected;
+            if zeta = 1, the sequence with the maximum number of rounds of distillation is selected.
     """
     protocol = []
 
-    # TODO: validate the protocol
+    # Sample the sequence of swaps
+    swap_space = get_swap_space(nodes-1)
+    selected_idx = round(gamma * (len(swap_space)-1))
+    swap_sequence = swap_space[selected_idx]
+    logging.info(f"Selected index: {selected_idx+1}/{len(swap_space)} \
+                 \nSelected swap sequence: {swap_sequence}")
+
+    # Generate the joined sequences of distillations
+    joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
+    len_joined_sequences = len(joined_sequences)
+    logging.info(f"Number of joined sequences: {len_joined_sequences}")
+
+    # Sample the sequence of distillations
+    selected_idx = round(zeta * (len_joined_sequences-1))
+    logging.info(f"Selected index: {selected_idx+1}/{len_joined_sequences}")
+    protocol = tuple(joined_sequences[selected_idx])
+
+    checkAsymProtocol(protocol, nodes-1)
+    logging.info(f"Generated protocol: {protocol}")
     return protocol
 
 

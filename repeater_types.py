@@ -25,7 +25,7 @@ def checkProtocolUnit(punit: str) -> bool:
     return bool(re.match(r'^[sd]\d+$', punit))
 
 
-def checkAsymProtocol(protocol: Tuple[str]) -> Tuple[str]:
+def checkAsymProtocol(protocol: Tuple[str], S: int = None) -> Tuple[str]:
     """
     Validates a string passed in input for running an asymmetric protocol
     If the protocol is valid, the string is translated in an instance of the type
@@ -45,8 +45,9 @@ def checkAsymProtocol(protocol: Tuple[str]) -> Tuple[str]:
 
         assert checkProtocolUnit(punit), "The protocol is bad formatted."
     
+    if S is None:
+        S = max(swapped_segments) + 1
     # Check if the number is between the allowed indexes for segments
-    S = max(swapped_segments) + 2
     assert all([0 <= s <= S-2 for s in swapped_segments]) and len(swapped_segments) == S-1, "The protocol is bad formatted."
 
     return S
