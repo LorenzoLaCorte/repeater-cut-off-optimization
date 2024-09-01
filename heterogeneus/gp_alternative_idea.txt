@@ -1,0 +1,33 @@
+    This function generates a protocol from the center, spacing and symmetricity parameters.
+    
+    Parameters:
+    - zeta: Centering of the ro. of distillation, between -1 and 1.
+    - tau: Spacing of the ro. of distillation, between 0 and 1.
+    - gamma: Symmetricity of the protocol, between 0 and 1.
+    
+    Returns:
+    - tuple: the protocol to be tested.
+
+    I. Sample of the sequence of swaps
+    II. Sample of the sequences of distillations, before and after each swap
+
+    The protocol is generated as follows:
+        I. The set of all the possible sequences of swaps is generated.
+        They are ordered by the symmetricity of the shape of the swaps, from the least symmetric to the most symmetric.
+        The (gamma*len(swap_space)) sequence is selected;
+            if gamma = 0, the least symmetric sequence is selected;
+            if gamma = 1, the most symmetric sequence is selected.
+
+        II. For the selected sequence of swaps, the set of all the possible sequences of distillations is generated.
+            seq = (D_0, swap_0, D_1, swap_1, D_2, ..., D_S, swap_S-1, D_S)
+            where D_0, D_1, ..., D_S are the sequences of distillations.
+        Factors gamma_i, between 0 and 1, are given to each D_i, to model the sampling of the sequences.
+        They are sampled from a normal distribution with mean mu and standard deviation gamma.
+            where mu is derived from the centering and gamma from the spacing.
+            if zeta = 0, gamma_0 = 1;
+            if zeta = 1, gamma_S = 1;
+        Given Di, the sequence of distillations is picked from the set of all the possible ones,
+            with a probability proportional to gamma_i.
+            if gamma_i = 0, the first sequence of distillations, corresponding to no distillation, is picked.
+            if gamma_i = 1, the last sequence of distillations, corresponding to the maximum number of distillations, is picked.
+              

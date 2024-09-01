@@ -11,12 +11,9 @@ GENERAL_RESULT_DIR="./results"
 
 # Define parameters as tuples of t_coh, p_gen, p_swap, w0, nodes, max_dists
 PARAMETER_SETS=(
-    "40000 0.02 0.85 0.99 5 0"
-    "40000 0.02 0.85 0.99 5 1"
-    "40000 0.02 0.85 0.99 7 0"
-    "40000 0.02 0.85 0.99 7 1"
-    "40000 0.02 0.85 0.99 9 0"
-    "40000 0.02 0.85 0.99 9 1"
+    "1400000 0.00092 0.85 0.9524 5  1"
+    "3600000 0.0026  0.85 0.958  10 0"
+    "3600000 0.0026  0.85 0.958  10 1"
 )
 
 # -----------------------------------------
@@ -37,7 +34,7 @@ PARAMETER_SETS=(
 if [ "$GP" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
-        "bf"
+        "gp"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
@@ -75,11 +72,16 @@ if [ "$GP" = "True" ]; then
             rm "$TMPFILE"
 
             # Create a folder for the results if it doesn't exist
-            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_tcoh${T_COH}_pgen${P_GEN}_pswap${P_SWAP}_w0${W0}_swaps${SWAPS}_maxdists${MAX_DISTS}"
+            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_tcoh${T_COH}_pgen${P_GEN}_pswap${P_SWAP}_w0${W0}_nodes${NODES}_maxdists${MAX_DISTS}"
             mkdir -p "$RESULT_DIR"
 
-            # Move the output file to the results folder
+            # Move the output file and the plots to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
+            if ls *_${OPTIMIZER}.png 1> /dev/null 2>&1; then
+                mv *_${OPTIMIZER}.png "$RESULT_DIR/"
+            else
+                echo "No plots yielded for optimizer $OPTIMIZER"
+            fi
         done
     done
 fi
