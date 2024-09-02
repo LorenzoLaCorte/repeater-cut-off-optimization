@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT="gp_heterogeneus.py"
+SCRIPT="gp_asymmetric.py"
 PY_ALIAS="python3.10"
 
 # Define what simulation you want to run {True, False}

@@ -1,5 +1,5 @@
 """
-....
+This script produces plots that show the efficiency of the Gaussian Process optimization algorithm in comparison to the brute force algorithm.
 """
 
 from argparse import ArgumentParser, Namespace
@@ -8,7 +8,7 @@ import time
 
 from gp_utils import OptimizerType, SimParameters, SpaceType, get_protocol_space_size
 from repeater_algorithm import RepeaterChainSimulation
-from gp_homogeneus import gaussian_optimization, brute_force_optimization
+from gp_symmetric import gaussian_optimization, brute_force_optimization
 from gp_plots import plot_gp_optimization_efficiency
 
 logging.getLogger().level = logging.INFO
