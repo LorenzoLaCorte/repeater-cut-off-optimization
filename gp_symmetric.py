@@ -124,7 +124,7 @@ def brute_force_optimization(simulator, parameters: SimParameters, space_type: S
                 break
 
         if store_results:
-            plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps, results)
+            plot_optimization_process(min_dists, max_dists, parameters, results=results, number_of_swaps=number_of_swaps)
 
         ordered_results: List[Tuple[np.float64, Tuple[int]]] = sorted(results, key=lambda x: x[0], reverse=True)
         best_results[number_of_swaps] = (ordered_results[0][0], ordered_results[0][1], None)
@@ -289,7 +289,9 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
             ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(result, space_type, number_of_swaps)
 
             if store_results:
-                plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps, ordered_results, result)
+                plot_optimization_process(min_dists, max_dists, parameters, 
+                                          results=ordered_results, gp_result=result,
+                                          number_of_swaps=number_of_swaps)
             
             cache_results.clear()
 

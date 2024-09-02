@@ -188,7 +188,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 
         if store_results:
             plot_optimization_process(min_dists=0, max_dists=max_dists, parameters=parameters, 
-                                      number_of_swaps=int(np.log2(nodes)), results=ordered_results, gp_result=result)
+                                      results=ordered_results, gp_result=result)
         cache_results.clear()
     
     except ThresholdExceededError as e:
@@ -209,11 +209,11 @@ if __name__ == "__main__":
 
     parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--gp_shots", type=int, default=200,
+    parser.add_argument("--gp_shots", type=int, default=100,
                         help=(  "Number of shots for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
     
-    parser.add_argument("--gp_initial_points", type=int, default=20,
+    parser.add_argument("--gp_initial_points", type=int, default=10,
                         help=(  "Number of initial points for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
        

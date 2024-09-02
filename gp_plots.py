@@ -1544,9 +1544,9 @@ def _evaluate_min_params(
     return x_vals
 
 
-def plot_protocols_key_rates(results, parameters, number_of_swaps, title, 
+def plot_protocols_key_rates(results, parameters, title, 
                  maximum: Tuple[np.float64, Tuple[int]], maxima: List[Tuple[np.float64, Tuple[int]]],
-                 is_gp=False):
+                 is_gp=False, number_of_swaps=None):
     """
     This function plots the results of the optimization.
     It creates a scatter plot where the y-axis represents the secret key rate,
@@ -1566,7 +1566,9 @@ def plot_protocols_key_rates(results, parameters, number_of_swaps, title,
     best_protocol = maximum[1]
     best_protocol_label = str(best_protocol)
 
-    plt.figure(figsize=(config['figsize_key_rates']['width'], config['figsize_key_rates']['height']+number_of_swaps*0.5))
+    plt.figure(figsize=(config['figsize_key_rates']['width'], 
+                        config['figsize_key_rates']['height'] + (number_of_swaps*0.5 if number_of_swaps is not None else 0)))
+    
     plt.scatter(protocol_labels, key_rates, color='b', marker='o')
     plt.plot(protocol_labels, key_rates, color='b', linestyle='-', label='Secret Key Rate')
     
@@ -1580,20 +1582,24 @@ def plot_protocols_key_rates(results, parameters, number_of_swaps, title,
     
     plt.axvline(x=best_protocol_label, color='r', linestyle='--', label='Global Maximum')
 
-    plt.title(title, pad=20)
+    plt.title(title, pad=50)
     plt.xlabel('Protocol')
     plt.ylabel('Secret Key Rate')
     plt.legend()
 
     maxima_labels = [str(maxima_protocol) for _, maxima_protocol in maxima]
     
-    # Show only protocols ending with all swaps (zeros)
-    plt.xticks(
-        ticks = [i for i, p in enumerate(protocol_labels) 
-                if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
-        labels = [p for i, p in enumerate(protocol_labels) 
-                if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
-    )
+    if number_of_swaps is not None:
+        # Show only protocols ending with all swaps (zeros)
+        plt.xticks(
+            ticks = [i for i, p in enumerate(protocol_labels) 
+                    if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+            labels = [p for i, p in enumerate(protocol_labels) 
+                    if list(ast.literal_eval(p))[-number_of_swaps:] == [0]*number_of_swaps],
+        )
+    else:
+        # Do not show ticks
+        plt.xticks(ticks=[], labels=[])
     
     for i, txt in enumerate(protocol_labels):
         if txt in maxima_labels:
@@ -1603,11 +1609,12 @@ def plot_protocols_key_rates(results, parameters, number_of_swaps, title,
     plt.grid(True, axis='y')
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.225)
-    plt.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_{optimizer}.png', dpi=config['high_dpi'])
+    plt.savefig(f'{optimizer}.png', dpi=config['high_dpi'])
 
 
-def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps, 
-                 results: List[Tuple[np.float64, Tuple[int]]], gp_result:OptimizeResult=None):
+def plot_optimization_process(min_dists, max_dists, parameters,
+                 results: List[Tuple[np.float64, Tuple[int]]], gp_result:OptimizeResult=None,
+                 number_of_swaps=None):
     """
     Invoke general and (eventually) skopt plot functions to visualize the optimization results.
     """
@@ -1618,8 +1625,6 @@ def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps,
     maxima: List[Tuple[np.float64, Tuple[int]]] = get_all_maxima(ordered_results, min_dists, max_dists)
 
     title = (
-        f"Protocols with {number_of_swaps} swap{'' if number_of_swaps==1 else 's'}, "
-        f"from {min_dists} to {max_dists} distillations\n"
         f"$p_{{gen}} = {parameters['p_gen']}, "
         f"p_{{swap}} = {parameters['p_swap']}, "
         f"w_0 = {parameters['w0']}, "
@@ -1636,12 +1641,12 @@ def plot_optimization_process(min_dists, max_dists, parameters, number_of_swaps,
         plot_objective(gp_result, ax=ax2)
 
         plt.tight_layout()
-        plt.subplots_adjust(top=0.75, wspace=0.25)
+        plt.subplots_adjust(top=0.85, wspace=0.25)
 
         fig.suptitle(title)
-        fig.savefig(f'{parameters["w0"]}_{number_of_swaps}_swaps_skopt_gp.png', dpi=config['high_dpi'])
+        fig.savefig(f'skopt_gp.png', dpi=config['high_dpi'])
     
-    plot_protocols_key_rates(results, parameters, number_of_swaps, title, maximum, maxima, is_gp)
+    plot_protocols_key_rates(results, parameters, title, maximum, maxima, is_gp, number_of_swaps)
 
 
 def plot_gp_optimization_efficiency(gp_shots_percentages, results, parameters, plot_info, metric):
