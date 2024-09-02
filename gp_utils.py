@@ -339,21 +339,21 @@ def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
     swap_space = get_swap_space(nodes-1)
     selected_idx = round(gamma * (len(swap_space)-1))
     swap_sequence = swap_space[selected_idx]
-    logging.info(f"Selected index: {selected_idx+1}/{len(swap_space)} \
+    logging.debug(f"Selected index: {selected_idx+1}/{len(swap_space)} \
                  \nSelected swap sequence: {swap_sequence}")
 
     # Generate the joined sequences of distillations
     joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
     len_joined_sequences = len(joined_sequences)
-    logging.info(f"Number of joined sequences: {len_joined_sequences}")
+    logging.debug(f"Number of joined sequences: {len_joined_sequences}")
 
     # Sample the sequence of distillations
     selected_idx = round(zeta * (len_joined_sequences-1))
-    logging.info(f"Selected index: {selected_idx+1}/{len_joined_sequences}")
+    logging.debug(f"Selected index: {selected_idx+1}/{len_joined_sequences}")
     protocol = tuple(joined_sequences[selected_idx])
 
     checkAsymProtocol(protocol, nodes-1)
-    logging.info(f"Generated protocol: {protocol}")
+    logging.debug(f"Generated protocol: {protocol}")
     return protocol
 
 
