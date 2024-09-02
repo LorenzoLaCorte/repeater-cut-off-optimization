@@ -638,13 +638,7 @@ class RepeaterChainSimulation():
 
     def asymmetric_protocol(self, parameters, number_of_segments):
         """
-        Compute the waiting time and the Werner parameter of a heterogeneus (?) and asymmetric protocol.
-        TODO: implement heterogeneus protocols
-        - p_gen, w0, should be a list of values
-        - we should also have a list of distances
-        - t_coh should be a single scalar values given in seconds (not units of time)
-            -- maybe another parameter for the coherence time in units of time (t_coh_sec)
-            -- derivation of a list of t_coh(s) should be done in the protocol (maybe stored in the t_coh parameter)
+        Compute the waiting time and the Werner parameter of an asymmetric protocol.
         Parameters
         ----------
         parameters: dict
