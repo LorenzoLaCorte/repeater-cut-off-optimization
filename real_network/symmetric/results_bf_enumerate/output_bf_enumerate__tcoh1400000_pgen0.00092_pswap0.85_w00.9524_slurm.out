@@ -1,0 +1,406 @@
+Running distillation with optimizer bf and space enumerate...
+/home/l/lorenzo-la/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_homogeneus.py", line 33, in <module>
+    from gp_plots import plot_optimization_process
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_plots.py", line 34, in <module>
+    import pandas as pd
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/apps/free81/python/3.10.2/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/apps/free81/python/3.10.2/lib/python3.10/site-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+INFO:root:
+
+Number of swaps: 2
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 0), 't_trunc': 1400000}
+INFO:root:Protocol (0, 0),	 r = 4.0680171899583804e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 0),	 r = 6.99532427379989e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 0),	 r = 6.448186638416541e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 0, 1),	 r = 5.4454128790430974e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 0, 0),	 r = 7.866027774427274e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 1, 0),	 r = 7.44674742867434e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 0, 1),	 r = 6.716909592703168e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 1, 0),	 r = 6.95761429291962e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 0, 1),	 r = 6.260255027327605e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 0, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 0, 1, 1),	 r = 5.357559220763779e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 0, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 1, 0, 0),	 r = 7.804914628483713e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 0, 1, 0),	 r = 7.439744281662922e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 0, 0, 1),	 r = 6.899821060215268e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 1, 1, 0),	 r = 7.085793298267583e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 1, 0, 1),	 r = 6.563954696598284e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 0, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 0, 1, 1),	 r = 5.91095499126501e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 1, 1, 0),	 r = 6.666557715988247e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 1, 0, 1),	 r = 6.166410291203807e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 0, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 0, 1, 1),	 r = 5.537125057504375e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 0, 1, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 0, 1, 1, 1),	 r = 4.7527249670200964e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 1, 0, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 1, 1, 0, 0),	 r = 7.325978064125423e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 0, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 1, 0, 1, 0),	 r = 6.982254483878659e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 0, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 1, 0, 0, 1),	 r = 6.57239562146879e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 1, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 0, 1, 1, 0),	 r = 6.692516785794091e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 1, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 0, 1, 0, 1),	 r = 6.292397083235292e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 0, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 1, 0, 0, 1, 1),	 r = 5.819464940273227e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 1, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 1, 1, 1, 0),	 r = 6.410835894058569e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 1, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 1, 1, 0, 1),	 r = 6.0188878843093345e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 0, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 1, 0, 1, 1),	 r = 5.555311133141894e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 0, 1, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (1, 0, 0, 1, 1, 1),	 r = 4.9982750624818355e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 1, 1, 0), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 1, 1, 1, 0),	 r = 6.053409000448324e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 1, 0, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 1, 1, 0, 1),	 r = 5.678777064053862e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 0, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 1, 0, 1, 1),	 r = 5.230911591416293e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 0, 1, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 1, 0, 1, 1, 1),	 r = 4.691109491812042e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 0, 1, 1, 1, 1), 't_trunc': 1400000}
+INFO:root:Protocol (0, 0, 1, 1, 1, 1),	 r = 4.026306650135332e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 1, 1, 0, 0), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 1, 1, 1, 0, 0),	 r = 6.677808348147045e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 1, 0, 1, 0), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 1, 1, 0, 1, 0),	 r = 6.346203868127926e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 1, 0, 0, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 1, 1, 0, 0, 1),	 r = 6.027523675118261e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 0, 1, 1, 0), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 1, 0, 1, 1, 0),	 r = 6.0845223846611614e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 0, 1, 0, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 1, 0, 1, 0, 1),	 r = 5.7710743426357436e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 1, 0, 0, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 1, 0, 0, 1, 1),	 r = 5.422302059527011e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 1, 1, 1, 0), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 0, 1, 1, 1, 0),	 r = 5.876609474437521e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 1, 1, 0, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 0, 1, 1, 0, 1),	 r = 5.5613454525792076e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 1, 0, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 0, 1, 0, 1, 1),	 r = 5.213064215880534e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 1, 0, 0, 1, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 1, 0, 0, 1, 1, 1),	 r = 4.824873597290608e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 1, 1, 1, 0), 't_trunc': 1925680}
+INFO:root:Protocol (1, 0, 1, 1, 1, 1, 0),	 r = 5.651278816368904e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 1, 1, 0, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 0, 1, 1, 1, 0, 1),	 r = 5.3421099764071355e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 1, 0, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 0, 1, 1, 0, 1, 1),	 r = 4.996463207087843e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 1, 0, 1, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 0, 1, 0, 1, 1, 1),	 r = 4.612380914437354e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (1, 0, 0, 1, 1, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (1, 0, 0, 1, 1, 1, 1),	 r = 4.1468480145052315e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 1, 1, 1, 0), 't_trunc': 1925680}
+INFO:root:Protocol (0, 1, 1, 1, 1, 1, 0),	 r = 5.344051215744177e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 1, 1, 0, 1), 't_trunc': 1925680}
+INFO:root:Protocol (0, 1, 1, 1, 1, 0, 1),	 r = 5.0505521275401755e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 1, 0, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (0, 1, 1, 1, 0, 1, 1),	 r = 4.717963785052849e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 1, 0, 1, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (0, 1, 1, 0, 1, 1, 1),	 r = 4.344941012678221e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 1, 0, 1, 1, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (0, 1, 0, 1, 1, 1, 1),	 r = 3.8925899697550846e-05
+
+INFO:root:
+Running: {'t_coh': 1400000, 'p_gen': 0.00092, 'p_swap': 0.85, 'w0': 0.9524, 'protocol': (0, 0, 1, 1, 1, 1, 1), 't_trunc': 1925680}
+INFO:root:Protocol (0, 0, 1, 1, 1, 1, 1),	 r = 3.335130295438725e-05
+
+
+real	17m16.728s
+user	15m32.203s
+sys	1m46.607s
+Running distillation with optimizer bf and space enumerate...
+/home/l/lorenzo-la/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_homogeneus.py", line 33, in <module>
+    from gp_plots import plot_optimization_process
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_plots.py", line 34, in <module>
+    import pandas as pd
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/apps/free81/python/3.10.2/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/apps/free81/python/3.10.2/lib/python3.10/site-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+INFO:root:
+
+Number of swaps: 1
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (0,), 't_trunc': 1568627}
+INFO:root:Protocol (0,),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 0), 't_trunc': 3137254}
+INFO:root:Protocol (1, 0),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (0, 1), 't_trunc': 3137254}
+INFO:root:Protocol (0, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 0), 't_trunc': 6274509}
+INFO:root:Protocol (1, 1, 0),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 0, 1), 't_trunc': 6274509}
+INFO:root:Protocol (1, 0, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (0, 1, 1), 't_trunc': 6274509}
+INFO:root:Protocol (0, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 1, 0), 't_trunc': 12549019}
+INFO:root:Protocol (1, 1, 1, 0),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 0, 1), 't_trunc': 12549019}
+INFO:root:Protocol (1, 1, 0, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 0, 1, 1), 't_trunc': 12549019}
+INFO:root:Protocol (1, 0, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (0, 1, 1, 1), 't_trunc': 12549019}
+INFO:root:Protocol (0, 1, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 1, 1, 0), 't_trunc': 25098038}
+INFO:root:Protocol (1, 1, 1, 1, 0),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 1, 0, 1), 't_trunc': 25098038}
+INFO:root:Protocol (1, 1, 1, 0, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 0, 1, 1), 't_trunc': 25098038}
+INFO:root:Protocol (1, 1, 0, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 0, 1, 1, 1), 't_trunc': 25098038}
+INFO:root:Protocol (1, 0, 1, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (0, 1, 1, 1, 1), 't_trunc': 25098038}
+INFO:root:Protocol (0, 1, 1, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 1, 1, 1, 0), 't_trunc': 50196076}
+INFO:root:Protocol (1, 1, 1, 1, 1, 0),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 1, 1, 0, 1), 't_trunc': 50196076}
+INFO:root:Protocol (1, 1, 1, 1, 0, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 1, 0, 1, 1), 't_trunc': 50196076}
+INFO:root:Protocol (1, 1, 1, 0, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 1, 0, 1, 1, 1), 't_trunc': 50196076}
+INFO:root:Protocol (1, 1, 0, 1, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (1, 0, 1, 1, 1, 1), 't_trunc': 50196076}
+INFO:root:Protocol (1, 0, 1, 1, 1, 1),	 r = 0.0
+
+INFO:root:
+Running: {'t_coh': 720000, 'p_gen': 1.5e-05, 'p_swap': 0.85, 'w0': 0.867, 'protocol': (0, 1, 1, 1, 1, 1), 't_trunc': 50196076}
+INFO:root:Protocol (0, 1, 1, 1, 1, 1),	 r = 0.0
+
+
+real	152m23.670s
+user	139m38.637s
+sys	12m17.081s

@@ -4,11 +4,11 @@ SCRIPT="gp_homogeneus.py"
 PY_ALIAS="python3.10"
 
 # Define what simulation you want to run {True, False}
-GP=False
-DP_COMPLEXITY=True
+GP=True
+DP_COMPLEXITY=False
 
 # Define the general result directory
-GENERAL_RESULT_DIR="./results"
+GENERAL_RESULT_DIR="./results_real"
 
 # Define the space of rounds of distillation to be simulated
 MIN_DISTS=0
@@ -16,10 +16,9 @@ MAX_DISTS=5
 
 # Define parameters as tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
 PARAMETER_SETS=(
-    "-1 1440000 0.0026 0.85 0.9577 3" # 20 km, 3 SWAP, rate is non-zero only with dist. and optimal for k=4
-    "-1 720000 0.0009187 0.85 0.9524 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
-    "-1 360000 0.0000150 0.85 0.867 1"  # 100 km, 1 SWAP, rate is 0 whatsoever
-    # "-1 180000 0.000000096 0.85 0.36" # 200 km, 0 SWAP, hard to simulate
+    "-1 1400000 0.00092     0.85 0.9524 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
+    "-1 720000  0.0000150   0.85 0.867  1"  # 100 km, 1 SWAP, rate is 0 whatsoever
+    # "-1 360000  0.000000096 0.85 0.36   0" # 200 km, 0 SWAP, hard to simulate
 )
 
 # -----------------------------------------
@@ -40,7 +39,7 @@ PARAMETER_SETS=(
 if [ "$GP" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_SPACE_DP_COMBS=(
-        "bf enumerate"
+        "gp centerspace"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
