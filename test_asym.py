@@ -9,11 +9,13 @@ protocols = [
     ("s0", "s2", "s1"),
     ("d0", "d1", "d2", "d3", "s0", "s2", "s1"),
     ("s0", "s2", "d1", "d3", "s1"),
+    ('d0', 'd1', 'd2', 'd3', 's0', 's2', 'd1', 'd3', 's1'),
 ]
 benchmarks = [
     (0, 0),
     (1, 0, 0),
     (0, 1, 0),
+    (1, 0, 1, 0),
 ]
 
 
@@ -47,3 +49,7 @@ def test_asym_repeater_sim(protocol, benchmark):
     assert skr1 == skr2, "The secret key rate is not the same."
     assert np.array_equal(pmf1, pmf2), "The pmf is not the same."
     assert np.array_equal(w_func1, w_func2), "The w_func is not the same."
+
+
+if __name__ == "__main__":
+    pytest.main(["-sv", "test_asym.py"])
