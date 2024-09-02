@@ -17,7 +17,7 @@ from skopt.utils import use_named_args
 
 from gp_plots import plot_optimization_process
 from gp_utils import (
-    get_asym_protocol_space_size, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
+    optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
     get_asym_protocol_space,  # Getters for Spaces
     get_protocol_from_center_spacing_symmetricity, # Getters for Protocols
     get_t_trunc, get_ordered_results, # Other Getters
@@ -111,7 +111,7 @@ def brute_force_optimization(simulator, parameters: SimParameters,
 cache_results = defaultdict(np.float64)
 strategy_to_protocol = {}
 
-def objective_key_rate(space, nodes, max_dists, shot_count, space_size, parameters, simulator):
+def objective_key_rate(space, nodes, max_dists, shot_count, gp_shots, parameters, simulator):
     """
     Objective function, consider the whole space of actions,
         returning a negative secret key rate
@@ -121,15 +121,16 @@ def objective_key_rate(space, nodes, max_dists, shot_count, space_size, paramete
     gamma = space['gamma']
     zeta = space['zeta']
     
-    logging.debug(f"\n\nGenerating a protocol with gamma={gamma}, zeta={zeta}...")
+    logging.info(f"\n\nGenerating a protocol with gamma={gamma}, zeta={zeta}...")
     parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
+    logging.info(f"Protocol generated: {parameters['protocol']}")
     strategy_to_protocol[(gamma, zeta)] = parameters["protocol"]
 
     if parameters["protocol"] in cache_results:
         logging.info("Already evaluated protocol, returning cached result")
         return -cache_results[parameters["protocol"]]
     
-    secret_key_rate, pmf, _ = asym_protocol_runner(simulator, parameters, nodes, shot_count[0], space_size)
+    secret_key_rate, pmf, _ = asym_protocol_runner(simulator, parameters, nodes, shot_count[0], gp_shots)
     
     cdf_coverage = pmf_to_cdf(pmf)[-1]
     if cdf_coverage < cdf_threshold:
@@ -161,7 +162,6 @@ def gaussian_optimization(simulator, parameters: SimParameters,
                 f"and {gp_initial_points} initial points\n\n")
 
     shot_count = [-1]
-    space_size = get_asym_protocol_space_size(nodes, max_dists)
 
     space = [
         Real(0, 1, name='gamma'),
@@ -169,7 +169,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
     ]
     @use_named_args(space)
     def wrapped_objective(**space_params):
-        return objective_key_rate(space_params, nodes, max_dists, shot_count, space_size, parameters, simulator)
+        return objective_key_rate(space_params, nodes, max_dists, shot_count, gp_shots, parameters, simulator)
 
     try:
         result: OptimizeResult = gp_minimize(
@@ -179,7 +179,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
             n_initial_points=gp_initial_points,
             callback=[is_gp_done],
             acq_func='LCB',
-            kappa=1.96 * 2, # Double the default kappa, to prefer exploration
+            kappa=1.96,
             noise=1e-10,    # There is no noise in results
         )
         
