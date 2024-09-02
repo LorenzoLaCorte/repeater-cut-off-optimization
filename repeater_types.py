@@ -45,8 +45,8 @@ def checkAsymProtocol(protocol: Tuple[str], S: int = None) -> Tuple[str]:
 
         assert checkProtocolUnit(punit), "The protocol is bad formatted."
     
-    if S is None:
-        S = max(swapped_segments) + 1
+    S = max(swapped_segments) + 2 if S is None else S
+    
     # Check if the number is between the allowed indexes for segments
     assert all([0 <= s <= S-2 for s in swapped_segments]) and len(swapped_segments) == S-1, "The protocol is bad formatted."
 
