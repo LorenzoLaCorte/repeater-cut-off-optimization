@@ -191,6 +191,7 @@ def get_possible_dist_sequences(N, swapped_segments, max_dists):
     """
     Returns all the possible distillation sequences for a given number of nodes 
     at a step where swapped_segments have been swapped, and thus cannot be distillated.
+    TODO: check shape also here to avoid sequences with the same meaning
     """
     S = N - 1
     combinations_list = []
@@ -226,14 +227,15 @@ def get_asym_protocol_space(nodes, max_dists):
     space = []
 
     swap_space = get_swap_space(S)
-
+    assert len(swap_space) == catalan_number(nodes-2), f"Expected {catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
     for swap_sequence in swap_space:
         joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
         space.extend([tuple(protocol) for protocol in joined_sequences])
     
     expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
-    assert len(space) == expected_protocols, \
-        f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    # assert len(space) == expected_protocols, \
+    #     f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    space = sorted(space, key=lambda x: (len(x), x))
     return space
 
 
@@ -242,38 +244,88 @@ def get_joined_sequences(nodes, max_dists, swap_sequence):
     Returns all the possible joined sequences of distillation and swap for a given swap sequence.
     """
     joined_sequences = list(get_possible_dist_sequences(nodes, [], max_dists))
+    shapes = []
 
     for idx, swap in enumerate(swap_sequence):
-            # Combine all possible distillation sequences with the swap under consideration
+        # Combine all possible distillation sequences with the swap under consideration
         curr_joined_sequences = [[f"s{swap}"] + list(dist_sequence) 
                                      for dist_sequence in get_possible_dist_sequences(nodes, swap_sequence[:idx+1], max_dists)]
             
-            # Combine all the sequences for the current swap sequence with the previous ones
+        # Combine all the sequences for the current swap sequence with the previous ones
         new_joined_sequences = []
+        
         for c1, c2 in itertools.product(joined_sequences, curr_joined_sequences):
-            new_joined_sequences.append(c1 + c2)
+            shape = get_swap_dist_shape(c1 + c2)
+
+            # If shape has one element with more than max_dists distillations, skip
+            if any("d" in el and int(el.split("d")[0]) > max_dists for comp in shape for el in comp):
+                continue
+
+            for s in shapes:
+                if s == shape:
+                    break
+                
+            else:
+                shapes.append(shape)
+                new_joined_sequences.append(c1 + c2)
+
         joined_sequences = new_joined_sequences
     return joined_sequences
 
 
-def get_shape(seq, S):
+def get_swap_shape(seq):
     """
-    Returns ...
-    Is bugged when one of the segment has 2 digits
-    TODO: add commas to the numbers
+    Returns the shape (evolution of the links) of a given sequence of swaps.
     """
-    segments = {str(i) for i in range(S)}
+    left_segments = {f"{i}," for i in seq}
+    right_segments = {f"{i+1}," for i in seq}
+    segments = left_segments.union(right_segments)
     shape = set()
     for swap in seq:
         # left_segm is the string in the set that has swap as last character
         # right_segm is the string in the set that has left_segm+1 as first character
-        left_segm = next(segm for segm in segments if segm[-1] == str(swap))
-        right_segm = next((segm for segm in segments if segm[0] == str(int(left_segm[-1]) + 1)), None)
+        left_segm = next(segm for segm in segments if segm.split(",")[-2] == str(swap))
+        left_segm_num = int(left_segm.split(",")[-2])
+        right_segm = next((segm for segm in segments if segm.split(",")[0] == str(left_segm_num+1)), None)
         segments.discard(left_segm)
         segments.discard(right_segm)
-        new_segment = left_segm + right_segm
+        new_segment = left_segm + right_segm if right_segm else left_segm
         segments.add(new_segment)
         shape.add(new_segment)
+    return shape
+
+
+def get_swap_dist_shape(seq):
+    """
+    Returns the shape (evolution of the links) of a given sequence of swaps and distillations.
+    """
+    shape = [] # list of sets (indepedent components)
+    for step in seq:
+        segm = int(step[1:])
+        if step[0] == "s":
+            shape.append({step})
+
+        elif step[0] == "d":
+            # Search if in shape there is a component that INVOLVES the segment
+            for i, comp in enumerate(shape):
+                # Extract swaps from component
+                swaps = [int(s[1:]) for s in comp if s[0] == "s"]
+                swap_shape = get_swap_shape(swaps)
+                for s in swap_shape:
+                    if str(segm) in s:
+                        break
+                else:
+                    for sub_comp in shape[i]:
+                        if sub_comp.endswith(step):
+                            new_step = str(int(sub_comp.split('d')[0]) + 1) + sub_comp[1:]
+                            shape[i].remove(sub_comp)
+                            break
+                    else:
+                        new_step = "1" + step
+                    shape[i].add(new_step)
+                    break
+            else:
+                shape.append({"1" + step})
     return shape
 
 
@@ -287,7 +339,7 @@ def get_swap_space(S):
     shapes = []
 
     for seq in itertools.permutations(range(S-1), S-1):
-        shape = get_shape(seq, S)
+        shape = get_swap_shape(seq)
         mean_length = sum(len(s) for s in shape) / len(shape) if shape else 0
 
         for s in shapes:
@@ -343,7 +395,9 @@ def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
                  \nSelected swap sequence: {swap_sequence}")
 
     # Generate the joined sequences of distillations
+    # Sort the joined sequences by their length
     joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
+    joined_sequences = sorted(joined_sequences, key=lambda x: (len(x), x))
     len_joined_sequences = len(joined_sequences)
     logging.debug(f"Number of joined sequences: {len_joined_sequences}")
 
