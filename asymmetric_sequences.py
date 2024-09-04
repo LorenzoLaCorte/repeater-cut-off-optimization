@@ -1,8 +1,5 @@
-import itertools
 from itertools import chain, combinations
-
-from gp_utils import get_swap_dist_shape
-from repeater_types import SimParameters, checkProtocolUnit, checkAsymProtocol
+from repeater_types import checkAsymProtocol
 
 def checkUniqueness(segment, position, final_sequence):
     """
@@ -19,8 +16,14 @@ def checkUniqueness(segment, position, final_sequence):
         return True
 
     # Check if, from where s{i-1} happened, swapped segments start from i-1 and go down
+    if f"s{segment-1}" not in final_sequence:
+        return False
     swap_of_prev = final_sequence.index(f"s{segment-1}")
 
+    # If the swap of the previous segment is after the current position, return False
+    if swap_of_prev >= position:
+        return False
+    
     # Considering the sequence of swapped segments starting from s{i-1}
     swapped_segments = [int(final_sequence[i][1:]) for i in range(swap_of_prev, position) 
                         if final_sequence[i].startswith("s")]
@@ -37,15 +40,15 @@ def powerset(iterable):
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
 
-def get_possible_combinations(swap_seq, dists, total_slots):
+def get_possible_combinations(swap_seq, dists):
     """
-    Generate lists of length total_slots with the positions of the dists
+    Generate lists with the positions of the dists
     """
     all_dists = dists.copy()
     curr = all_dists.copy()
 
     all_possible_combs = [[]]
-    for step in swap_seq:
+    for idx, step in enumerate(swap_seq):       
         swapped_segment = int(step[1:])
 
         new_all_possible_combs = []
@@ -72,40 +75,50 @@ def get_possible_combinations(swap_seq, dists, total_slots):
         
         all_possible_combs = new_all_possible_combs
 
+
     # If the last dist has not been added, add it
-    max_dist = max([int(dist[1:]) for dist in all_dists])
-    for comb in all_possible_combs:
-        if f"d{max_dist}" not in comb:
-            comb.append(f"d{max_dist}")
-    return all_possible_combs
+    not_complete_combs = [comb for comb in all_possible_combs if len(comb) < (len(swap_seq) + len(dists))]
+    last_dist = max([int(dist[1:]) for dist in all_dists])
+
+    for comb in not_complete_combs:
+        for _ in range(len(swap_seq) + len(dists) - len(comb)):
+            comb.append(f"d{last_dist}")
+    
+    # Return the unique combinations
+    return [list(comb) for comb in set([tuple(comb) for comb in all_possible_combs])]
 
 
-def generate_sequences(swap_seq, dists):
-    total_slots = len(swap_seq) + len(dists)
-    dist_segments = [int(dist[1:]) for dist in dists]
-    # TODO: instead of combs of range(total_slots), len(dists)
-    # I have to generate my own combs by considering spots where dists can be placed
-    possible_sequences = get_possible_combinations(swap_seq, dists, total_slots)
+def generate_sequences(swap_seq, kappa):
+    """
+    Generate my own combs by considering spots where dists can be placed
+    """
+    if kappa == 0:
+        yield swap_seq
+        return
+    
+    S = len(swap_seq) + 1
+    dists = [f"d{i}" for i in range(S) for _ in range(kappa)]
+
+    possible_sequences = get_possible_combinations(swap_seq, dists)
 
     for sequence in possible_sequences:
-        for dist in dists:
-            dist_segm = int(dist[1:])
-            dist_idx = sequence.index(dist)
-            if not checkUniqueness(dist_segm, dist_idx, sequence): 
-                break
+        for idx, step in enumerate(sequence):
+            if step.startswith("d"):
+                if not checkUniqueness(int(step[1:]), idx, sequence): 
+                    break
         else:
             # Check if the sequence is valid
             try:
-                checkAsymProtocol(sequence)
                 yield sequence
             except:
                 pass
 
-swap_seq = ["s0", "s2", "s1"]
-dists = ["d0", "d1", "d2", "d3"]
-# dists = ["d0", "d0", "d1", "d1", "d2", "d2", "d3", "d3"]
+if __name__ == "__main__":
+    swap_seq = [ "s1", "s0", "s2"]
+    kappa = 2
 
-for seq in generate_sequences(swap_seq, dists):
-    print(seq)
-
-print(len(list(generate_sequences(swap_seq, dists))))
+    sequences = list(generate_sequences(swap_seq, kappa))
+                    
+    for seq in sequences:
+        print(seq)
+    print(len(sequences))
