@@ -41,6 +41,7 @@ def write_results(filename, ordered_results):
             comma = ',' if protocol != ordered_results[-1][1] else ''
             file.write(f'  "{protocol}": {skr}{comma}\n')
         file.write("}\n\n")
+        file.write(f"Unique values: {len(set([skr for skr, _ in ordered_results]))}\n")
 
 
 def asym_protocol_runner(simulator, parameters, nodes, idx=None, space_len=None):
