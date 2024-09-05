@@ -4,7 +4,9 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{tikz}
+\usepackage{xcolor}
 \usetikzlibrary{calc}
+\usepackage{hyperref}
 
 \begin{document}
 
@@ -23,13 +25,13 @@ where:
 When two links are swapped, the joined segment is represented by the right segment index.
 
 In the example above, the protocol is composed of 3 distillations and 2 swaps, and it is performed as follows:
-\begin{enumerate}
-    \item distillation of segment 0,
-    \item swap of segments 0 and 1,
-    \item distillation of the joined segment of 0 and 1 (now represented as segment 1),
-    \item swap of segments 2 and 3,
-    \item final swap between the two joined segments 0-1 and 2-3.
-\end{enumerate}
+\begin{itemize}
+    \item d0: distillation of segment 0,
+    \item s0: swap of segments 0 and 1,
+    \item d1: distillation of the joined segment of 0 and 1 (now represented as segment 1),
+    \item s2: swap of segments 2 and 3,
+    \item s1: final swap between the two joined segments 0-1 and 2-3.
+\end{itemize}
 
 \begin{figure}[ht!]
   \centering
@@ -76,32 +78,25 @@ In the example above, the protocol is composed of 3 distillations and 2 swaps, a
 
 Considering a protocol with $N$ nodes and $S=N-1$ segments, restrictions implied by this notation are:
 \begin{enumerate}
-  \item a protocol must perform exactly $S$ SWAPs,
-  \item $d\{i\}$ is allowed only if $s\{i\}$ has not been performed yet.
+  \item a protocol must perform exactly $S$ entanglement swapping operations,
+  \item $d\{i\}$ is allowed only if $s\{i\}$ has not been performed yet, otherwise the protocol is invalid.
 \end{enumerate}
 
-For example, $(d0, s0, d0, s2, s1)$ is not valid, as the joined segment 0-1 is represented by $s1$ after entanglement swapping has been performed to join the two segments, and so the second $d0$ does not have any meaning.
+For example, $(d0, s0, \textcolor{red}{d0}, s2, s1)$ is not valid, as the joined segment 0-1 is represented by $s1$ after entanglement swapping has been performed to join the two segments, and so $\textcolor{red}{d0}$ does not have any meaning.
 
 \section*{Size of the Protocol Space}
 
-The size of the protocol space is given by the number of possible sequences of swaps and distillations, considering the restrictions imposed by the notation:
-\begin{itemize}
-    \item the number of \textbf{unique} possible sequences of swaps is given by the number of Catalan numbers of $N-2$,
-    \item the number of possible sequences of distillations is derived by considering all the possible distillations allowed before and after each swap.
-\end{itemize}
-
-Considering $N$ nodes and $\kappa$ distillations per segment per level, the number of possible sequences of distillations is given by:
-\begin{equation*}
-    |P| = \text{Catalan}(N-2) \cdot \Omega(\kappa, N-1)
-\end{equation*}
-where:
-\begin{equation*}
-    \text{Catalan}(n) = \frac{1}{n+1} \binom{2n}{n} \quad and \quad 
-    \Omega(\kappa, n) = \sum_{i=1}^{n} (\kappa+1)^i
-\end{equation*}
-thus:
+The size of the protocol space is given by the number of possible sequences of swaps and distillations, considering the restrictions imposed by the notation. The number of valid possible sequences of swaps is given by the number of Catalan numbers of $N-2$.
+\\\\
+When considering distillations, we define $\kappa$ as the maximum number of distillations allowed by a segment ${{i}}$, and we iterate over all possible values of $\kappa$ from 0 to a maximum number of distillations per segment $\beta$.
+\footnotetext[1]{From numerical results, I just searched the series here \url{https://oeis.org/search?q=1,5,40,385&language=english&go=Search}.}
+Thus, considering $N$ nodes, $S$ segments, and $\kappa$ distillations per segment, the number of possible repeater protocols is given by the Generalized Catalan number \footnotemark[1] of order $S$ and parameter $\kappa+1$, over all $\kappa$ from 0 to $\beta$:
 \begin{equation}
-    |P| = \frac{1}{N-1} \binom{2(N-2)}{N-2} \cdot (\kappa+1)^{\frac{(N-1) \cdot N}{2}} .
+    |P| = \sum_{\kappa=0}^{\beta} C(S, \kappa+1) ,
+\end{equation}
+where:
+\begin{equation}
+    C(n,k)= \binom{(k+1)*n-2}{n} \cdot \frac{1}{(k*n-1)} .
 \end{equation}
 
 \section*{Methodology}
@@ -143,7 +138,8 @@ The protocol is generated as follows:
     \end{itemize}
 \end{enumerate}
 
-\section*{Validation}
+\clearpage
+\section*{Validation (old protocol space results)}
 
 \begin{table}[ht!]
   \centering
@@ -163,13 +159,13 @@ The protocol is generated as follows:
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=\linewidth, trim=10 10 10 20, clip]{asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png}
+  \includegraphics[width=\linewidth, trim=10 10 10 20, clip]{asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png}
   \caption{Results of the GP optimization for 5 nodes, and max distance 1. The algorithm converges to the optimal protocol in less than 200 evaluations, while a bruteforce algorithm must evaluate all the 5120 protocols.}
   \label{fig:gp_results}
 \end{figure}
 
 \clearpage
-\section*{Results}
+\section*{Results (old protocol space results)}
 
 \begin{table}[ht!]
     \centering
@@ -248,7 +244,7 @@ We present Case C of Table \ref{tab:symmetric_protocols} in Figure \ref{fig:symm
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=\linewidth]{/home/lax/University/OIST/repeater-cut-off-optimization/real_network/asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png}
+  \includegraphics[width=\linewidth]{asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png}
   \caption{Results of the GP optimization for 5 nodes (asymmetric), and up to 2 rounds of distillation. The algorithm converges to the maximum in around $100$ evaluations, out of the $295245$. However, we know that this is a sub-optimal result, as a higher secret key rate is yielded by the symmetric protocol presented in \ref{fig:symmetric_5_nodes}.}
   \label{fig:asymmetric_5_nodes}
 \end{figure}

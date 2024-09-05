@@ -20,14 +20,13 @@ benchmarks = [
     (1, 1, 0, 0),
 ]
 
-
 @pytest.mark.parametrize("protocol, benchmark", zip(protocols, benchmarks))
 def test_asym_repeater_sim(protocol, benchmark):
     parameters = {
-        "p_gen": 0.02,
+        "p_gen": 0.00092,
         "p_swap": 0.85,
-        "w0": 0.95,
-        "t_coh": 40000,
+        "w0": 0.952,
+        "t_coh": 1400000,
         "t_trunc": 400000,
     }
 

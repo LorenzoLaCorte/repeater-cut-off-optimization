@@ -1,0 +1,4 @@
+Time taken:
+real	124m54.826s
+user	182m46.526s
+sys	8m38.371s
