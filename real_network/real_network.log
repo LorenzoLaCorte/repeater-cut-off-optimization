@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.9)  2 SEP 2024 18:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.9)  3 SEP 2024 12:41
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -382,49 +382,55 @@ Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
-))
-Underfull \hbox (badness 10000) in paragraph at lines 91--100
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 91--100
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 91--100
-
- []
-
-[1
+)) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png, id=15, 867.24pt x 433.62pt>
+Underfull \hbox (badness 10000) in paragraph at lines 116--125
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--125
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 116--125
+
+ []
+
+<asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png, id=21, 867.24pt x 433.62pt>
 File: asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png Graphic file (type png)
 <use asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png>
-Package pdftex.def Info: asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png  used on input line 141.
+Package pdftex.def Info: asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png  used on input line 166.
 (pdftex.def)             Requested size: 542.02501pt x 258.17615pt.
- [2 <./asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png>]
-<symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png, id=28, 867.24pt x 433.62pt>
+[2] [3 <./asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png>]
+<symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png, id=35, 867.24pt x 433.62pt>
 File: symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png Graphic file (type png)
 <use symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png>
-Package pdftex.def Info: symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png  used on input line 217.
+Package pdftex.def Info: symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png  used on input line 244.
 (pdftex.def)             Requested size: 542.02501pt x 271.02507pt.
- [3] [4 <./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png>] (./real_network.aux) ) 
+</home/lax/University/OIST/repeater-cut-off-optimization/real_network/asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png, id=36, 867.24pt x 433.62pt>
+File: /home/lax/University/OIST/repeater-cut-off-optimization/real_network/asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png Graphic file (type png)
+<use /home/lax/University/OIST/repeater-cut-off-optimization/real_network/asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png>
+Package pdftex.def Info: /home/lax/University/OIST/repeater-cut-off-optimization/real_network/asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png  used on input line 251.
+(pdftex.def)             Requested size: 542.02501pt x 271.02507pt.
+ [4
+
+] [5 <./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png> </home/lax/University/OIST/repeater-cut-off-optimization/real_network/asymmetric/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png>] (./real_network.aux) ) 
 Here is how much of TeX's memory you used:
- 13228 strings out of 480171
- 269771 string characters out of 5894490
- 548154 words of memory out of 5000000
- 30968 multiletter control sequences out of 15000+600000
+ 13237 strings out of 480171
+ 270960 string characters out of 5894490
+ 549162 words of memory out of 5000000
+ 30975 multiletter control sequences out of 15000+600000
  473839 words of font info for 44 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  84i,13n,89p,654b,685s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/lax/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on real_network.pdf (4 pages, 874930 bytes).
+ </home/lax/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on real_network.pdf (5 pages, 1332314 bytes).
 PDF statistics:
- 82 PDF objects out of 1000 (max. 8388607)
- 49 compressed objects within 1 object stream
+ 107 PDF objects out of 1000 (max. 8388607)
+ 63 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 29 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 34 words of extra memory for PDF output out of 10000 (max. 10000000)
 
