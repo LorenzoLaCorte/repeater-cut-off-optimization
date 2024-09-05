@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+
+The enumeration of all possible binary trees with $N$ leaves is a fundamental topic in combinatorics and computer science. This problem is closely related to Catalan numbers, which arise in various counting problems involving recursive structures.
+
+To find all possible binary trees with $N$ leaves, you can use the concept of Catalan numbers, which count the number of possible full binary trees. A full binary tree with $N$ leaves has $2N-1$ nodes. The number of distinct trees can be computed using dynamic programming, recursion, or combinatorial methods.
+
+The number of full binary trees corresponds to the $N$-th Catalan number, given by:
+
+\[
+C_N = \frac{1}{N+1} \binom{2N}{N}
+\]
+
+This formula helps to determine the structure and count of possible trees with specific leaves. For more details, you can explore resources like Leetcode's problem on full binary trees\footnote{\url{https://leetcode.com/problems/all-possible-full-binary-trees/}}.
+
+Here are some references that cover this topic in detail:
+
+\begin{itemize}
+    \item \textbf{Introduction to Algorithms} \\
+    Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein \\
+    \textit{Description:} A comprehensive textbook that covers fundamental algorithms and data structures, including binary trees. It discusses tree structures, traversal algorithms, and touches upon the enumeration of different binary trees. \\
+    \textit{Edition:} 3rd Edition, MIT Press, 2009 \\
+    \textit{ISBN:} 978-0262033848
+
+    \item \textbf{Concrete Mathematics: A Foundation for Computer Science} \\
+    Ronald L. Graham, Donald E. Knuth, and Oren Patashnik \\
+    \textit{Description:} This book blends continuous and discrete mathematics and includes a thorough discussion of Catalan numbers and their applications in counting binary trees. \\
+    \textit{Edition:} 2nd Edition, Addison-Wesley, 1994 \\
+    \textit{ISBN:} 978-0201558029
+
+    \item \textbf{Enumerative Combinatorics, Volume 2} \\
+    Richard P. Stanley \\
+    \textit{Description:} A detailed text on combinatorial enumeration, providing in-depth coverage of Catalan numbers, generating functions, and the enumeration of binary trees. \\
+    \textit{Edition:} Cambridge University Press, 1999 \\
+    \textit{ISBN:} 978-0521663519
+
+    \item \textbf{Combinatorics: Topics, Techniques, Algorithms} \\
+    Peter J. Cameron \\
+    \textit{Description:} An introduction to combinatorial concepts, including tree enumeration and combinatorial structures related to binary trees. \\
+    \textit{Edition:} Cambridge University Press, 1994 \\
+    \textit{ISBN:} 978-0521457613
+\end{itemize}
+
+\textbf{Research Articles and Papers:}
+\begin{itemize}
+    \item \textit{The Number of Binary Trees with Integer Node Labels} \\
+    Explores counting binary trees with various constraints.
+    \item \textit{Catalan Numbers and Their Applications} \\
+    An overview of Catalan numbers in combinatorial problems, including binary trees.
+\end{itemize}
+
+\textbf{Online Resources:}
+\begin{itemize}
+    \item \textbf{The On-Line Encyclopedia of Integer Sequences (OEIS):} \\
+    Sequence A000108: Catalan Numbers \\
+    Provides information on Catalan numbers with references to their occurrence in counting binary trees.
+    \item \textbf{Wikipedia:}
+    \begin{itemize}
+        \item \href{https://en.wikipedia.org/wiki/Catalan_number}{Catalan Number} \\
+        Offers a comprehensive overview, including formulas and applications to binary trees.
+        \item \href{https://en.wikipedia.org/wiki/Binary_tree}{Binary Tree} \\
+        Discusses the properties of binary trees and includes sections on counting and enumeration.
+    \end{itemize}
+    \item \textbf{MathWorld:} \\
+    \href{https://mathworld.wolfram.com/CatalanNumber.html}{Catalan Number} \\
+    A resource for mathematical definitions and properties related to Catalan numbers and binary trees.
+\end{itemize}
+
+\textbf{Generatingfunctionology} \\
+Herbert S. Wilf \\
+\textit{Description:} Focuses on generating functions as a method for counting combinatorial objects like binary trees. \\
+\textit{Edition:} 3rd Edition, Academic Press, 2005 \\
+\textit{ISBN:} 978-0127519565 \\
+\textit{Availability:} Downloadable PDF provided by the author.
+
+\textbf{Lecture Notes and Course Materials:}
+\begin{itemize}
+    \item Many universities provide lecture notes on combinatorics and data structures that include sections on binary tree enumeration. For example:
+    \item \textbf{MIT OpenCourseWare:} \\
+    Course 6.042J Mathematics for Computer Science \\
+    Lecture Notes covering combinatorial structures.
+\end{itemize}
+
+These references should give you a solid foundation in understanding how to enumerate all possible binary trees with $N$ leaves. They cover theoretical aspects, provide mathematical proofs, and include examples that illustrate the concepts.
+
+% TODO: Solve leetcode problem on full binary trees.
+% TODO: Porting of the problem to our scenario, implementation and report here.
+% TODO: Merge with main document.
+
+\end{document}
