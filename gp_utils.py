@@ -16,7 +16,10 @@ from scipy.optimize import OptimizeResult
 from skopt.space import Categorical
 from scipy.stats import norm
 
+from asymmetric_sequences import generate_sequences
 from repeater_types import checkAsymProtocol
+
+logging.basicConfig(level=logging.INFO)
 
 # Define the exception for the CDF coverage
 class ThresholdExceededError(Exception):
@@ -166,6 +169,13 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
     return space
 
 
+def generalized_catalan_number(n, k):
+    """
+    Returns the generalized Catalan number for a given n and k.
+    """
+    return binom((k + 1) * n - 2, n) / (k * n - 1)
+
+
 def catalan_number(n):
     """
     Returns the n-th Catalan number.
@@ -176,35 +186,12 @@ def catalan_number(n):
 def get_asym_protocol_space_size(nodes, max_dists):
     """
     Returns the space of asymmetric protocols to be tested,
-     by analytical derivation.
+     by analytical derivation (generalized Catalan numbers).
     """
-    if nodes < 3:
-        raise ValueError("N should be at least 3")
-    swap_permutations =  catalan_number(nodes - 2)
-
+    if nodes < 2:
+        raise ValueError("N should be at least 2")
     S = nodes - 1
-    gauss = (S * (S+1)) // 2
-    return swap_permutations * ((max_dists+1)**(gauss))
-
-
-def get_possible_dist_sequences(N, swapped_segments, max_dists):
-    """
-    Returns all the possible distillation sequences for a given number of nodes 
-    at a step where swapped_segments have been swapped, and thus cannot be distillated.
-    TODO: check shape also here to avoid sequences with the same meaning
-    """
-    S = N - 1
-    combinations_list = []
-    elements = [f"d{i}" for i in range(S) if i not in swapped_segments]
-    
-    for r in range(len(elements)*max_dists + 1):
-        for combo in itertools.combinations_with_replacement(elements, r):
-            # Check if the sequence doesn't exceed the max_dists for any element
-            # TODO: maybe there is a more efficient way to do this
-            if all(combo.count(x) <= max_dists for x in elements):
-                combinations_list.append(list(combo))
-    
-    return combinations_list
+    return int(sum(generalized_catalan_number(S, kappa + 1) for kappa in range(max_dists + 1)))
 
 
 def get_asym_protocol_space(nodes, max_dists):
@@ -228,48 +215,29 @@ def get_asym_protocol_space(nodes, max_dists):
 
     swap_space = get_swap_space(S)
     assert len(swap_space) == catalan_number(nodes-2), f"Expected {catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
-    for swap_sequence in swap_space:
-        joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
+    for idx, swap_sequence in enumerate(swap_space):
+        logging.info(f"Generating asymmetric protocols for swap sequence {idx+1}/{len(swap_space)}")
+        joined_sequences = get_joined_sequences(max_dists, swap_sequence)
         space.extend([tuple(protocol) for protocol in joined_sequences])
     
     expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
-    # assert len(space) == expected_protocols, \
-    #     f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    assert len(space) == expected_protocols, \
+        f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
     space = sorted(space, key=lambda x: (len(x), x))
     return space
 
 
-def get_joined_sequences(nodes, max_dists, swap_sequence):
+def get_joined_sequences(max_dists, swap_sequence):
     """
     Returns all the possible joined sequences of distillation and swap for a given swap sequence.
     """
-    joined_sequences = list(get_possible_dist_sequences(nodes, [], max_dists))
-    shapes = []
-
-    for idx, swap in enumerate(swap_sequence):
-        # Combine all possible distillation sequences with the swap under consideration
-        curr_joined_sequences = [[f"s{swap}"] + list(dist_sequence) 
-                                     for dist_sequence in get_possible_dist_sequences(nodes, swap_sequence[:idx+1], max_dists)]
-            
-        # Combine all the sequences for the current swap sequence with the previous ones
-        new_joined_sequences = []
-        
-        for c1, c2 in itertools.product(joined_sequences, curr_joined_sequences):
-            shape = get_swap_dist_shape(c1 + c2)
-
-            # If shape has one element with more than max_dists distillations, skip
-            if any("d" in el and int(el.split("d")[0]) > max_dists for comp in shape for el in comp):
-                continue
-
-            for s in shapes:
-                if s == shape:
-                    break
-                
-            else:
-                shapes.append(shape)
-                new_joined_sequences.append(c1 + c2)
-
-        joined_sequences = new_joined_sequences
+    joined_sequences = []
+    
+    for kappa in range(max_dists+1):
+        swap_seq = [f"s{i}" for i in swap_sequence]
+        kappa_sequences = list(generate_sequences(swap_seq=swap_seq, kappa=kappa))
+        joined_sequences.extend(kappa_sequences)
+    
     return joined_sequences
 
 
@@ -335,6 +303,9 @@ def get_swap_space(S):
     Returns the swap space for a given number of nodes.
     TODO: this is a brute force approach, it should be optimized
     """
+    if S < 1:
+        raise ValueError("S should be at least 1")
+    
     swap_space = []
     shapes = []
 
@@ -396,7 +367,7 @@ def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
 
     # Generate the joined sequences of distillations
     # Sort the joined sequences by their length
-    joined_sequences = get_joined_sequences(nodes, max_dists, swap_sequence)
+    joined_sequences = get_joined_sequences(max_dists, swap_sequence)
     joined_sequences = sorted(joined_sequences, key=lambda x: (len(x), x))
     len_joined_sequences = len(joined_sequences)
     logging.debug(f"Number of joined sequences: {len_joined_sequences}")

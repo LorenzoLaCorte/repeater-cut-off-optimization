@@ -90,7 +90,19 @@ def get_possible_combinations(swap_seq, dists):
 
 def generate_sequences(swap_seq, kappa):
     """
+    Returns all the possible distillation sequences
+
     Generate my own combs by considering spots where dists can be placed
+    for a given sequence of swaps N and a fixed number of distillations per segment kappa.
+    Given:
+        seq = [swap_0, swap_1, ..., swap_S-1]
+    Return all the different possible sequences of distillations:
+        [
+            [D_0, swap_0, D_1, swap_1, ..., D_S-1, swap_S-1, D_S],
+            [D_0, swap_0, D_1, swap_1, ..., D_S-1, swap_S-1, D_S],
+            ...
+            [D_0, swap_0, D_1, swap_1, ..., D_S-1, swap_S-1, D_S],
+        ]
     """
     if kappa == 0:
         yield swap_seq
@@ -114,7 +126,7 @@ def generate_sequences(swap_seq, kappa):
                 pass
 
 if __name__ == "__main__":
-    swap_seq = [ "s1", "s0", "s2"]
+    swap_seq = ["s1", "s0", "s2", "s3", "s4", "s7", "s5", "s6"]
     kappa = 2
 
     sequences = list(generate_sequences(swap_seq, kappa))
