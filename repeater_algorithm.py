@@ -442,9 +442,14 @@ class RepeaterChainSimulation():
         else:
             cutoff = np.iinfo(int).max
 
-        # type check
-        if not np.isreal(p_gen) or not np.isreal(p_swap):
-            raise TypeError("p_gen and p_swap must be a float number.")
+        # type check (allow for list of p_gen)
+        if isinstance(p_gen, Iterable):
+            if not all(np.isreal(p) for p in p_gen):
+                raise TypeError("p_gen must be a float number.")
+        elif not np.isreal(p_gen):
+            raise TypeError("p_gen must be a float number.")
+        if not np.isreal(p_swap):
+            raise TypeError("p_swap must be a float number.")
         if cut_type in ("memory_time", "run_time") and not np.issubdtype(type(cutoff), np.integer):
             raise TypeError(f"Time cut-off must be an integer. not {cutoff}")
         if cut_type == "fidelity" and not (cutoff >= 0. or cutoff < 1.):
@@ -652,6 +657,21 @@ class RepeaterChainSimulation():
         t_pmf, w_func: array-like 1-D
             The output waiting time and Werner parameters
         """
+        # Check if it is a heterogeneous protocol
+        # TODO: move this check before the function call
+        if isinstance(parameters["p_gen"], Iterable):
+            # Check LO is in the parameters
+            if "L0" not in parameters:
+                raise ValueError("L0 must be given for heterogeneous protocols.")
+            if not isinstance(parameters["w0"], Iterable) or not isinstance(parameters["L0"], Iterable):
+                raise ValueError("w0 and L0 must be lists of values.")
+            if len(parameters["w0"]) != number_of_segments \
+                    or len(parameters["L0"]) != number_of_segments \
+                    or len(parameters["p_gen"]) != number_of_segments:
+                raise ValueError("The number of segments must match the number of p_gen, w0, and L0 values.")
+            logging.info("Heterogeneous protocol..., t_coh should be expressed in seconds.")
+            return self.asymmetric_heterogeneous_protocol(parameters, number_of_segments)
+        
         S = number_of_segments
         parameters = deepcopy(parameters)
 
@@ -697,6 +717,83 @@ class RepeaterChainSimulation():
                 segments[idx] = (pmf, w_func)
 
         return next((segm for segm in segments if segm is not None), (None, None))
+
+
+    def asymmetric_heterogeneous_protocol(self, parameters, number_of_segments):
+        """
+        TODO: implement heterogeneus protocols
+        - p_gen, w0, should be a list of values
+        - we should also have a list of distances
+        - t_coh should be a single scalar values given in seconds (not units of time)
+            -- maybe another parameter for the coherence time in units of time (t_coh_sec)
+            -- derivation of a list of t_coh(s) should be done in the protocol (maybe stored in the t_coh parameter)
+        """
+        S = number_of_segments
+        parameters = deepcopy(parameters)
+
+        protocol = parameters["protocol"]
+        p_gens = parameters["p_gen"]
+        w0s = parameters["w0"]
+        L0s = parameters["L0"]
+        t_trunc = parameters["t_trunc"]
+        t_list = np.arange(1, t_trunc)
+
+        base_t_coh = parameters["t_coh"] # coherence time in seconds
+        parameters["t_coh"] = base_t_coh * 299792458 / (max(L0s)) # coherence time in units of time
+
+        # In case of 1-level protocol, ensure protocol is treated as a tuple
+        if isinstance(protocol, str):
+            protocol = (protocol,)
+
+        # Each segment will keep
+        # - an integer for the segment length
+        # - a distribution for waiting time and Werner parameter
+        segments = []
+
+        # Elementary link: for each segment, generate its distribution
+        for i in range(S):
+            pmf = p_gens[i] * (1 - p_gens[i])**(t_list - 1)
+            pmf = np.concatenate((np.array([0.]), pmf))
+            w_func = np.array([w0s[i]] * t_trunc)
+            segments.append((L0s[i], pmf, w_func))
+
+        # Compute step by step the whole protocol
+        # Given idx as the index of the segment (or left segment in case of swap)
+        for i in range(len(protocol)):
+            step: str = protocol[i]
+            operation = step[0]
+            idx = int(step[1:])
+            curr_segment = segments[idx]
+
+            if operation == 's':
+                next_idx = self.find_right_segment(segments, idx)
+                next_segment = segments[next_idx]
+                joined_distance = segments[idx][0] + segments[next_idx][0]
+                # parameters["t_coh"] = get_t_coh(base_t_coh, joined_distance)
+                pmf, w_func = self.compute_unit(
+                    parameters, curr_segment[1], curr_segment[2], next_segment[1], next_segment[2], 
+                    unit_kind="swap", step_size=1)
+                segments[idx] = None
+                segments[next_idx] = (joined_distance, pmf, w_func)
+            
+            elif operation == 'd':
+                # parameters["t_coh"] = get_t_coh(base_t_coh, curr_segment[0])
+                pmf, w_func = self.compute_unit(
+                    parameters, curr_segment[1], curr_segment[2], unit_kind="dist", step_size=1)
+                segments[idx] = (curr_segment[0], pmf, w_func)
+
+        final_segment = next((segm for segm in segments if segm is not None), (None, None))
+        logging.info(f"Entanglement distributed at distance {final_segment[0]}")
+        return (final_segment[1], final_segment[2])
+
+
+# def get_t_coh(base_t_coh, distance):
+#     """
+#     Compute the coherence time between two memories separated by distance
+#         considering the coherence time of the system in seconds.
+#     """
+#     speed_of_light = 299792458  # m/s
+#     return base_t_coh * speed_of_light / distance # units of time
 
 
 def compute_unit(
