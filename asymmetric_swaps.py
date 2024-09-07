@@ -119,7 +119,7 @@ class TreeNode:
             if node.right[1] > 0:
                 for _ in range(node.right[1]):
                     sequence.append(f"d{node.right[0].val[0]}")
-            sequence.append(f's{node.val[0]}')
+            sequence.append(f's{node.left[0].val[-2]}')
 
         dfs(self, sequence)
         return tuple(sequence)
@@ -216,7 +216,7 @@ def get_all_edges_combs(n: int, tree: TreeNode, max_dists: int):
     
     n_edges = n-1
     
-    if True: # DEBUG
+    if False: # DEBUG
         all_edge_combinations = list(itertools.product(range(max_dists+1), repeat=n_edges))
     else:
         all_edge_combinations = get_tree_edge_combs(tree, max_dists, n_edges)
@@ -225,7 +225,7 @@ def get_all_edges_combs(n: int, tree: TreeNode, max_dists: int):
     for edge_values in all_edge_combinations:
         labeled_tree = copy.deepcopy(tree)
         dfs(labeled_tree, edge_values=list(edge_values), current_index=0)
-        yield labeled_tree
+        yield labeled_tree, edge_values[-1]
 
 
 def get_tree_edge_combs(swap_tree: TreeNode, max_dists: int, swap_tree_edges: int):
@@ -235,35 +235,52 @@ def get_tree_edge_combs(swap_tree: TreeNode, max_dists: int, swap_tree_edges: in
             each node is assigned to the edges values in a dfs traversal
 
     """
-    edge_trees: List[EdgeTreeNode] = [EdgeTreeNode()]
     
-    def get_tree_edge_combs_dfs(swap_tree: TreeNode, edge_trees: EdgeTreeNode, weight_remaining: int) -> EdgeTreeNode:
+    def get_tree_edge_combs_dfs(swap_tree: TreeNode, edge_trees: List[EdgeTreeNode], weight_remaining: int) -> List[EdgeTreeNode]:
         """
-        Perform a DFS traversal of both trees together 
-            (the two trees will have the same shape in the end)
-            and assign swap tree's edge values to the edge tree nodes in a DFS traversal
+        Perform a DFS traversal of the swap tree and create a list of edge trees 
+            (the trees will have the same shape in the end)
+        Create all possible edge trees with all the combinations of node values 
         """
-        if swap_tree is None:
-            return None
+        new_edge_trees = []
 
-        # Navigate the swap tree and return possible edge values
-        # Edge Trees already existing in the list can be combined
-        # -- with left and right nodes possibly having a weight from 0 to weight_left
-        if swap_tree.left[0] is not None:
-            for node_weight in range(weight_remaining):
-                pass
-                # edge_tree.left = EdgeTreeNode(val=node_weight)
-                # get_tree_edge_combs_dfs(swap_tree.left[0], edge_tree.left, weight_remaining-node_weight)
-        
-        if swap_tree.right[0] is not None:
-            for node_weight in range(weight_remaining):
-                pass
-                # edge_tree.right = EdgeTreeNode(val=node_weight)
-                # get_tree_edge_combs_dfs(swap_tree.right[0], edge_tree.right, weight_remaining-node_weight)
+        for edge_tree in edge_trees:
+            left_right_combs = []
 
-        return edge_trees
+            if swap_tree.left[0] is not None and swap_tree.right[0] is not None:
+                for left_weight in range(weight_remaining + 1):
+                    for right_weight in range(weight_remaining + 1):
+                        new_tree = copy.deepcopy(edge_tree)
+                        new_tree.left = EdgeTreeNode(val=left_weight)
+                        new_tree.right = EdgeTreeNode(val=right_weight)
 
-    yield from get_tree_edge_combs_dfs(swap_tree, edge_trees, max_dists)
+                        # Recursively build left and right subtrees
+                        left_subtrees = get_tree_edge_combs_dfs(swap_tree.left[0], [new_tree.left], weight_remaining - left_weight)
+                        right_subtrees = get_tree_edge_combs_dfs(swap_tree.right[0], [new_tree.right], weight_remaining - right_weight)
+
+                        # Combine left and right subtrees in all possible ways
+                        for l_sub in left_subtrees:
+                            for r_sub in right_subtrees:
+                                combined_tree = copy.deepcopy(new_tree)
+                                combined_tree.left = l_sub
+                                combined_tree.right = r_sub
+                                left_right_combs.append(combined_tree)
+            
+            # If both subtrees are None (leaf node)
+            else:
+                left_right_combs.append(edge_tree)
+
+            new_edge_trees.extend(left_right_combs)
+
+        return new_edge_trees
+
+    edge_trees: List[EdgeTreeNode] = [EdgeTreeNode(val=x) for x in range(max_dists+1)]
+    tree_edge_combs = []
+    for edge_tree in edge_trees:
+        val = edge_tree.val
+        tree_edge_combs.extend(get_tree_edge_combs_dfs(swap_tree, [edge_tree], max_dists - val))
+    
+    return [et.get_node_values() for et in tree_edge_combs]
     
 
 def generate_swap_space(S: int):
@@ -295,12 +312,12 @@ def generate_asym_protocol_space(N: int, max_dists: int):
     S = N - 1
     n = 2*S - 1
     for nodeLabeledShape, _ in generate_swap_space(S):
-        for edgeLabeledShape in get_all_edges_combs(n, nodeLabeledShape, max_dists):
-            yield edgeLabeledShape.get_sequence()
+        for edgeLabeledShape, finalDist in get_all_edges_combs(n, nodeLabeledShape, max_dists):
+            yield edgeLabeledShape.get_sequence() + (f'd{S-1}',)*finalDist
 
 
 if __name__ == "__main__":
-    N = 5
+    N = 4
     S = N - 1
     max_dists = 2
     
@@ -312,4 +329,7 @@ if __name__ == "__main__":
     print(f"\nExpected number of asymmetric protocols for {N} nodes ({S} segments) and max_dists={max_dists}: {expected}")
     asym_protocol_space = list(generate_asym_protocol_space(N, max_dists))
     print(f"   Total number of asymmetric protocols for {N} nodes ({S} segments) and max_dists={max_dists}: {len(asym_protocol_space)}")
-    
+
+    asym_protocol_space.sort(key=lambda x: (len(x), x))
+    for sequence in asym_protocol_space:
+        print(f"   {sequence}")
