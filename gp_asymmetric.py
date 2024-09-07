@@ -5,7 +5,7 @@ This script is used to test the performance of different distillation strategies
 
 from argparse import ArgumentParser
 from collections import defaultdict
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 
 import logging
 import numpy as np
@@ -53,7 +53,12 @@ def asym_protocol_runner(simulator, parameters, nodes, idx=None, space_len=None)
     protocol = parameters["protocol"]
     dists = sum(1 for item in protocol if 'd' in item)
     
-    parameters["t_trunc"] = get_t_trunc(parameters["p_gen"], parameters["p_swap"], parameters["t_coh"],
+    if isinstance(parameters["p_gen"], list):
+        t_coh = parameters["t_coh"] * 299792458 / max(L0)
+        parameters["t_trunc"] = get_t_trunc(min(parameters["p_gen"]), parameters["p_swap"], t_coh,
+                                            nested_swaps=np.log2(nodes+1), nested_dists=np.log2(dists+1))
+    else:        
+        parameters["t_trunc"] = get_t_trunc(parameters["p_gen"], parameters["p_swap"], parameters["t_coh"],
                                         nested_swaps=np.log2(nodes+1), nested_dists=np.log2(dists+1))
     
     if (idx is None) or (space_len is None):
@@ -205,10 +210,10 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--nodes", type=int, default=5, help="Number of nodes in the chain")
-    parser.add_argument("--max_dists", type=int, default=1, help="Maximum round of distillations of each segment per level")
+    parser.add_argument("--nodes", type=int, default=4, help="Number of nodes in the chain")
+    parser.add_argument("--max_dists", type=int, default=5, help="Maximum round of distillations of each segment per level")
 
-    parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
+    parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
     
     parser.add_argument("--gp_shots", type=int, default=100,
                         help=(  "Number of shots for Gaussian Process optimization"
@@ -222,12 +227,13 @@ if __name__ == "__main__":
     parser.add_argument("--cdf_threshold", type=float, default=0.99, 
                         help=("Threshold for CDF coverage. If one configuration goes below this threshold, "
                               "the simulation is discarded"))
-
-    parser.add_argument("--t_coh", type=int, default=40000, help="Coherence time")
-    parser.add_argument("--p_gen", type=float, default=0.02, help="Generation success probability")
+    
+    parser.add_argument("--t_coh", type=float, default=20, help="Coherence time")
     parser.add_argument("--p_swap", type=float, default=0.85, help="Swapping probability")
-    parser.add_argument("--w0", type=float, default=0.99, help="Werner parameter")
-
+    parser.add_argument("--p_gen", type=float, nargs='+', default=[0.002588,0.0009187,0.0009082], help="Generation success probability")
+    parser.add_argument("--w0", type=float, nargs='+', default=[0.9577,0.9524,0.9523], help="Werner parameter")
+    parser.add_argument("--L0", type=int, nargs='+', default=[19800,50400,60400], help="Length of links")
+    
     args = parser.parse_args()
 
     nodes: int = args.nodes
@@ -240,16 +246,24 @@ if __name__ == "__main__":
     filename: str = args.filename
     cdf_threshold: float = args.cdf_threshold
 
-    t_coh = args.t_coh
-    p_gen = args.p_gen
-    p_swap = args.p_swap
-    w0 = args.w0
+    t_coh: Union[int, List[int]] = args.t_coh
+    p_swap: Union[float, List[float]] = args.p_swap
+    p_gen: Union[float, List[float]] = args.p_gen if len(args.p_gen) > 1 else args.p_gen[0]
+    w0: Union[float, List[float]] = args.w0 if len(args.w0) > 1 else args.w0[0]
+    L0: List[int] = args.L0
+
+    # Ensure all are lists if one is a list
+    if isinstance(p_gen, list):
+        if not all(isinstance(arg, list) for arg in [args.p_gen, args.w0, args.L0]) or \
+            not all(len(arg) == len(p_gen) for arg in [args.p_gen, args.w0, args.L0]):
+            raise ValueError("Parameters must be all lists or all scalars")
 
     parameters: SimParameters = {
         't_coh': t_coh,
         'p_gen': p_gen,
         'p_swap': p_swap,
         'w0': w0,
+        'L0': L0,
     }
 
     simulator = RepeaterChainSimulation()

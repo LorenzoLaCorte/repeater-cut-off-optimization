@@ -58,6 +58,25 @@ def get_protocol_rate(parameters):
     return secret_key_rate(pmf, w_func, parameters["t_trunc"])
 
 
+def single_asym_test(): 
+    """
+    This function is used to test the repeater simulation with a fixed set of parameters.
+     You can call this function from command line:
+     ```py -c "from distillation_ml_gp import single_test; single_test()"```
+    """
+    parameters = {
+        't_coh': 20, # seconds
+        'p_gen': [0.002588, 0.0009187, 0.0009082],
+        'p_swap': 0.85,
+        'w0': [0.9577, 0.9524, 0.9523],
+        "t_trunc": 321168,
+        "L0": [19800, 50400, 60400] # meters
+    }
+    
+    parameters["protocol"] = ('d0', 'd2', 's0', 'd2', 's1')
+    print(get_protocol_rate(parameters))
+
+
 def single_test(): 
     """
     This function is used to test the repeater simulation with a fixed set of parameters.
@@ -557,7 +576,7 @@ def hw_varying_experiment(hw_param_name: str, hw_param_val_range,
         for ax in axes:
             ax.clear()
 
-if __name__ == "__main__":
+def hw_varying_experiment_runner():
     # Set the parameters for the experiment
     t_coh = 8
     parameters = {"p_gen": 0.5, "p_swap": 0.5, "t_trunc": t_coh*300, 
@@ -607,3 +626,7 @@ if __name__ == "__main__":
                     val_range = np.round(np.arange(max_param_val / variants, max_param_val + max_param_val / variants, max_param_val / variants), 2)
 
                 hw_varying_experiment(hw_param, val_range, parameters, min_dists=0, max_dists=1, number_of_swaps=2)
+
+
+if __name__ == "__main__":
+    single_asym_test()

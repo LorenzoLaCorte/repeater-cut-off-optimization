@@ -739,7 +739,6 @@ class RepeaterChainSimulation():
         t_list = np.arange(1, t_trunc)
 
         base_t_coh = parameters["t_coh"] # coherence time in seconds
-        parameters["t_coh"] = base_t_coh * 299792458 / (max(L0s)) # coherence time in units of time
 
         # In case of 1-level protocol, ensure protocol is treated as a tuple
         if isinstance(protocol, str):
@@ -755,7 +754,7 @@ class RepeaterChainSimulation():
             pmf = p_gens[i] * (1 - p_gens[i])**(t_list - 1)
             pmf = np.concatenate((np.array([0.]), pmf))
             w_func = np.array([w0s[i]] * t_trunc)
-            segments.append((L0s[i], pmf, w_func))
+            segments.append((L0s[i], get_t_coh(base_t_coh, L0s[i]), pmf, w_func))
 
         # Compute step by step the whole protocol
         # Given idx as the index of the segment (or left segment in case of swap)
@@ -769,31 +768,32 @@ class RepeaterChainSimulation():
                 next_idx = self.find_right_segment(segments, idx)
                 next_segment = segments[next_idx]
                 joined_distance = segments[idx][0] + segments[next_idx][0]
-                # parameters["t_coh"] = get_t_coh(base_t_coh, joined_distance)
+                parameters["t_coh"] = min(segments[idx][1], segments[next_idx][1]) # consider the most restrictive coherence time
                 pmf, w_func = self.compute_unit(
-                    parameters, curr_segment[1], curr_segment[2], next_segment[1], next_segment[2], 
+                    parameters, curr_segment[2], curr_segment[3], next_segment[2], next_segment[3], 
                     unit_kind="swap", step_size=1)
                 segments[idx] = None
-                segments[next_idx] = (joined_distance, pmf, w_func)
+                segments[next_idx] = (joined_distance, parameters["t_coh"], pmf, w_func)
             
             elif operation == 'd':
-                # parameters["t_coh"] = get_t_coh(base_t_coh, curr_segment[0])
+                parameters["t_coh"] = curr_segment[1]
                 pmf, w_func = self.compute_unit(
-                    parameters, curr_segment[1], curr_segment[2], unit_kind="dist", step_size=1)
-                segments[idx] = (curr_segment[0], pmf, w_func)
+                    parameters, curr_segment[2], curr_segment[3], unit_kind="dist", step_size=1)
+                segments[idx] = (curr_segment[0], curr_segment[1], pmf, w_func)
 
         final_segment = next((segm for segm in segments if segm is not None), (None, None))
         logging.info(f"Entanglement distributed at distance {final_segment[0]}")
-        return (final_segment[1], final_segment[2])
+        return (final_segment[2], final_segment[3])
 
 
-# def get_t_coh(base_t_coh, distance):
-#     """
-#     Compute the coherence time between two memories separated by distance
-#         considering the coherence time of the system in seconds.
-#     """
-#     speed_of_light = 299792458  # m/s
-#     return base_t_coh * speed_of_light / distance # units of time
+def get_t_coh(base_t_coh, distance):
+    """
+    Compute the coherence time (in time units) 
+        between two memories separated by distance L
+        considering the coherence time of the system in seconds.
+    """
+    speed_of_light = 299792458  # m/s
+    return int(base_t_coh * speed_of_light / distance) # units of time
 
 
 def compute_unit(
