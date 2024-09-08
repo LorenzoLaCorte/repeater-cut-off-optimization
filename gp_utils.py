@@ -16,7 +16,7 @@ from scipy.optimize import OptimizeResult
 from skopt.space import Categorical
 from scipy.stats import norm
 
-from asymmetric_sequences import generate_sequences
+from asymmetric_swaps import TreeNode, generate_swap_space, generate_edge_combs
 from repeater_types import checkAsymProtocol
 
 logging.basicConfig(level=logging.INFO)
@@ -169,81 +169,66 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
     return space
 
 
-def generalized_catalan_number(n, k):
-    """
-    Returns the generalized Catalan number for a given n and k.
-    """
-    return binom((k + 1) * n - 2, n) / (k * n - 1)
-
-
 def catalan_number(n):
     """
     Returns the n-th Catalan number.
     """
     return math.comb(2*n, n) // (n + 1)
 
-
+    
 def get_asym_protocol_space_size(nodes, max_dists):
     """
     Returns the space of asymmetric protocols to be tested,
-     by analytical derivation (generalized Catalan numbers).
+     by analytical derivation.
     """
     if nodes < 2:
         raise ValueError("N should be at least 2")
     S = nodes - 1
-    return int(sum(generalized_catalan_number(S, kappa + 1) for kappa in range(max_dists + 1)))
+
+    expected = catalan_number(nodes-2) * (max_dists+1)**((2*S-1)-1)
+    return expected
 
 
-def get_asym_protocol_space(nodes, max_dists):
+def get_asym_protocol_space(nodes: int, max_dists: int):
     """
     Returns the space of asymmetric protocols to be tested.
     For each number of distillation tested, we test all the possible asymmetric protocols.
-        i.e. for 4 nodes (3 segments) and 1 distillation, we test:
-        - zero or one distillation
-            (A, "s0", B, "s1", C), (D, "s1", E, "s0", F)
-    where:
-        A = [(), ("d0"), ("d1"), ("d2"), ("d0", "d1"), ("d0", "d2"), ("d1", "d2"), ("d0", "d1", "d2")]
-        i.e. |A| = 8 (and also |D| = 8)
-        B = [(), ("d1"), ("d2"), ("d1", "d2")]
-        i.e. |B| = 4 (and also |E| = 4)
-        C = [(), ("d2")]
-        i.e. |C| = 2 (and also |F| = 2)
-    because I cannot distill a segment that has been swapped before
     """
-    S = nodes - 1
     space = []
+    S = nodes - 1
 
     swap_space = get_swap_space(S)
     assert len(swap_space) == catalan_number(nodes-2), f"Expected {catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
-    for idx, swap_sequence in enumerate(swap_space):
-        logging.info(f"Generating asymmetric protocols for swap sequence {idx+1}/{len(swap_space)}")
-        joined_sequences = get_joined_sequences(max_dists, swap_sequence)
-        space.extend([tuple(protocol) for protocol in joined_sequences])
-    
+
+    for idx, (swap_tree, swap_sequence) in enumerate(swap_space):
+        logging.info(f"{idx+1}/{len(swap_space)} Generating protocols for swap sequence {swap_sequence}...")
+        space.extend(get_joined_sequences(S, swap_tree, max_dists))
+
     expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
     assert len(space) == expected_protocols, \
         f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    
     space = sorted(space, key=lambda x: (len(x), x))
     return space
 
 
-def get_joined_sequences(max_dists, swap_sequence):
+def get_joined_sequences(S: int, swap_tree: TreeNode, max_dists: int) -> List[Tuple[str]]:
     """
-    Returns all the possible joined sequences of distillation and swap for a given swap sequence.
+    Returns the space of edge combinations for a given swap tree and a maximum number of distillations.
     """
-    joined_sequences = []
-    
-    for kappa in range(max_dists+1):
-        swap_seq = [f"s{i}" for i in swap_sequence]
-        kappa_sequences = list(generate_sequences(swap_seq=swap_seq, kappa=kappa))
-        joined_sequences.extend(kappa_sequences)
-    
-    return joined_sequences
+    n = 2*S - 1
+    space: List[Tuple[str]] = []
+
+    for edgeLabeledShape, finalDist in generate_edge_combs(n, swap_tree, max_dists):
+        space.append(edgeLabeledShape.get_sequence() + (f'd{S-1}',)*finalDist)
+
+    return space
 
 
 def get_swap_shape(seq):
     """
     Returns the shape (evolution of the links) of a given sequence of swaps.
+    TODO: replace this function with a score given in the swap_space
     """
     left_segments = {f"{i}," for i in seq}
     right_segments = {f"{i+1}," for i in seq}
@@ -263,74 +248,30 @@ def get_swap_shape(seq):
     return shape
 
 
-def get_swap_dist_shape(seq):
-    """
-    Returns the shape (evolution of the links) of a given sequence of swaps and distillations.
-    """
-    shape = [] # list of sets (indepedent components)
-    for step in seq:
-        segm = int(step[1:])
-        if step[0] == "s":
-            shape.append({step})
-
-        elif step[0] == "d":
-            # Search if in shape there is a component that INVOLVES the segment
-            for i, comp in enumerate(shape):
-                # Extract swaps from component
-                swaps = [int(s[1:]) for s in comp if s[0] == "s"]
-                swap_shape = get_swap_shape(swaps)
-                for s in swap_shape:
-                    if str(segm) in s:
-                        break
-                else:
-                    for sub_comp in shape[i]:
-                        if sub_comp.endswith(step):
-                            new_step = str(int(sub_comp.split('d')[0]) + 1) + sub_comp[1:]
-                            shape[i].remove(sub_comp)
-                            break
-                    else:
-                        new_step = "1" + step
-                    shape[i].add(new_step)
-                    break
-            else:
-                shape.append({"1" + step})
-    return shape
-
-
 @lru_cache(maxsize=None)
 def get_swap_space(S):
     """
     Returns the swap space for a given number of nodes.
-    TODO: this is a brute force approach, it should be optimized
     """
     if S < 1:
         raise ValueError("S should be at least 1")
     
     swap_space = []
-    shapes = []
-
-    for seq in itertools.permutations(range(S-1), S-1):
-        shape = get_swap_shape(seq)
+    for tree, seq in generate_swap_space(S):
+        shape = get_swap_shape([int(s[1:]) for s in seq])
         mean_length = sum(len(s) for s in shape) / len(shape) if shape else 0
-
-        for s in shapes:
-            if s == shape:
-                break
-        else:
-            shapes.append(shape)
-            # Append a score for the simmetricity of the shape
-            swap_space.append((mean_length, seq))
+        swap_space.append((mean_length, tree, seq))
     
     # Sort the swap_space by the score of the simmetricity
     swap_space = sorted(swap_space, key=lambda x: x[0], reverse=True)
-    logging.info(f"Most symmetric shapes: {swap_space[-3:]}")
-    return [x[1] for x in swap_space]
+    logging.info(f"Most symmetric shapes: {[s[2] for s in swap_space[-3:]]}")
+    return [(x[1], x[2]) for x in swap_space]
 
 
 def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists):
     """
     This function generates a protocol from the symmetricity (gamma) and centering of dists (zeta) parameters.
-    
+    TODO: try implementing another version with another parameter kappa, which is the number of distillations per segment.
     Parameters:
     - gamma: Symmetricity of the protocol, between 0 and 1.
     - zeta: Centering of the ro. of distillation, between 0 and 1.
@@ -361,21 +302,22 @@ def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
     # Sample the sequence of swaps
     swap_space = get_swap_space(nodes-1)
     selected_idx = round(gamma * (len(swap_space)-1))
-    swap_sequence = swap_space[selected_idx]
+    swap_tree, swap_sequence = swap_space[selected_idx][0], swap_space[selected_idx][1]
     logging.debug(f"Selected index: {selected_idx+1}/{len(swap_space)} \
                  \nSelected swap sequence: {swap_sequence}")
 
     # Generate the joined sequences of distillations
     # Sort the joined sequences by their length
-    joined_sequences = get_joined_sequences(max_dists, swap_sequence)
-    joined_sequences = sorted(joined_sequences, key=lambda x: (len(x), x))
-    len_joined_sequences = len(joined_sequences)
-    logging.debug(f"Number of joined sequences: {len_joined_sequences}")
+    joined_combs = get_joined_sequences(nodes-1, swap_tree, max_dists)
+    joined_combs = sorted(joined_combs, key=lambda x: (len(x), x))
+    
+    len_joined_combs = len(joined_combs)
+    logging.debug(f"Number of joined sequences: {len_joined_combs}")
 
     # Sample the sequence of distillations
-    selected_idx = round(zeta * (len_joined_sequences-1))
-    logging.debug(f"Selected index: {selected_idx+1}/{len_joined_sequences}")
-    protocol = tuple(joined_sequences[selected_idx])
+    selected_idx = round(zeta * (len_joined_combs-1))
+    logging.debug(f"Selected index: {selected_idx+1}/{len_joined_combs}")
+    protocol = tuple(joined_combs[selected_idx])
 
     checkAsymProtocol(protocol, nodes-1)
     logging.debug(f"Generated protocol: {protocol}")
