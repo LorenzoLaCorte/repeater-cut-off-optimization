@@ -74,7 +74,8 @@ if [ "$GP_HOMOGENEOUS" = "True" ]; then
             rm "$TMPFILE"
 
             # Create a folder for the results if it doesn't exist
-            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_tcoh${T_COH}_pgen${P_GEN}_pswap${P_SWAP}_w0${W0}_nodes${NODES}_maxdists${MAX_DISTS}"
+            TIMESTAMP=$(date +%s)
+            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_tcoh${T_COH}_pgen${P_GEN}_pswap${P_SWAP}_w0${W0}_nodes${NODES}_maxdists${MAX_DISTS}_$TIMESTAMP"
             mkdir -p "$RESULT_DIR"
 
             # Move the output file and the plots to the results folder
@@ -159,7 +160,8 @@ if [ "$GP_HETEROGENEOUS" = "True" ]; then
             rm "$TMPFILE"
 
             # Create a folder for the results if it doesn't exist
-            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_tcoh${T_COH}_pgen${P_GEN}_pswap${P_SWAP}_w0${W0}_nodes${NODES}_maxdists${MAX_DISTS}"
+            TIMESTAMP=$(date +%s)
+            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_tcoh${T_COH}_pgen${P_GEN}_pswap${P_SWAP}_w0${W0}_nodes${NODES}_maxdists${MAX_DISTS}_$TIMESTAMP"
             mkdir -p "$RESULT_DIR"
 
             # Move the output file and the plots to the results folder
