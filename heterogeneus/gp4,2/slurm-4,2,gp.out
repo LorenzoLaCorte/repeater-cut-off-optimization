@@ -1,0 +1,975 @@
+Running distillation with optimizer gp...
+/home/l/lorenzo-la/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 18, in <module>
+    from gp_plots import plot_optimization_process
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_plots.py", line 34, in <module>
+    import pandas as pd
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/apps/free81/python/3.10.2/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/apps/free81/python/3.10.2/lib/python3.10/site-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+INFO:root:
+
+Number of nodes: 4, max dists: 3
+INFO:root:Gaussian process with 100 evaluations and 10 initial points
+
+
+INFO:root:
+
+Generating a protocol with gamma=0.39128409038028944, zeta=0.47235665682491057...
+INFO:root:Most symmetric shapes: [('s1', 's0'), ('s0', 's1')]
+INFO:root:Protocol generated: ('d2', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2', 'd2')
+INFO:root:
+(1/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2', 'd2'), 't_trunc': 642336}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2', 'd2'),	 r = 2.1109347136838e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.22193724499334638, zeta=0.18093191098896325...
+INFO:root:Protocol generated: ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 's0')
+INFO:root:
+(2/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 's0'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 's0'),	 r = 1.4369504120991026e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.37729916601306246, zeta=0.018510226743086337...
+INFO:root:Protocol generated: ('d1', 's1', 'd0', 's0')
+INFO:root:
+(3/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 's0'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 's0'),	 r = 9.50945032279147e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.31016133861263623, zeta=0.07059348453069238...
+INFO:root:Protocol generated: ('d2', 's1', 'd0', 's0', 'd2')
+INFO:root:
+(4/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 's0', 'd2'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 's0', 'd2'),	 r = 8.248937750447382e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.7612282874216353, zeta=0.1690900551948832...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 'd1', 's0', 's1', 'd2')
+INFO:root:
+(5/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 's1', 'd2'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 's1', 'd2'),	 r = 9.863416454630776e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.8050590380750453, zeta=0.12809573529035248...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 'd1', 'd2', 's1')
+INFO:root:
+(6/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 9.727012755232175e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.10879996192591748, zeta=0.6346889190390109...
+INFO:root:Protocol generated: ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(7/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 802919}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 8.502329912969328e-06
+
+INFO:root:
+
+Generating a protocol with gamma=0.9817712935437878, zeta=0.6660033680204488...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2')
+INFO:root:
+(8/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 802919}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 2.7908153155545583e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.8067412678637172, zeta=0.8452606492065007...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2')
+INFO:root:
+(9/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 963504}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 1.712748963084104e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.2769024725352988, zeta=0.48534863410212703...
+INFO:root:Protocol generated: ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(10/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 642336}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 1.7825570030752235e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9969405970244569, zeta=0.227552773491231...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1')
+INFO:root:
+(11/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 9.76155491035664e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.0...
+INFO:root:Protocol generated: ('s0', 's1')
+INFO:root:
+(12/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 's1'), 't_trunc': 99269}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 's1'),	 r = 0.00010935939452895663
+
+INFO:root:
+
+Generating a protocol with gamma=0.7353878244689092, zeta=0.0...
+INFO:root:Protocol generated: ('s0', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.0, zeta=1.0...
+INFO:root:Protocol generated: ('d1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2', 'd2')
+INFO:root:
+(14/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2', 'd2'), 't_trunc': 1284672}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2', 'd2'),	 r = 0.0
+
+INFO:root:
+
+Generating a protocol with gamma=0.0, zeta=0.0...
+INFO:root:Protocol generated: ('s1', 's0')
+INFO:root:
+(15/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 's0'), 't_trunc': 99269}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 's0'),	 r = 9.286236931029404e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9975820760979818, zeta=0.049370390193599734...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd2', 's1')
+INFO:root:
+(16/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd2', 's1'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 's1'),	 r = 0.00012535617143680155
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.16327711078631899...
+INFO:root:Protocol generated: ('s0', 'd1', 'd2', 'd2', 'd2', 's1')
+INFO:root:
+(17/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 8.003563430052164e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.3343305272561764...
+INFO:root:Protocol generated: ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2')
+INFO:root:
+(18/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 7.512403854557707e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.810479604868423, zeta=0.05009560532093832...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd2', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.9036254217234305, zeta=0.03776356815511548...
+INFO:root:Protocol generated: ('s0', 'd2', 'd2', 's1')
+INFO:root:
+(20/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd2', 'd2', 's1'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd2', 'd2', 's1'),	 r = 8.373400887866e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9929971257906058, zeta=0.05792326268366966...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 'd1', 's1')
+INFO:root:
+(21/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 's1'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 's1'),	 r = 8.835405463369798e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.0038275142137855923, zeta=0.04613288762640859...
+INFO:root:Protocol generated: ('d1', 'd1', 's1', 'd0', 's0')
+INFO:root:
+(22/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 's0'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 's0'),	 r = 7.06053107875081e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.921408989234107, zeta=0.008799881130437389...
+INFO:root:Protocol generated: ('s0', 'd1', 's1')
+INFO:root:
+(23/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 's1'), 't_trunc': 160584}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 's1'),	 r = 0.00010359232309143294
+
+INFO:root:
+
+Generating a protocol with gamma=0.9847291503130815, zeta=0.24157789058287912...
+INFO:root:Protocol generated: ('d1', 's0', 'd1', 'd1', 'd1', 's1', 'd2')
+INFO:root:
+(24/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'),	 r = 3.051771304420487e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9808340760422349, zeta=0.2157866455655383...
+INFO:root:Protocol generated: ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2')
+INFO:root:
+(25/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 7.641048120985419e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.7885336500531833, zeta=0.1143459158478222...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd2', 'd2', 's1')
+INFO:root:
+(26/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd2', 'd2', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 'd2', 's1'),	 r = 0.00010584111670343997
+
+INFO:root:
+
+Generating a protocol with gamma=0.01965601447581693, zeta=0.1025531879601989...
+INFO:root:Protocol generated: ('d1', 'd1', 'd2', 's1', 's0', 'd2')
+INFO:root:
+(27/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 's0', 'd2'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 's0', 'd2'),	 r = 5.5620058085910105e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.0, zeta=0.12063387570851121...
+INFO:root:Protocol generated: ('d1', 'd2', 's1', 'd2', 's0', 'd2')
+INFO:root:
+(28/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 4.771917034629361e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9947448132965061, zeta=0.1399962310979209...
+INFO:root:Protocol generated: ('d1', 'd1', 's0', 's1', 'd2', 'd2')
+INFO:root:
+(29/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 4.741527487754055e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.00823275404661952, zeta=0.2245953043384005...
+INFO:root:Protocol generated: ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 's0')
+INFO:root:
+(30/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'),	 r = 8.72132784107014e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.12058800507354984...
+INFO:root:Protocol generated: ('d0', 'd1', 's0', 'd2', 's1', 'd2')
+INFO:root:
+(31/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 9.10211600831513e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.4707458120066973, zeta=0.3589242692299904...
+INFO:root:Protocol generated: ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(32/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 1.5557023162360813e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9318470942271232, zeta=0.31336154901276975...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1')
+INFO:root:
+(33/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 9.339857407849828e-05
+
+INFO:root:
+
+Generating a protocol with gamma=2.8312087671517557e-05, zeta=0.30130683309858697...
+INFO:root:Protocol generated: ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2')
+INFO:root:
+(34/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 2.3318118868070487e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.062307609993090735, zeta=0.322838463611258...
+INFO:root:Protocol generated: ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(35/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 2.7461551207303112e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.10581008703753796...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 'd1', 's1')
+INFO:root:
+(36/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 's1'),	 r = 8.896212351165112e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.09681467666414766, zeta=0.009801093687115505...
+INFO:root:Protocol generated: ('s1', 'd0', 's0')
+INFO:root:
+(37/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 's0'), 't_trunc': 160584}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 's0'),	 r = 0.00011041195677638597
+
+INFO:root:
+
+Generating a protocol with gamma=0.44928234844364945, zeta=0.0075462640225917406...
+INFO:root:Protocol generated: ('s1', 'd0', 's0')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.03466292421604789, zeta=0.7548055892087752...
+INFO:root:Protocol generated: ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(39/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 883212}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 1.0040373917330266e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9202017975981008, zeta=0.921596686323786...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 'd1', 'd1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2', 'd2')
+INFO:root:
+(40/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 'd1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2', 'd2'), 't_trunc': 1043796}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 'd1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2', 'd2'),	 r = 2.903776494169629e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9237800305949251, zeta=0.5588963791370256...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1')
+INFO:root:
+(41/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 722627}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 7.919555178024881e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.03551725454815547, zeta=0.5411845058417334...
+INFO:root:Protocol generated: ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(42/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 722627}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 2.7050778544712585e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9541990564150933, zeta=0.5760817503628926...
+INFO:root:Protocol generated: ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2')
+INFO:root:
+(43/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 722627}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 2.5830896550392982e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9818300170529368, zeta=0.41762181904439855...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2')
+INFO:root:
+(44/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'), 't_trunc': 642336}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'),	 r = 3.586349190329928e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9383393094230906, zeta=0.7999727524032552...
+INFO:root:Protocol generated: ('d0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2')
+INFO:root:
+(45/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2'), 't_trunc': 883212}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2'),	 r = 6.954753860429024e-06
+
+INFO:root:
+
+Generating a protocol with gamma=0.1060389419113549, zeta=0.7087696589495049...
+INFO:root:Protocol generated: ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2')
+INFO:root:
+(46/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 802919}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 2.5100709135885155e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.8942094368357844, zeta=0.08296616630727502...
+INFO:root:Protocol generated: ('s0', 'd1', 'd1', 'd2', 's1')
+INFO:root:
+(47/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 's1'),	 r = 9.119486705505001e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.004180114505518474, zeta=0.8841861265948511...
+INFO:root:Protocol generated: ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(48/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 963504}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 7.228973281101762e-06
+
+INFO:root:
+
+Generating a protocol with gamma=0.9944247079305877, zeta=0.9597405436999366...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2')
+INFO:root:
+(49/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2'), 't_trunc': 1124088}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+/home/l/lorenzo-la/experiments/cluster-sim-1/utility_functions.py:141: RuntimeWarning: overflow encountered in exp
+  rest = c_0 * np.exp(-a * d_0 * t_trunc + b) / a / d_0
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2'),	 r = -0.0
+
+INFO:root:
+
+Generating a protocol with gamma=0.026966102213685984, zeta=0.1652921814284442...
+INFO:root:Protocol generated: ('s1', 'd0', 'd2', 'd2', 'd2', 's0')
+INFO:root:
+(50/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 4.047885128755953e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.8210690431283532, zeta=0.04638356355126477...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 's1')
+INFO:root:
+(51/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 's1'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 's1'),	 r = 0.00011437096457415895
+
+INFO:root:
+
+Generating a protocol with gamma=0.46970578280904995, zeta=0.05477046602544346...
+INFO:root:Protocol generated: ('d1', 'd2', 's1', 's0', 'd2')
+INFO:root:
+(52/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 's0', 'd2'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 's0', 'd2'),	 r = 6.80173214623259e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.5355108419018765, zeta=0.22477223469045196...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 's1')
+INFO:root:
+(53/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'),	 r = 7.314531247040002e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.40569529690399886, zeta=0.08563478274572772...
+INFO:root:Protocol generated: ('s1', 'd0', 'd2', 'd2', 's0')
+INFO:root:
+(54/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 's0'),	 r = 6.194345905556032e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.17728981216800058...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 's1')
+INFO:root:
+(55/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 's1'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 's1'),	 r = 0.0001165505350271946
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.18784916334930543...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2')
+INFO:root:
+(56/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 9.694494563019183e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.0, zeta=0.022585088000071793...
+INFO:root:Protocol generated: ('d1', 's1', 'd2', 's0')
+INFO:root:
+(57/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd2', 's0'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd2', 's0'),	 r = 6.027049853325637e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.29785932589844244...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2')
+INFO:root:
+(58/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 8.019943278937481e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.5754037120702823, zeta=0.1213377822483835...
+INFO:root:Protocol generated: ('d0', 'd1', 's0', 'd2', 's1', 'd2')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.5416860287395551...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2')
+INFO:root:
+(60/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 722627}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 4.284954955189817e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9691963542511367, zeta=0.020763942063915224...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 's1')
+INFO:root:
+(61/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 's1'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 's1'),	 r = 0.00011253656819324897
+
+INFO:root:
+
+Generating a protocol with gamma=0.7402392638653748, zeta=0.016512120300313505...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 's1')
+INFO:root:
+(62/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 's1'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 's1'),	 r = 0.00013084850869760932
+
+INFO:root:
+
+Generating a protocol with gamma=0.7182031435660625, zeta=0.021422123287203547...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.6504428746148235, zeta=0.013590073429498046...
+INFO:root:Protocol generated: ('s0', 'd2', 's1')
+INFO:root:
+(64/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd2', 's1'), 't_trunc': 160584}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd2', 's1'),	 r = 0.00010207267231874992
+
+INFO:root:
+
+Generating a protocol with gamma=0.9251958133909971, zeta=0.015889118423602872...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.349987918925794, zeta=0.0017668346792875224...
+INFO:root:Protocol generated: ('s1', 's0')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.8237397228888421, zeta=0.017819038875722844...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.8999150811125667, zeta=0.05095687847291657...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd2', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.853689943891035, zeta=0.17997363594517143...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 's1')
+INFO:root:
+(69/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 's1'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 's1'),	 r = 0.00010987558641019323
+
+INFO:root:
+
+Generating a protocol with gamma=0.7478761485390888, zeta=0.05961350132298655...
+INFO:root:Protocol generated: ('d0', 's0', 'd1', 'd1', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.014445827956092021...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.2612841763802628, zeta=0.010567280820610571...
+INFO:root:Protocol generated: ('s1', 'd2', 's0')
+INFO:root:
+(72/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd2', 's0'), 't_trunc': 160584}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd2', 's0'),	 r = 7.349836132858734e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.5484782212187251, zeta=0.0...
+INFO:root:Protocol generated: ('s0', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.751781426127533, zeta=0.09971608010687859...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 's0', 'd2', 's1')
+INFO:root:
+(74/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd2', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd2', 's1'),	 r = 0.0001264505209750026
+
+INFO:root:
+
+Generating a protocol with gamma=0.6285674651455759, zeta=0.10411536679649176...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 'd1', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.8551900879843957, zeta=0.09616637850910974...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 's0', 'd2', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.7423868932920676, zeta=0.09103134141231918...
+INFO:root:Protocol generated: ('s0', 'd2', 'd2', 'd2', 's1')
+INFO:root:
+(77/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd2', 'd2', 'd2', 's1'), 't_trunc': 321168}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd2', 'd2', 'd2', 's1'),	 r = 6.313173838239073e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.8308893241998806, zeta=0.1035497645859346...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 's0', 's1', 'd2')
+INFO:root:
+(78/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 's1', 'd2'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 's1', 'd2'),	 r = 9.711064699071458e-05
+
+INFO:root:
+
+Generating a protocol with gamma=1.0, zeta=0.09258729896091009...
+INFO:root:Protocol generated: ('d0', 'd0', 'd0', 's0', 'd1', 's1')
+INFO:root:
+(79/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 's1'),	 r = 0.00010978742727446886
+
+INFO:root:
+
+Generating a protocol with gamma=0.485464888739759, zeta=0.031551288002396004...
+INFO:root:Protocol generated: ('s1', 'd0', 'd0', 's0')
+INFO:root:
+(80/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 's0'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 's0'),	 r = 0.00012084399591021341
+
+INFO:root:
+
+Generating a protocol with gamma=0.33463192031359723, zeta=0.034506200055959245...
+INFO:root:Protocol generated: ('s1', 'd0', 'd2', 's0')
+INFO:root:
+(81/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd2', 's0'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0'),	 r = 8.712597988744029e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.5914706453990465, zeta=0.03848083898878602...
+INFO:root:Protocol generated: ('s0', 'd2', 'd2', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.5282239371478568, zeta=0.024845710976513613...
+INFO:root:Protocol generated: ('d0', 's0', 'd2', 's1')
+INFO:root:
+(83/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd2', 's1'), 't_trunc': 240876}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd2', 's1'),	 r = 0.00011730601513773451
+
+INFO:root:
+
+Generating a protocol with gamma=0.6530597355888241, zeta=0.30924867217785096...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1')
+INFO:root:
+(84/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 9.960772452416976e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.6837827111666747, zeta=0.32247332501814063...
+INFO:root:Protocol generated: ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2')
+INFO:root:
+(85/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 5.5263018342027654e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.6366116000852458, zeta=0.29603431741155545...
+INFO:root:Protocol generated: ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2')
+INFO:root:
+(86/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 562044}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 5.361501175724691e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.0017183976728400799, zeta=0.24301944387648014...
+INFO:root:Protocol generated: ('d2', 's1', 'd0', 'd0', 'd0', 's0', 'd2')
+INFO:root:
+(87/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'),	 r = 9.375285773627505e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.014620842211209907, zeta=0.2593466755990463...
+INFO:root:Protocol generated: ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0')
+INFO:root:
+(88/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 7.564708298581957e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.27168805617133573, zeta=0.24076585845956547...
+INFO:root:Protocol generated: ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(89/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 2.7427123722729476e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.7228771204037255, zeta=0.19291949966106967...
+INFO:root:Protocol generated: ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 's1')
+INFO:root:
+(90/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 's1'), 't_trunc': 481752}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 's1'),	 r = 6.408149324699681e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.5352648060620686, zeta=0.1385354897894092...
+INFO:root:Protocol generated: ('d0', 's0', 'd2', 'd2', 'd2', 's1')
+INFO:root:
+(91/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd2', 'd2', 'd2', 's1'), 't_trunc': 401459}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd2', 'd2', 'd2', 's1'),	 r = 7.400659501744868e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.022509328851706315, zeta=0.41374828034996247...
+INFO:root:Protocol generated: ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2')
+INFO:root:
+(92/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'), 't_trunc': 642336}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'),	 r = 7.365168838757346e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.9972381989117463, zeta=0.7340096265471486...
+INFO:root:Protocol generated: ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2', 'd2')
+INFO:root:
+(93/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 802919}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 2.6220034659706955e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.7749209739407629, zeta=0.0118944092324125...
+INFO:root:Protocol generated: ('s0', 'd2', 's1')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.006228933855970233, zeta=0.9415970706878228...
+INFO:root:Protocol generated: ('d1', 'd1', 'd2', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2', 'd2')
+INFO:root:
+(95/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2', 'd2'), 't_trunc': 1043796}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2', 'd2'),	 r = 0.0
+
+INFO:root:
+
+Generating a protocol with gamma=0.0060079748828496555, zeta=0.8141357114425056...
+INFO:root:Protocol generated: ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2')
+INFO:root:
+(96/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 883212}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 9.313969883662897e-06
+
+INFO:root:
+
+Generating a protocol with gamma=0.035355691577868005, zeta=0.5875821937724183...
+INFO:root:Protocol generated: ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0', 'd2')
+INFO:root:
+(97/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 722627}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 4.185143729444115e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.01067584356708891, zeta=0.07247529923651382...
+INFO:root:Protocol generated: ('d2', 's1', 'd0', 's0', 'd2')
+INFO:root:Already evaluated protocol, returning cached result
+INFO:root:
+
+Generating a protocol with gamma=0.9513293848443438, zeta=0.6205962351332115...
+INFO:root:Protocol generated: ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2')
+INFO:root:
+(99/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 722627}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 4.0486100845292666e-05
+
+INFO:root:
+
+Generating a protocol with gamma=0.009326078755464947, zeta=0.4391496282457473...
+INFO:root:Protocol generated: ('d1', 'd2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2')
+INFO:root:
+(100/100) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2'), 't_trunc': 642336}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2'),	 r = 2.0048420977950977e-05
+
+INFO:root:
+Best results: (np.float64(0.00013084850869760932), ('d0', 'd0', 's0', 's1'))
+
+real	16m27.589s
+user	28m44.025s
+sys	1m26.638s
+./gp_asymmetric_runner.sh: line 177: ne: command not found
+./gp_asymmetric_runner.sh: line 178: syntax error near unexpected token `fi'
+./gp_asymmetric_runner.sh: line 178: `fi'

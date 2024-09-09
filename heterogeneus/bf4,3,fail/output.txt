@@ -1,0 +1,28 @@
+INFO:root:
+(497/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2', 'd2', 'd2'), 't_trunc': 1124088}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+Traceback (most recent call last):
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 278, in <module>
+    brute_force_optimization(simulator, parameters,
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 94, in brute_force_optimization
+    secret_key_rate, pmf, _ = asym_protocol_runner(simulator, parameters, nodes, idx, len(space))
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 71, in asym_protocol_runner
+    skr = secret_key_rate(pmf, w_func, parameters["t_trunc"])
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/utility_functions.py", line 90, in secret_key_rate
+    aver_t = get_mean_waiting_time(pmf, extrapolation, show_warning)
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/utility_functions.py", line 134, in get_mean_waiting_time
+    par, cov = curve_fit(func,
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/scipy/optimize/_minpack_py.py", line 1012, in curve_fit
+    raise RuntimeError("Optimal parameters not found: " + errmsg)
+RuntimeError: Optimal parameters not found: Number of calls to function has reached maxfev = 600.
+
+real	146m9.944s
+user	130m1.846s
+sys	15m6.464s
+No plots yielded for optimizer bf
+
+Time taken:
+real	146m9.944s
+user	130m1.846s
+sys	15m6.464s

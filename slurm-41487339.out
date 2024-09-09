@@ -1,0 +1,1735 @@
+Running distillation with optimizer bf...
+/home/l/lorenzo-la/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 18, in <module>
+    from gp_plots import plot_optimization_process
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_plots.py", line 34, in <module>
+    import pandas as pd
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/apps/free81/python/3.10.2/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/apps/free81/python/3.10.2/lib/python3.10/site-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+INFO:root:Most symmetric shapes: [('s1', 's0'), ('s0', 's1')]
+INFO:root:1/2 Generating protocols for swap sequence ('s1', 's0')...
+INFO:root:2/2 Generating protocols for swap sequence ('s0', 's1')...
+INFO:root:The space of asymmetric protocols has size 512
+INFO:root:
+(1/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 's1'), 't_trunc': 802920}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 's1'),	 r = 0.00010935939452450225
+
+INFO:root:
+(2/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 's0'), 't_trunc': 802920}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 's0'),	 r = 9.286236930663563e-05
+
+INFO:root:
+(3/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 's1'), 't_trunc': 1605840}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 's1'),	 r = 0.00012494242576940607
+
+INFO:root:
+(4/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 's0'), 't_trunc': 1605840}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 's0'),	 r = 7.952563427323499e-05
+
+INFO:root:
+(5/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 's1'), 't_trunc': 1605840}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 's1'),	 r = 0.00010359232307932384
+
+INFO:root:
+(6/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd2', 's1'), 't_trunc': 1605840}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd2', 's1'),	 r = 0.00010207267230966372
+
+INFO:root:
+(7/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 's0'), 't_trunc': 1605840}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 's0'),	 r = 0.0001104119567665476
+
+INFO:root:
+(8/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd2', 's0'), 't_trunc': 1605840}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd2', 's0'),	 r = 7.3498361320514e-05
+
+INFO:root:
+(9/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 's1'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 's1'),	 r = 0.0001308485086751909
+
+INFO:root:
+(10/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 's1'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 's1'),	 r = 0.00011253656817061573
+
+INFO:root:
+(11/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd2', 's1'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd2', 's1'),	 r = 0.00011730601512044915
+
+INFO:root:
+(12/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 's0'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 's0'),	 r = 5.811329261828597e-05
+
+INFO:root:
+(13/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 's1', 'd2'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 's1', 'd2'),	 r = 8.221280799369386e-05
+
+INFO:root:
+(14/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 's0'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 's0'),	 r = 9.509450321169076e-05
+
+INFO:root:
+(15/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd2', 's0'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd2', 's0'),	 r = 6.027049851956584e-05
+
+INFO:root:
+(16/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 's0', 'd2'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 's0', 'd2'),	 r = 7.274825005073709e-05
+
+INFO:root:
+(17/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 's1'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 's1'),	 r = 8.26525154858635e-05
+
+INFO:root:
+(18/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd2', 's1'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd2', 's1'),	 r = 0.00010644280525906068
+
+INFO:root:
+(19/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd2', 'd2', 's1'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd2', 'd2', 's1'),	 r = 8.37340088657013e-05
+
+INFO:root:
+(20/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 's0'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 's0'),	 r = 0.00012084399589068343
+
+INFO:root:
+(21/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd2', 's0'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0'),	 r = 8.712597987231228e-05
+
+INFO:root:
+(22/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd2', 'd2', 's0'), 't_trunc': 2408760}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd2', 'd2', 's0'),	 r = 5.221780768588908e-05
+
+INFO:root:
+(23/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 's1'),	 r = 0.00012809183189706801
+
+INFO:root:
+(24/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 's1'),	 r = 0.00011437096453574849
+
+INFO:root:
+(25/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd2', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 's1'),	 r = 0.0001253561714075885
+
+INFO:root:
+(26/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 's1', 'd2'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 's1', 'd2'),	 r = 9.159917301859933e-05
+
+INFO:root:
+(27/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 's1'),	 r = 8.835405459869884e-05
+
+INFO:root:
+(28/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd2', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 's1'),	 r = 0.00011588809180621236
+
+INFO:root:
+(29/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd2', 'd2', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd2', 'd2', 's1'),	 r = 9.716278119131157e-05
+
+INFO:root:
+(30/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 's0'),	 r = 3.735226463539024e-05
+
+INFO:root:
+(31/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 's0'),	 r = 7.06053107656982e-05
+
+INFO:root:
+(32/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd2', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 's0'),	 r = 4.2631574278956826e-05
+
+INFO:root:
+(33/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 's0', 'd2'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 's0', 'd2'),	 r = 6.801732144039802e-05
+
+INFO:root:
+(34/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 's1', 'd2'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 's1', 'd2'),	 r = 6.528734601133884e-05
+
+INFO:root:
+(35/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd2', 's1', 'd2'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd2', 's1', 'd2'),	 r = 8.17797343371942e-05
+
+INFO:root:
+(36/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 's0'),	 r = 0.00010584610314686991
+
+INFO:root:
+(37/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd2', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 's0'),	 r = 7.171311417426895e-05
+
+INFO:root:
+(38/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd2', 'd2', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd2', 'd2', 's0'),	 r = 4.11557285596423e-05
+
+INFO:root:
+(39/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 's0', 'd2'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 's0', 'd2'),	 r = 8.248937748207114e-05
+
+INFO:root:
+(40/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd2', 's0', 'd2'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd2', 's0', 'd2'),	 r = 5.2128873493826545e-05
+
+INFO:root:
+(41/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd1', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd1', 's1'),	 r = 5.9629983436094706e-05
+
+INFO:root:
+(42/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 's1'),	 r = 9.11948670233859e-05
+
+INFO:root:
+(43/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd2', 'd2', 's1'),	 r = 9.698004310136061e-05
+
+INFO:root:
+(44/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd2', 'd2', 'd2', 's1'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd2', 'd2', 'd2', 's1'),	 r = 6.313173836556247e-05
+
+INFO:root:
+(45/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd0', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd0', 's0'),	 r = 0.00012454398486738403
+
+INFO:root:
+(46/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 's0'),	 r = 9.725042904709652e-05
+
+INFO:root:
+(47/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 's0'),	 r = 6.194345903536161e-05
+
+INFO:root:
+(48/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd2', 'd2', 'd2', 's0'), 't_trunc': 3211680}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd2', 'd2', 'd2', 's0'),	 r = 3.373378005521849e-05
+
+INFO:root:
+(49/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 's1'),	 r = 0.00010978742720977966
+
+INFO:root:
+(50/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd2', 's1'),	 r = 0.0001264505209267166
+
+INFO:root:
+(51/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 's1', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 's1', 'd2'),	 r = 9.711064694240744e-05
+
+INFO:root:
+(52/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 's1'),	 r = 8.896212345523083e-05
+
+INFO:root:
+(53/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 's1'),	 r = 0.00011918396338767337
+
+INFO:root:
+(54/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd2', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 'd2', 's1'),	 r = 0.00010584111667010843
+
+INFO:root:
+(55/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 7.153667920379397e-05
+
+INFO:root:
+(56/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 9.102116004190632e-05
+
+INFO:root:
+(57/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd1', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd1', 's1'),	 r = 6.36941967365248e-05
+
+INFO:root:
+(58/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 9.727012750322484e-05
+
+INFO:root:
+(59/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.00010624075106844561
+
+INFO:root:
+(60/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd2', 'd2', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd2', 'd2', 'd2', 's1'),	 r = 7.400659499171373e-05
+
+INFO:root:
+(61/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 's0'),	 r = 4.675020599207359e-05
+
+INFO:root:
+(62/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd2', 's0'),	 r = 2.6172158934613906e-05
+
+INFO:root:
+(63/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 's0', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 's0', 'd2'),	 r = 5.562005805441254e-05
+
+INFO:root:
+(64/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 4.7415274837993034e-05
+
+INFO:root:
+(65/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 's0'),	 r = 8.006014023289679e-05
+
+INFO:root:
+(66/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 's0'),	 r = 5.148491970120354e-05
+
+INFO:root:
+(67/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd2', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 'd2', 's0'),	 r = 2.7172183945484e-05
+
+INFO:root:
+(68/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 7.703669727712577e-05
+
+INFO:root:
+(69/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 4.7719170317837214e-05
+
+INFO:root:
+(70/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 4.659848538506834e-05
+
+INFO:root:
+(71/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 7.001870669638151e-05
+
+INFO:root:
+(72/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 7.304347423506867e-05
+
+INFO:root:
+(73/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd0', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd0', 's0'),	 r = 0.00011193710203946718
+
+INFO:root:
+(74/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 8.058285986876908e-05
+
+INFO:root:
+(75/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 4.9177002007075326e-05
+
+INFO:root:
+(76/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd2', 'd2', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd2', 'd2', 'd2', 's0'),	 r = 2.490193261181545e-05
+
+INFO:root:
+(77/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 4.248473869505721e-05
+
+INFO:root:
+(78/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 8.947005495111901e-05
+
+INFO:root:
+(79/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 5.923265940551821e-05
+
+INFO:root:
+(80/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 3.457076605044173e-05
+
+INFO:root:
+(81/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd1', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd1', 'd2', 's1'),	 r = 6.878765768779866e-05
+
+INFO:root:
+(82/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 9.140405193399948e-05
+
+INFO:root:
+(83/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 8.003563426864211e-05
+
+INFO:root:
+(84/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd0', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd0', 'd2', 's0'),	 r = 0.00010410611392420875
+
+INFO:root:
+(85/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 6.962981866558635e-05
+
+INFO:root:
+(86/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 4014599}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 4.047885126286559e-05
+
+INFO:root:
+(87/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 's1', 'd2'),	 r = 9.863416447114622e-05
+
+INFO:root:
+(88/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 's1'),	 r = 8.475586119660888e-05
+
+INFO:root:
+(89/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 's1'),	 r = 0.00011655053494495639
+
+INFO:root:
+(90/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 's1'),	 r = 0.00010987558635794659
+
+INFO:root:
+(91/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 7.507688309224879e-05
+
+INFO:root:
+(92/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 9.694494557004721e-05
+
+INFO:root:
+(93/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 's1'),	 r = 6.408149317174648e-05
+
+INFO:root:
+(94/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 9.83952768941448e-05
+
+INFO:root:
+(95/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.00011093896929072516
+
+INFO:root:
+(96/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd2', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 'd2', 'd2', 's1'),	 r = 8.175249717001102e-05
+
+INFO:root:
+(97/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 5.2601894779757e-05
+
+INFO:root:
+(98/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 5.106275259772539e-05
+
+INFO:root:
+(99/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 7.641048114966992e-05
+
+INFO:root:
+(100/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 8.147434993448827e-05
+
+INFO:root:
+(101/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'),	 r = 7.314531240370519e-05
+
+INFO:root:
+(102/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 9.761554904193231e-05
+
+INFO:root:
+(103/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 8.824508097143222e-05
+
+INFO:root:
+(104/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 's1', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 's1', 's0', 'd2'),	 r = 4.0456298416224085e-05
+
+INFO:root:
+(105/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 's0'),	 r = 5.413874322406881e-05
+
+INFO:root:
+(106/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd2', 's0'),	 r = 3.2705501617963746e-05
+
+INFO:root:
+(107/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 's0'),	 r = 1.4369504098953289e-05
+
+INFO:root:
+(108/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 6.323786937228467e-05
+
+INFO:root:
+(109/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 3.7890045332674265e-05
+
+INFO:root:
+(110/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 3.278898633731194e-05
+
+INFO:root:
+(111/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 4.9971916741173025e-05
+
+INFO:root:
+(112/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd0', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd0', 's0'),	 r = 8.67563318720819e-05
+
+INFO:root:
+(113/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 5.849606725207969e-05
+
+INFO:root:
+(114/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 3.3259635013822885e-05
+
+INFO:root:
+(115/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd2', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 'd2', 'd2', 's0'),	 r = 1.4035842422097402e-05
+
+INFO:root:
+(116/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 4.2856408079432406e-05
+
+INFO:root:
+(117/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 8.381191694240989e-05
+
+INFO:root:
+(118/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 5.417828917576094e-05
+
+INFO:root:
+(119/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 3.095465727174605e-05
+
+INFO:root:
+(120/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'),	 r = 3.0517712995872276e-05
+
+INFO:root:
+(121/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 5.219303480478112e-05
+
+INFO:root:
+(122/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 6.898157267567784e-05
+
+INFO:root:
+(123/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 5.947643973128509e-05
+
+INFO:root:
+(124/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'),	 r = 8.721327836094365e-05
+
+INFO:root:
+(125/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 5.556837613840165e-05
+
+INFO:root:
+(126/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 3.0399375826187904e-05
+
+INFO:root:
+(127/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 4.758012411438032e-05
+
+INFO:root:
+(128/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 2.7427123695413758e-05
+
+INFO:root:
+(129/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'),	 r = 9.375285767786465e-05
+
+INFO:root:
+(130/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 6.480198492890309e-05
+
+INFO:root:
+(131/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 3.94955343665151e-05
+
+INFO:root:
+(132/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 2.060338793493803e-05
+
+INFO:root:
+(133/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 7.381308768768797e-05
+
+INFO:root:
+(134/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 8.334378132719471e-05
+
+INFO:root:
+(135/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 7.564708294215517e-05
+
+INFO:root:
+(136/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 4817520}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 4.586962256789109e-05
+
+INFO:root:
+(137/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 7.576455681538915e-05
+
+INFO:root:
+(138/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 9.946502438404018e-05
+
+INFO:root:
+(139/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd1', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd1', 's1'),	 r = 6.081795793122298e-05
+
+INFO:root:
+(140/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 9.466099847750485e-05
+
+INFO:root:
+(141/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.00011104109785293766
+
+INFO:root:
+(142/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd2', 'd2', 'd2', 's1'),	 r = 8.66167422865217e-05
+
+INFO:root:
+(143/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 5.630972049757204e-05
+
+INFO:root:
+(144/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 5.361501167173882e-05
+
+INFO:root:
+(145/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 8.019943270358501e-05
+
+INFO:root:
+(146/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 8.733245919370674e-05
+
+INFO:root:
+(147/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'),	 r = 7.36425324146185e-05
+
+INFO:root:
+(148/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 9.960772443234735e-05
+
+INFO:root:
+(149/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 9.339857401400544e-05
+
+INFO:root:
+(150/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 3.639874086650885e-05
+
+INFO:root:
+(151/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 5.526301827125629e-05
+
+INFO:root:
+(152/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'),	 r = 3.388533268554712e-05
+
+INFO:root:
+(153/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 5.6902141902922855e-05
+
+INFO:root:
+(154/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 7.512403847164881e-05
+
+INFO:root:
+(155/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 6.659734062890337e-05
+
+INFO:root:
+(156/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 7.83242386618682e-05
+
+INFO:root:
+(157/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 8.922501517389477e-05
+
+INFO:root:
+(158/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 4.641472592139705e-05
+
+INFO:root:
+(159/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 2.618475024764786e-05
+
+INFO:root:
+(160/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's0', 's1', 'd2', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's0', 's1', 'd2', 'd2', 'd2'),	 r = 2.122791475284653e-05
+
+INFO:root:
+(161/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd0', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd0', 's0'),	 r = 5.98822696076417e-05
+
+INFO:root:
+(162/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 3.79092427446079e-05
+
+INFO:root:
+(163/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 1.874966862476826e-05
+
+INFO:root:
+(164/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd2', 'd2', 'd2', 's0'),	 r = 4.3819280917852324e-06
+
+INFO:root:
+(165/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 3.8363616064668584e-05
+
+INFO:root:
+(166/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 6.917472559436327e-05
+
+INFO:root:
+(167/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 4.323062082912381e-05
+
+INFO:root:
+(168/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 2.331811882501322e-05
+
+INFO:root:
+(169/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 2.013186624943492e-05
+
+INFO:root:
+(170/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 3.630615191193895e-05
+
+INFO:root:
+(171/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 4.8242827212060017e-05
+
+INFO:root:
+(172/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'),	 r = 6.402867557410792e-05
+
+INFO:root:
+(173/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 3.8119142022920116e-05
+
+INFO:root:
+(174/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 1.810449576686619e-05
+
+INFO:root:
+(175/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 4.785717745251369e-05
+
+INFO:root:
+(176/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 2.7461551167775527e-05
+
+INFO:root:
+(177/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'),	 r = 8.848095760962569e-05
+
+INFO:root:
+(178/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 5.9295903292805674e-05
+
+INFO:root:
+(179/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 3.5408736533588016e-05
+
+INFO:root:
+(180/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 1.7819300268761634e-05
+
+INFO:root:
+(181/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 3.5115070869650404e-05
+
+INFO:root:
+(182/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 5.505054807159469e-05
+
+INFO:root:
+(183/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 6.214069735961893e-05
+
+INFO:root:
+(184/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 6.0684653403748524e-05
+
+INFO:root:
+(185/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 3.4792190178389585e-05
+
+INFO:root:
+(186/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2'),	 r = 1.8623988913597215e-05
+
+INFO:root:
+(187/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 5.15325408788474e-05
+
+INFO:root:
+(188/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 3.091835888733423e-05
+
+INFO:root:
+(189/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 1.5557023134910776e-05
+
+INFO:root:
+(190/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 6.90686402431394e-05
+
+INFO:root:
+(191/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 4.342880091040031e-05
+
+INFO:root:
+(192/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 2.391052166273809e-05
+
+INFO:root:
+(193/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 7.352167639439454e-05
+
+INFO:root:
+(194/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 5620440}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 5.022520387373915e-05
+
+INFO:root:
+(195/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 5.854272548655563e-05
+
+INFO:root:
+(196/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 5.4108279796269044e-05
+
+INFO:root:
+(197/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 8.125292592944569e-05
+
+INFO:root:
+(198/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 9.065199359945094e-05
+
+INFO:root:
+(199/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 's1'),	 r = 7.024232245072715e-05
+
+INFO:root:
+(200/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 9.728352429774191e-05
+
+INFO:root:
+(201/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 9.55272033234809e-05
+
+INFO:root:
+(202/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 3.900056664957582e-05
+
+INFO:root:
+(203/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 5.9111091961846806e-05
+
+INFO:root:
+(204/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'),	 r = 3.586349180127384e-05
+
+INFO:root:
+(205/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 5.9626842955664304e-05
+
+INFO:root:
+(206/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 7.901027572382613e-05
+
+INFO:root:
+(207/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 7.181644153959118e-05
+
+INFO:root:
+(208/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 7.913311599982363e-05
+
+INFO:root:
+(209/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 9.198896250559746e-05
+
+INFO:root:
+(210/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 'd1', 's0', 's1', 'd2', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 'd1', 's0', 's1', 'd2', 'd2', 'd2'),	 r = 2.3842171052347152e-05
+
+INFO:root:
+(211/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 2.2762289993147463e-05
+
+INFO:root:
+(212/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 4.01020677337865e-05
+
+INFO:root:
+(213/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 5.333019467627084e-05
+
+INFO:root:
+(214/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 3.875508778736151e-05
+
+INFO:root:
+(215/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 5.977505902617211e-05
+
+INFO:root:
+(216/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 6.760447499524553e-05
+
+INFO:root:
+(217/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 7.793191713860841e-05
+
+INFO:root:
+(218/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 3.015836047859271e-05
+
+INFO:root:
+(219/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 5.1144627336357426e-05
+
+INFO:root:
+(220/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 3.0265528441454382e-05
+
+INFO:root:
+(221/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 1.4398278410165968e-05
+
+INFO:root:
+(222/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2', 'd2'),	 r = 1.15883666343579e-05
+
+INFO:root:
+(223/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2', 'd2'),	 r = 2.3443586547526544e-05
+
+INFO:root:
+(224/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd0', 'd2', 's0'),	 r = 4.209636070433481e-05
+
+INFO:root:
+(225/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 2.2240256098074598e-05
+
+INFO:root:
+(226/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 's1', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 's1', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 7.1942328469345e-06
+
+INFO:root:
+(227/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 4.288438619858363e-05
+
+INFO:root:
+(228/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 2.3986744170771663e-05
+
+INFO:root:
+(229/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2'),	 r = 7.365168830220888e-05
+
+INFO:root:
+(230/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 4.7491161947524316e-05
+
+INFO:root:
+(231/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 2.6937510259665646e-05
+
+INFO:root:
+(232/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 1.2053089132411842e-05
+
+INFO:root:
+(233/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 1.0446011775186682e-05
+
+INFO:root:
+(234/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 2.2996982425216182e-05
+
+INFO:root:
+(235/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 3.788986228731354e-05
+
+INFO:root:
+(236/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 4.224515513852245e-05
+
+INFO:root:
+(237/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 4.204572775191994e-05
+
+INFO:root:
+(238/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 2.134841903728957e-05
+
+INFO:root:
+(239/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 'd2', 's1', 's0', 'd2', 'd2', 'd2'),	 r = 2.004842093723047e-05
+
+INFO:root:
+(240/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 5.1778836395945434e-05
+
+INFO:root:
+(241/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 3.088672885747604e-05
+
+INFO:root:
+(242/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 1.554588755134699e-05
+
+INFO:root:
+(243/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 6.331908529833505e-05
+
+INFO:root:
+(244/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 3.8971650107493754e-05
+
+INFO:root:
+(245/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 2.0793168048614387e-05
+
+INFO:root:
+(246/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 3.858544715398166e-05
+
+INFO:root:
+(247/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 5.425262648475342e-05
+
+INFO:root:
+(248/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 'd2', 's0'),	 r = 3.835102215439923e-05
+
+INFO:root:
+(249/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2', 'd2'),	 r = 2.1109347098452476e-05
+
+INFO:root:
+(250/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2', 'd2'),	 r = 9.263112934567411e-06
+
+INFO:root:
+(251/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 5.4470803652526503e-05
+
+INFO:root:
+(252/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 3.370753022425333e-05
+
+INFO:root:
+(253/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 1.7825569994425424e-05
+
+INFO:root:
+(254/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 'd2', 's1', 'd2', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 6.830642621704625e-06
+
+INFO:root:
+(255/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 4.6592841689945176e-05
+
+INFO:root:
+(256/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'), 't_trunc': 6423360}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd2', 'd2', 'd2', 's0', 'd2'),	 r = 2.6556004842765967e-05
+
+INFO:root:
+(257/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 4.0588027277142986e-05
+
+INFO:root:
+(258/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 6.15456016560554e-05
+
+INFO:root:
+(259/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2'),	 r = 3.631880288384501e-05
+
+INFO:root:
+(260/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 6.0219187356509146e-05
+
+INFO:root:
+(261/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 8.057526081359967e-05
+
+INFO:root:
+(262/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 7.528224449166442e-05
+
+INFO:root:
+(263/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 7.611752665420618e-05
+
+INFO:root:
+(264/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 9.150159081793829e-05
+
+INFO:root:
+(265/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 'd1', 's0', 's1', 'd2', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 'd1', 's0', 's1', 'd2', 'd2', 'd2'),	 r = 2.5865077720544085e-05
+
+INFO:root:
+(266/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 2.469078547140144e-05
+
+INFO:root:
+(267/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 4.2849549436717324e-05
+
+INFO:root:
+(268/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 5.71136381490604e-05
+
+INFO:root:
+(269/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 4.089272181727002e-05
+
+INFO:root:
+(270/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 6.258693960405512e-05
+
+INFO:root:
+(271/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 7.129618222052761e-05
+
+INFO:root:
+(272/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 'd2', 's1'),	 r = 7.919555163271919e-05
+
+INFO:root:
+(273/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2', 'd2'),	 r = 1.3378059307652154e-05
+
+INFO:root:
+(274/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2', 'd2'),	 r = 2.620508230076868e-05
+
+INFO:root:
+(275/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 1.2384273771519383e-05
+
+INFO:root:
+(276/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 2.583089645507121e-05
+
+INFO:root:
+(277/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 4.1695631205948606e-05
+
+INFO:root:
+(278/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 4.678759800772648e-05
+
+INFO:root:
+(279/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 4.2380318190852055e-05
+
+INFO:root:
+(280/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 'd2', 's1', 'd2'),	 r = 5.866928501004474e-05
+
+INFO:root:
+(281/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
+INFO:root:Entanglement distributed at distance 130600
+INFO:root:Protocol ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 3.3893077540534576e-05
+
+INFO:root:
+(282/512) Running: {'t_coh': 20.0, 'p_gen': [0.002588, 0.0009187, 0.0009082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'L0': [19800, 50400, 60400], 'protocol': ('d1', 'd1', 'd1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 7226279}
+INFO:root:Heterogeneous protocol..., t_coh should be expressed in seconds.
