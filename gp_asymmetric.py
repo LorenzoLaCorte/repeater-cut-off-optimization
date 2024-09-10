@@ -211,7 +211,7 @@ if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--nodes", type=int, default=4, help="Number of nodes in the chain")
-    parser.add_argument("--max_dists", type=int, default=5, help="Maximum round of distillations of each segment per level")
+    parser.add_argument("--max_dists", type=int, default=1, help="Maximum round of distillations of each segment per level")
 
     parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
     
@@ -250,22 +250,24 @@ if __name__ == "__main__":
     p_swap: Union[float, List[float]] = args.p_swap
     p_gen: Union[float, List[float]] = args.p_gen if len(args.p_gen) > 1 else args.p_gen[0]
     w0: Union[float, List[float]] = args.w0 if len(args.w0) > 1 else args.w0[0]
-    L0: List[int] = args.L0
 
     # Ensure all are lists if one is a list
     if isinstance(p_gen, list):
         if not all(isinstance(arg, list) for arg in [args.p_gen, args.w0, args.L0]) or \
             not all(len(arg) == len(p_gen) for arg in [args.p_gen, args.w0, args.L0]):
             raise ValueError("Parameters must be all lists or all scalars")
+        L0: List[int] = args.L0
 
     parameters: SimParameters = {
         't_coh': t_coh,
         'p_gen': p_gen,
         'p_swap': p_swap,
         'w0': w0,
-        'L0': L0,
     }
 
+    if isinstance(p_gen, list):
+        parameters['L0'] = L0
+        
     simulator = RepeaterChainSimulation()
     
     # Start the optimization process
