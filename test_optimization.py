@@ -1,5 +1,5 @@
 import numpy as np
-from numpy.testing import assert_allclose, run_module_suite, assert_
+from numpy.testing import assert_allclose, assert_
 import pytest
 import multiprocessing
 
@@ -65,3 +65,7 @@ def test_opt_uniform():
         opt_kind="uniform_de", adaptive=True)
     best_cutoff_dict = opt.run(parameters)
     assert_allclose(best_cutoff_dict["memory_time"], (45, 45))
+
+
+if __name__ == "__main__":
+    pytest.main()
