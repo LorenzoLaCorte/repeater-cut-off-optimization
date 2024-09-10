@@ -16,8 +16,8 @@ MAX_DISTS=5
 
 # Define parameters as tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
 PARAMETER_SETS=(
-    "-1 1400000 0.00092     0.85 0.9524 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
-    "-1 720000  0.0000150   0.85 0.867  1"  # 100 km, 1 SWAP, rate is 0 whatsoever
+    "-1 1400000 0.00092     0.85 0.952 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
+    # "-1 720000  0.0000150   0.85 0.867  1"  # 100 km, 1 SWAP, rate is 0 whatsoever
     # "-1 360000  0.000000096 0.85 0.36   0" # 200 km, 0 SWAP, hard to simulate
 )
 
@@ -69,6 +69,8 @@ if [ "$GP" = "True" ]; then
                 --max_dists="$MAX_DISTS" \
                 --optimizer="$OPTIMIZER" \
                 --space="$SPACE" \
+                --gp_shots=20 \
+                --gp_initial_points=2 \
                 --filename="$FILENAME" \
                 --t_coh="$T_COH" \
                 --p_gen="$P_GEN" \

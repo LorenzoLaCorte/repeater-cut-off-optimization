@@ -83,15 +83,17 @@ def single_test():
      You can call this function from command line:
      ```py -c "from distillation_ml_gp import single_test; single_test()"```
     """
+    # "1400000 0.00092     0.85 0.952 5  1"
+
     parameters = {
-        't_coh': 360000,
-        'p_gen': 0.002,
+        't_coh': 1400000,
+        'p_gen': 0.00092,
         'p_swap': 0.85,
-        'w0': 0.9577,
-        "t_trunc": 360000
+        'w0': 0.952,
+        "t_trunc": 1400000
     }
     
-    parameters["protocol"] = (0,0)
+    parameters["protocol"] = (1,1,0,0)
     print(get_protocol_rate(parameters))
 
 
@@ -629,4 +631,4 @@ def hw_varying_experiment_runner():
 
 
 if __name__ == "__main__":
-    single_asym_test()
+    single_test()

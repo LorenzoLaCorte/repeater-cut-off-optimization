@@ -4,17 +4,17 @@ SCRIPT="gp_asymmetric.py"
 PY_ALIAS="python3.10"
 
 # Define what simulation you want to run {True, False}
-GP_HOMOGENEOUS=False
-GP_HETEROGENEOUS=True
+GP_HOMOGENEOUS=True
+GP_HETEROGENEOUS=False
 
 # Define the general result directory
 GENERAL_RESULT_DIR="./results"
 
 # Define parameters as tuples of t_coh, p_gen, p_swap, w0, nodes, max_dists
 PARAMETER_SETS=(
-    # "360000  0.000000096 0.85 0.36  2  1"
+    "360000  0.000000096 0.85 0.36  2  1"
     # "720000  0.000015    0.85 0.9   3  1"
-    "1400000 0.00092     0.85 0.952 5  5"
+    # "1400000 0.00092     0.85 0.952 5  1"
     # "3600000 0.0026      0.85 0.958 11 1"
 )
 
@@ -36,7 +36,7 @@ PARAMETER_SETS=(
 if [ "$GP_HOMOGENEOUS" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
-        "gp"
+        "bf"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
@@ -114,13 +114,14 @@ fi
 # - max_dists: maximum distances between nodes
 
 PARAMETER_SETS=(
-    "20 [0.002588,0.0009187,0.0009082] 0.85 [0.9577,0.9524,0.9523] [19800,50400,60400] 4 4"
+    "20 [0.002588,0.0009187,0.0009082] 0.85 [0.9577,0.9524,0.9523] [19800,50400,60400] 4 3"
 )
 
 if [ "$GP_HETEROGENEOUS" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
         "bf"
+        "gp"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.9)  5 SEP 2024 11:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.9)  10 SEP 2024 16:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -306,9 +306,7 @@ File: pgfmodulematrix.code.tex 2021/05/15 v3.1.9a (3.1.9a)
 \tikz@expandcount=\count294
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-))) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
-File: tikzlibrarycalc.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+))) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2021-06-07 v7.00m Hypertext links for LaTeX
  (/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
@@ -411,31 +409,56 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 286.
 )
 \Hy@SectionHShift=\skip52
+) (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen268
+\captionmargin@=\dimen269
+\captionwidth=\dimen270
+\caption@tempdima=\dimen271
+\caption@indent=\dimen272
+\caption@parindent=\dimen273
+\caption@hangindent=\dimen274
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count305
+\c@continuedfloat=\count306
+Package caption Info: hyperref package is loaded.
+)
+\c@subfigure=\count307
+\c@subtable=\count308
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytrees.code.tex
+File: tikzlibrarytrees.code.tex 2021/05/15 v3.1.9a (3.1.9a)
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count305
+\l__color_backend_stack_int=\count309
 \l__pdf_internal_box=\box63
 ) (./real_network.aux)
 \openout1 = `real_network.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -473,16 +496,16 @@ LaTeX Font Info:    ... okay on input line 11.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count306
-\scratchdimen=\dimen268
+\scratchcounter=\count310
+\scratchdimen=\dimen275
 \scratchbox=\box64
-\nofMPsegments=\count307
-\nofMParguments=\count308
+\nofMPsegments=\count311
+\nofMParguments=\count312
 \everyMPshowfont=\toks35
-\MPscratchCnt=\count309
-\MPscratchDim=\dimen269
-\MPnumerator=\count310
-\makeMPintoPDFobject=\count311
+\MPscratchCnt=\count313
+\MPscratchDim=\dimen276
+\MPnumerator=\count314
+\makeMPintoPDFobject=\count315
 \everyMPtoPDFconversion=\toks36
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -490,7 +513,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 11.
+Package hyperref Info: Link coloring OFF on input line 13.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -498,75 +521,129 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count312
+\c@section@level=\count316
 )
-LaTeX Info: Redefining \ref on input line 11.
-LaTeX Info: Redefining \pageref on input line 11.
-LaTeX Info: Redefining \nameref on input line 11.
+LaTeX Info: Redefining \ref on input line 13.
+LaTeX Info: Redefining \pageref on input line 13.
+LaTeX Info: Redefining \nameref on input line 13.
  (./real_network.out) (./real_network.out)
 \@outlinefile=\write4
 \openout4 = `real_network.out'.
 
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 
-Underfull \hbox (badness 10000) in paragraph at lines 89--94
+Underfull \hbox (badness 10000) in paragraph at lines 22--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--34
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 111--120
+Underfull \hbox (badness 10000) in paragraph at lines 127--130
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 111--120
+Underfull \hbox (badness 10000) in paragraph at lines 160--164
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 111--120
+Underfull \hbox (badness 10000) in paragraph at lines 174--183
 
  []
 
-[2]
-<asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png, id=42, 867.24pt x 433.62pt>
-File: asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png Graphic file (type png)
-<use asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png>
-Package pdftex.def Info: asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png  used on input line 162.
-(pdftex.def)             Requested size: 542.02501pt x 258.17615pt.
- [3
 
- <./asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.9524_nodes5_maxdists1/0.9524_2_swaps_skopt_gp.png>]
-<symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png, id=62, 867.24pt x 433.62pt>
+Underfull \hbox (badness 10000) in paragraph at lines 174--183
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--183
+
+ []
+
+[2
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 200--210
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 200--210
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 200--210
+
+ []
+
+[3
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 241--246
+
+ []
+
+<asymmetric/gp5,2/skopt_gp.png, id=52, 867.24pt x 433.62pt>
+File: asymmetric/gp5,2/skopt_gp.png Graphic file (type png)
+<use asymmetric/gp5,2/skopt_gp.png>
+Package pdftex.def Info: asymmetric/gp5,2/skopt_gp.png  used on input line 249.
+(pdftex.def)             Requested size: 542.02501pt x 245.33153pt.
+[4
+
+ <./asymmetric/gp5,2/skopt_gp.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 257--262
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 257--262
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 321--324
+
+ []
+
+<symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png, id=73, 867.24pt x 433.62pt>
 File: symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png Graphic file (type png)
 <use symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png>
-Package pdftex.def Info: symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png  used on input line 240.
-(pdftex.def)             Requested size: 542.02501pt x 271.02507pt.
-<asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png, id=63, 867.24pt x 433.62pt>
-File: asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png Graphic file (type png)
-<use asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png>
-Package pdftex.def Info: asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png  used on input line 247.
-(pdftex.def)             Requested size: 542.02501pt x 271.02507pt.
- [4
+Package pdftex.def Info: symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png  used on input line 332.
+(pdftex.def)             Requested size: 542.02501pt x 238.90923pt.
+<asymmetric/gp11,1/skopt_gp.png, id=75, 867.24pt x 433.62pt>
+File: asymmetric/gp11,1/skopt_gp.png Graphic file (type png)
+<use asymmetric/gp11,1/skopt_gp.png>
+Package pdftex.def Info: asymmetric/gp11,1/skopt_gp.png  used on input line 339.
+(pdftex.def)             Requested size: 542.02501pt x 238.90923pt.
+[5
 
-] [5 <./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png> <./asymmetric/old_protocol_space/results_gp_tcoh1400000_pgen0.00092_pswap0.85_w00.952_nodes5_maxdists2/skopt_gp.png>] (./real_network.aux)
+] [6 <./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png> <./asymmetric/gp11,1/skopt_gp.png>] (./real_network.aux)
 Package rerunfilecheck Info: File `real_network.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 19984 strings out of 480171
- 376657 string characters out of 5894490
- 656341 words of memory out of 5000000
- 37590 multiletter control sequences out of 15000+600000
- 474007 words of font info for 45 fonts, out of 8000000 for 9000
+ 21395 strings out of 480171
+ 404559 string characters out of 5894490
+ 683290 words of memory out of 5000000
+ 38994 multiletter control sequences out of 15000+600000
+ 471606 words of font info for 36 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 84i,13n,89p,682b,693s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/lax/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on real_network.pdf (5 pages, 1319779 bytes).
+ 84i,14n,89p,747b,1214s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/lax/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on real_network.pdf (6 pages, 1276425 bytes).
 PDF statistics:
- 142 PDF objects out of 1000 (max. 8388607)
- 99 compressed objects within 1 object stream
- 26 named destinations out of 1000 (max. 500000)
- 34 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 161 PDF objects out of 1000 (max. 8388607)
+ 112 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
