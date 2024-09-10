@@ -133,7 +133,7 @@ def get_mean_waiting_time(pmf, extrapolation=False, show_warning=False):
                 warnings.simplefilter("ignore")
             par, cov = curve_fit(func,
                              np.arange(sample_start, sample_end),
-                             pmf[sample_start: sample_end])
+                             pmf[sample_start: sample_end], maxfev=5000)
         a = par[0]
         b = par[1]
         c_0 = pmf[-1]
