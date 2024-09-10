@@ -183,9 +183,13 @@ def get_asym_protocol_space_size(nodes, max_dists):
     """
     if nodes < 2:
         raise ValueError("N should be at least 2")
+    elif nodes == 2:
+        return max_dists + 1
+    
     S = nodes - 1
 
     expected = catalan_number(nodes-2) * (max_dists+1)**((2*S-1)-1)
+    logging.info(f"Expected number of protocols: {expected}")
     return expected
 
 
@@ -473,7 +477,7 @@ def get_t_trunc(p_gen, p_swap, t_coh, nested_swaps, nested_dists, epsilon=0.01):
     t_trunc *= (1/p_dist)**(nested_dists) # considering distillation, but very unprecise
 
     # Introduce a factor to reduce the truncation time, as the previous bound is very lossy
-    reduce_factor = 10
+    reduce_factor = 5
     t_trunc = min(max(t_coh, t_trunc//reduce_factor), t_coh * 300)
     return int(t_trunc)
 
