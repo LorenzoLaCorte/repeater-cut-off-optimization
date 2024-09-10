@@ -192,6 +192,11 @@ def generate_edge_combs(n: int, tree: TreeNode, max_dists: int):
     From a tree shape with n labeled nodes and (n-1) edges, 
         it generates max_dists^(n-1) possible trees with different values for the labels 
     """
+    if n == 1:
+        for i in range(max_dists+1):
+            yield tree, i
+        return
+
     def dfs(node: TreeNode, edge_values: List[int], current_index: int) -> List[TreeNode]:
         """
         Perform a DFS traversal of the tree and assign edge values from the provided list.
