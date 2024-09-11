@@ -8,7 +8,7 @@ GP_HOMOGENEOUS=True
 GP_HETEROGENEOUS=False
 
 # Define the general result directory
-GENERAL_RESULT_DIR="./results"
+GENERAL_RESULT_DIR="./results_asymmetric"
 
 # Define parameters as tuples of t_coh, p_gen, p_swap, w0, nodes, max_dists
 PARAMETER_SETS=(

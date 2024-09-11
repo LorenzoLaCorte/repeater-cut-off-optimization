@@ -8,7 +8,7 @@ GP=True
 DP_COMPLEXITY=False
 
 # Define the general result directory
-GENERAL_RESULT_DIR="./results_real"
+GENERAL_RESULT_DIR="./results_symmetric"
 
 # Define the space of rounds of distillation to be simulated
 MIN_DISTS=0
@@ -84,7 +84,8 @@ if [ "$GP" = "True" ]; then
             rm "$TMPFILE"
 
             # Create a folder for the results if it doesn't exist
-            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_${SPACE}${DP_FLAG}"
+            TIMESTAMP=$(date +%s)
+            RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_${SPACE}${DP_FLAG}_$TIMESTAMP"
             mkdir -p "$RESULT_DIR"
 
             # Move the output file to the results folder
@@ -152,7 +153,8 @@ elif [ "$DP_COMPLEXITY" = "True" ]; then
                     $DP_FLAG; } 2>&1 | tee -a "$TMPFILE"
 
                 # Create a folder for the results if it doesn't exist
-                RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_${SPACE}${DP_FLAG}"
+                TIMESTAMP=$(date +%s)
+                RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_${SPACE}${DP_FLAG}_$TIMESTAMP"
                 mkdir -p "$RESULT_DIR"
 
                 # Extract the time taken and append it to the output file
