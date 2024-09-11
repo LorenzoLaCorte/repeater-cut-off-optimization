@@ -16,7 +16,7 @@ from scipy.optimize import OptimizeResult
 from skopt.space import Categorical
 from scipy.stats import norm
 
-from asymmetric_swaps import TreeNode, generate_swap_space, generate_edge_combs
+from asymmetric_swaps import SwapTreeVertex, generate_swap_space, generate_dists_combs
 from repeater_types import checkAsymProtocol
 
 logging.basicConfig(level=logging.INFO)
@@ -176,7 +176,7 @@ def catalan_number(n):
     return math.comb(2*n, n) // (n + 1)
 
     
-def get_asym_protocol_space_size(nodes, max_dists):
+def get_asym_protocol_space_size(nodes: int, max_dists: int) -> int:
     """
     Returns the space of asymmetric protocols to be tested,
      by analytical derivation.
@@ -188,14 +188,13 @@ def get_asym_protocol_space_size(nodes, max_dists):
     
     S = nodes - 1
 
-    expected = catalan_number(nodes-2) * (max_dists+1)**((2*S-1)-1)
-    logging.info(f"Expected number of protocols: {expected}")
+    expected = catalan_number(nodes-2) * (max_dists+1)**(2*S-1)
     return expected
 
 
-def get_asym_protocol_space(nodes: int, max_dists: int):
+def get_asym_protocol_space(nodes: int, max_dists: int) -> List[Tuple[str]]:
     """
-    Returns the space of asymmetric protocols to be tested.
+    Returns the space of asymmetric protocols to be tested, sorted by length of the protocols.
     For each number of distillation tested, we test all the possible asymmetric protocols.
     """
     space = []
@@ -216,15 +215,15 @@ def get_asym_protocol_space(nodes: int, max_dists: int):
     return space
 
 
-def get_joined_sequences(S: int, swap_tree: TreeNode, max_dists: int) -> List[Tuple[str]]:
+def get_joined_sequences(S: int, swap_tree: SwapTreeVertex, max_dists: int) -> List[Tuple[str]]:
     """
     Returns the space of edge combinations for a given swap tree and a maximum number of distillations.
     """
-    n = 2*S - 1
+    vertices = 2*S - 1
     space: List[Tuple[str]] = []
 
-    for edgeLabeledShape, finalDist in generate_edge_combs(n, swap_tree, max_dists):
-        space.append(edgeLabeledShape.get_sequence() + (f'd{S-1}',)*finalDist)
+    for edgeLabeledShape in generate_dists_combs(vertices, swap_tree, max_dists):
+        space.append(edgeLabeledShape.get_sequence())
 
     return space
 
