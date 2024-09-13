@@ -1,6 +1,0 @@
-Gaussian process with 20 evaluations and 2 initial points
-
-Time taken:
-real	19m6.006s
-user	1m30.388s
-sys	5m38.412s

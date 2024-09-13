@@ -62,18 +62,18 @@ def single_asym_test():
     """
     This function is used to test the repeater simulation with a fixed set of parameters.
      You can call this function from command line:
-     ```py -c "from distillation_ml_gp import single_test; single_test()"```
+     ```py -c "from distillation_tests.py import single_test; single_test()"```
     """
     parameters = {
-        't_coh': 20, # seconds
-        'p_gen': [0.002588, 0.0009187, 0.0009082],
+        't_coh': [700000, 700000, 700000, 700000, 700000],
+        'p_gen': [0.002588, 0.0009187, 0.0009082, 0.0009082],
         'p_swap': 0.85,
-        'w0': [0.9577, 0.9524, 0.9523],
+        'w0': [0.9577, 0.9524, 0.9523, 0.9523],
         "t_trunc": 321168,
-        "L0": [19800, 50400, 60400] # meters
+        "L0": [19800, 50400, 60400, 60400] # meters
     }
     
-    parameters["protocol"] = ('d0', 'd2', 's0', 'd2', 's1')
+    parameters["protocol"] = ('d0', 'd2', 's0', 'd2', 's1', 's2')
     print(get_protocol_rate(parameters))
 
 
@@ -631,4 +631,4 @@ def hw_varying_experiment_runner():
 
 
 if __name__ == "__main__":
-    single_test()
+    single_asym_test()
