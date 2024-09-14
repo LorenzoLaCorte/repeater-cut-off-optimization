@@ -54,7 +54,7 @@ def asym_protocol_runner(simulator, parameters, nodes, idx=None, space_len=None)
     dists = sum(1 for item in protocol if 'd' in item)
     
     if isinstance(parameters["p_gen"], list):
-        t_coh = parameters["t_coh"] * 299792458 / max(L0)
+        t_coh = max(parameters["t_coh"])
         parameters["t_trunc"] = get_t_trunc(min(parameters["p_gen"]), parameters["p_swap"], t_coh,
                                             nested_swaps=np.log2(nodes+1), nested_dists=np.log2(dists+1))
     else:        
@@ -210,8 +210,8 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--nodes", type=int, default=4, help="Number of nodes in the chain")
-    parser.add_argument("--max_dists", type=int, default=1, help="Maximum round of distillations of each segment per level")
+    parser.add_argument("--nodes", type=int, default=9, help="Number of nodes in the chain")
+    parser.add_argument("--max_dists", type=int, default=0, help="Maximum round of distillations of each segment per level")
 
     parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
     
@@ -228,11 +228,10 @@ if __name__ == "__main__":
                         help=("Threshold for CDF coverage. If one configuration goes below this threshold, "
                               "the simulation is discarded"))
     
-    parser.add_argument("--t_coh", type=float, default=20, help="Coherence time")
     parser.add_argument("--p_swap", type=float, default=0.85, help="Swapping probability")
-    parser.add_argument("--p_gen", type=float, nargs='+', default=[0.002588,0.0009187,0.0009082], help="Generation success probability")
-    parser.add_argument("--w0", type=float, nargs='+', default=[0.9577,0.9524,0.9523], help="Werner parameter")
-    parser.add_argument("--L0", type=int, nargs='+', default=[19800,50400,60400], help="Length of links")
+    parser.add_argument("--t_coh", type=int, nargs='+', default=[560000], help="Coherence time")
+    parser.add_argument("--p_gen", type=float, nargs='+', default=[0.0009082], help="Generation success probability")
+    parser.add_argument("--w0", type=float, nargs='+', default=[0.9523], help="Werner parameter")
     
     args = parser.parse_args()
 
@@ -246,17 +245,15 @@ if __name__ == "__main__":
     filename: str = args.filename
     cdf_threshold: float = args.cdf_threshold
 
-    t_coh: Union[int, List[int]] = args.t_coh
     p_swap: Union[float, List[float]] = args.p_swap
     p_gen: Union[float, List[float]] = args.p_gen if len(args.p_gen) > 1 else args.p_gen[0]
     w0: Union[float, List[float]] = args.w0 if len(args.w0) > 1 else args.w0[0]
+    t_coh: List[int] = args.t_coh
 
     # Ensure all are lists if one is a list
     if isinstance(p_gen, list):
-        if not all(isinstance(arg, list) for arg in [args.p_gen, args.w0, args.L0]) or \
-            not all(len(arg) == len(p_gen) for arg in [args.p_gen, args.w0, args.L0]):
-            raise ValueError("Parameters must be all lists or all scalars")
-        L0: List[int] = args.L0
+        if not all(isinstance(x, list) for x in [p_gen, w0, t_coh]):
+            raise ValueError("If p_gen is a list, all other parameters must be lists")
 
     parameters: SimParameters = {
         't_coh': t_coh,
@@ -264,9 +261,6 @@ if __name__ == "__main__":
         'p_swap': p_swap,
         'w0': w0,
     }
-
-    if isinstance(p_gen, list):
-        parameters['L0'] = L0
         
     simulator = RepeaterChainSimulation()
     

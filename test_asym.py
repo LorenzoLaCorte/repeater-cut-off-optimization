@@ -69,9 +69,6 @@ def test_heterogeneus_repeater_sim(p_gen, p_swap, w0, t_coh, t_trunc, heterogene
         both with the algorithm for symmetric (homogeneous) protocols [benchmark]
          and the algorithm for asymmetric (and heterogeneous) protocols.
     """
-    # Consider both protocols and define whatever fixed L0
-    L0 = 1000
-
     # Test with benchmark
     parameters = {
         't_coh': t_coh,
@@ -88,17 +85,17 @@ def test_heterogeneus_repeater_sim(p_gen, p_swap, w0, t_coh, t_trunc, heterogene
     skr1 = secret_key_rate(pmf1, w_func1)
 
     segments = sum([1 for step in heterogeneous_protocol if step.startswith("s")]) + 1
-    t_coh_seconds = t_coh * L0 / 299792458 # convert coherence time to seconds
+    t_cohs = [t_coh*2] * (segments+1)
 
     # Test with heterogeneous protocol
     parameters = {
-        't_coh': t_coh_seconds,
+        't_coh': t_cohs,
         'p_gen': [p_gen]*segments,
         'p_swap': p_swap,
         'w0': [w0]*segments,
         "t_trunc": t_trunc,
-        "L0": [L0]*segments # derive this in meters
     }
+    print(parameters)
     parameters["protocol"] = heterogeneous_protocol
 
     start_time = time.time()

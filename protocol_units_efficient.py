@@ -24,7 +24,34 @@ Returns
 -------
 Four arrays of the shape `t_trunc` used in efficient computation.
 """
+
+def get_link_t_coh(t_coh_A: int, t_coh_B: int):
+    """
+    Return the joint coherence time of two nodes' memories.
+    """
+    return (t_coh_A * t_coh_B) / (t_coh_A + t_coh_B)
+
+
+def get_links_t_coh(t_coh):
+    """
+    Return the coherence times of the links involved
+        by considering the coherence time of the nodes.
+    """
+    assert len(t_coh) == 3 or len(t_coh) == 2, f"SWAP/DIST's coherence time list must have 2 or 3 elements, got {t_coh}"
+    # Distillation
+    if len(t_coh) == 2:
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1])]*2
+    # Swap
+    else:
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1]), get_link_t_coh(t_coh[0], t_coh[2])]
+    return links_t_coh
+
+
 def get_one_werner(pmf1, pmf2, w_func1, w_func2, t_coh):
+    """
+    func1 = Pr(T1=t1) (both early and later)
+    func2 = Pr(T2=t2) (both early and later)
+    """
     return pmf1, pmf1, pmf2, pmf2
 
 
@@ -36,11 +63,23 @@ def get_w1w2_werner(pmf1, pmf2, w_func1, w_func2, t_coh):
     func1_early = Pr(T2=t2) * w2 * exp(+t2)
     """
     size = len(pmf1)
-    decay_factors = np.exp(- np.arange(size) / t_coh) # exp(-t)
-    func1_later = pmf1 * w_func1 * decay_factors
-    func1_early = pmf1 * w_func1 / decay_factors
-    func2_later = pmf2 * w_func2 * decay_factors
-    func2_early = pmf2 * w_func2 / decay_factors
+
+    # If is a heterogenous protocol, evaluate the decay in function of the coherence times of the nodes involved
+    # Consider different links coherence times
+    if isinstance(t_coh, list):
+        links_t_coh = get_links_t_coh(t_coh)
+        decay_factors1, decay_factors2 = [np.exp(- np.arange(size) / t) for t in links_t_coh]
+        func1_later = pmf1 * w_func1 * decay_factors1
+        func1_early = pmf1 * w_func1 / decay_factors1
+        func2_later = pmf2 * w_func2 * decay_factors2
+        func2_early = pmf2 * w_func2 / decay_factors2
+    else:
+        decay_factors = np.exp(- np.arange(size) / t_coh) # exp(-t)
+        func1_later = pmf1 * w_func1 * decay_factors
+        func1_early = pmf1 * w_func1 / decay_factors
+        func2_later = pmf2 * w_func2 * decay_factors
+        func2_early = pmf2 * w_func2 / decay_factors
+
     return func1_early, func1_later, func2_early, func2_later
 
 
@@ -52,11 +91,18 @@ def get_w1_werner(pmf1, pmf2, w_func1, w_func2, t_coh):
     func1_early = Pr(T2=t2) * exp(+t2)
     """
     size = len(pmf1)
-    decay_factors = np.exp(- np.arange(size) / t_coh)
+    if isinstance(t_coh, list):
+        links_t_coh = get_links_t_coh(t_coh)
+        decay_factors1, decay_factors2 = [np.exp(- np.arange(size) / t) for t in links_t_coh]
+        func1_early = pmf1 * w_func1 / decay_factors1
+        func2_later = pmf2 * decay_factors2
+    else:
+        decay_factors = np.exp(- np.arange(size) / t_coh)
+        func1_early = pmf1 * w_func1 / decay_factors
+        func2_later = pmf2 * decay_factors
+
     func1_later = pmf1 * w_func1
     func2_early = pmf2
-    func1_early = pmf1 * w_func1 / decay_factors
-    func2_later = pmf2 * decay_factors
     return func1_early, func1_later, func2_early, func2_later
 
 
@@ -68,9 +114,15 @@ def get_w2_werner(pmf1, pmf2, w_func1, w_func2, t_coh):
     func1_early = Pr(T2=t2) * w2 * exp(+t2)
     """
     size = len(pmf1)
-    decay_factors = np.exp(- np.arange(size) / t_coh)
-    func1_later = pmf1 * decay_factors
-    func2_early = pmf2 * w_func2 / decay_factors
+    if isinstance(t_coh, list):
+        links_t_coh = get_links_t_coh(t_coh)
+        decay_factors1, decay_factors2 = [np.exp(- np.arange(size) / t) for t in links_t_coh]
+        func1_later = pmf1 * decay_factors1
+        func2_early = pmf2 * w_func2 / decay_factors2
+    else:
+        decay_factors = np.exp(- np.arange(size) / t_coh)
+        func1_later = pmf1 * decay_factors
+        func2_early = pmf2 * w_func2 / decay_factors
     func1_early = pmf1
     func2_later = pmf2 * w_func2
     return func1_early, func1_later, func2_early, func2_later
@@ -370,8 +422,8 @@ def join_links_efficient(
         raise ValueError(evaluate_func)
     
     size = len(pmf1)
-    if size/t_coh > 300:
-        logging.warn("Overflow in the exponential function!")
+    if (isinstance(t_coh, list) and size / min(t_coh) > 300) or (not isinstance(t_coh, list) and size / t_coh > 300):
+        logging.warning("Overflow in the exponential function!")
     if kind == "probability":
         final_result = np.zeros(pmf1.shape, dtype=pmf1.dtype)
     elif kind == "state":
