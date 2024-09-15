@@ -214,6 +214,10 @@ def assign_dists_to_tree(tree: SwapTreeVertex, dists_comb: List[int]) -> SwapTre
     """
     Assigns distillation values to the vertices of a tree.
     """
+    dists_comb_tree = copy.deepcopy(tree)
+    if not dists_comb:
+        return dists_comb_tree
+    
     # logging.info(f"Assigning distillation values {dists_comb} to the tree {tree}")
     def dfs(tree: SwapTreeVertex, dists_values: List[int], current_index: int) -> Tuple[SwapTreeVertex, int]:
         """
@@ -229,7 +233,7 @@ def assign_dists_to_tree(tree: SwapTreeVertex, dists_comb: List[int]) -> SwapTre
         if (tree.left is None and tree.right is None) or (tree.left.visited and tree.right.visited):
             if not tree.visited: 
                 tree.visit()
-                tree.dists = dists_values[current_index]  # TODO: Maybe is better [current_index-1]
+                tree.dists = dists_values[current_index]
                 current_index += 1
         else:
             # Recursively apply DFS to the left and right subtrees
@@ -238,10 +242,9 @@ def assign_dists_to_tree(tree: SwapTreeVertex, dists_comb: List[int]) -> SwapTre
 
         return tree, current_index
 
-    dists_comb_tree = copy.deepcopy(tree)
-    idx = 0
 
     # Until all the vertices have been visited, assign distillation values to the tree
+    idx = 0
     while not dists_comb_tree.all_visited():
         dists_comb_tree, idx = dfs(dists_comb_tree, dists_values=list(dists_comb), current_index=idx)
 

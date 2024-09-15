@@ -851,7 +851,7 @@ def plot_objective(
                     minimum[index2], minimum[index1], c=['r'], s=100, lw=0.0, marker='*'
                 )
 
-    ylabel = "Partial dependence"
+    ylabel = "Partial\ndependence"
 
     # Make various adjustments to the plots.
     _format_scatter_plot_axes(

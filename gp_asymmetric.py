@@ -11,7 +11,7 @@ import logging
 import numpy as np
 
 from skopt import gp_minimize
-from skopt.space import Real
+from skopt.space import Real, Integer, Categorical
 from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 
@@ -124,13 +124,15 @@ def objective_key_rate(space, nodes, max_dists, shot_count, gp_shots, parameters
         in order for the optimizer to maximize the function.
     """
     shot_count[0] += 1
-    gamma = space['gamma']
-    zeta = space['zeta']
-    
-    logging.info(f"\n\nGenerating a protocol with gamma={gamma}, zeta={zeta}...")
-    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
+    gamma = space["gamma"]
+    zeta = space["zeta"]
+    tau = space["tau"]
+    kappa = space["rounds of distillation"]
+
+    logging.info(f"\n\nGenerating a protocol with gamma={gamma}, zeta={zeta}, tau={tau}, kappa={kappa}")
+    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, zeta, tau)
     logging.info(f"Protocol generated: {parameters['protocol']}")
-    strategy_to_protocol[(gamma, zeta)] = parameters["protocol"]
+    strategy_to_protocol[(kappa, gamma, zeta, tau)] = parameters["protocol"]
 
     if parameters["protocol"] in cache_results:
         logging.info("Already evaluated protocol, returning cached result")
@@ -153,8 +155,8 @@ def is_gp_done(result: OptimizeResult):
     Callback function to stop the optimization if all the points have been evaluated.
     """
     # Add protocol to result dict, to then retrieve it later
-    result.x_iters[-1].append(strategy_to_protocol[(result.x_iters[-1][0], result.x_iters[-1][1])])
-    
+    result.x_iters[-1].append(strategy_to_protocol[tuple(result.x_iters[-1])])    
+
 
 def gaussian_optimization(simulator, parameters: SimParameters, 
                           nodes: int, max_dists: int, 
@@ -168,11 +170,16 @@ def gaussian_optimization(simulator, parameters: SimParameters,
                 f"and {gp_initial_points} initial points\n\n")
 
     shot_count = [-1]
+    v = 2 * (nodes - 1) - 1
 
     space = [
+        Integer(0, v * max_dists, name='rounds of distillation') \
+            if max_dists != 0 else Categorical([0], name='rounds of distillation'),
         Real(0, 1, name='gamma'),
-        Real(0, 1, name='zeta'), 
+        Real(0, 1, name='zeta'),
+        Real(0, 1, name='tau')
     ]
+
     @use_named_args(space)
     def wrapped_objective(**space_params):
         return objective_key_rate(space_params, nodes, max_dists, shot_count, gp_shots, parameters, simulator)
@@ -198,11 +205,11 @@ def gaussian_optimization(simulator, parameters: SimParameters,
         cache_results.clear()
     
     except ThresholdExceededError as e:
-        logging.warn((f"Simulation under coverage for {parameters['protocol']}"))
+        logging.warning((f"Simulation under coverage for {parameters['protocol']}"))
     
     if store_results:
         write_results(filename, ordered_results)
-            
+    
     best_results = (ordered_results[0][0], ordered_results[0][1])
     logging.info(f"\nBest results: {best_results}")
 
@@ -219,7 +226,7 @@ if __name__ == "__main__":
                         help=(  "Number of shots for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
     
-    parser.add_argument("--gp_initial_points", type=int, default=10,
+    parser.add_argument("--gp_initial_points", type=int, default=50,
                         help=(  "Number of initial points for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
        
