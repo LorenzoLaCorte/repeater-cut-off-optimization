@@ -53,7 +53,7 @@ def asym_protocol_runner(simulator, parameters, nodes, idx=None, space_len=None)
     protocol = parameters["protocol"]
     dists = sum(1 for item in protocol if 'd' in item)
     
-    if isinstance(parameters["p_gen"], list):
+    if isinstance(parameters["t_coh"], list):
         t_coh = max(parameters["t_coh"])
         parameters["t_trunc"] = get_t_trunc(min(parameters["p_gen"]), parameters["p_swap"], t_coh,
                                             nested_swaps=np.log2(nodes+1), nested_dists=np.log2(dists+1))
@@ -210,12 +210,12 @@ def gaussian_optimization(simulator, parameters: SimParameters,
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--nodes", type=int, default=9, help="Number of nodes in the chain")
-    parser.add_argument("--max_dists", type=int, default=0, help="Maximum round of distillations of each segment per level")
+    parser.add_argument("--nodes", type=int, default=5, help="Number of nodes in the chain")
+    parser.add_argument("--max_dists", type=int, default=3, help="Maximum round of distillations of each segment per level")
 
-    parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
+    parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--gp_shots", type=int, default=100,
+    parser.add_argument("--gp_shots", type=int, default=500,
                         help=(  "Number of shots for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
     
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     p_swap: Union[float, List[float]] = args.p_swap
     p_gen: Union[float, List[float]] = args.p_gen if len(args.p_gen) > 1 else args.p_gen[0]
     w0: Union[float, List[float]] = args.w0 if len(args.w0) > 1 else args.w0[0]
-    t_coh: List[int] = args.t_coh
+    t_coh: List[int] = args.t_coh if len(args.t_coh) > 1 else args.t_coh[0]
 
     # Ensure all are lists if one is a list
     if isinstance(p_gen, list):
