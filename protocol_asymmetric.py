@@ -1,6 +1,8 @@
 import copy
 import itertools
+import logging
 import math
+import statistics
 from typing import Generator, List, Optional, Tuple
 from repeater_types import checkAsymProtocol
 
@@ -110,6 +112,62 @@ class SwapTreeVertex:
         
         return tuple(sequence)
 
+    def get_leaf_depths(self, depth=0, leaf_depths=None):
+        """
+        Perform a depth-first search and extract all depths of the leaves in the binary tree.
+        
+        Args:
+            self (SwapTreeVertex): The current vertex of the binary tree.
+            depth (int): The current depth of the tree (default is 0).
+            leaf_depths (list): A list that will store the depths of the leaves (default is None).
+            
+        Returns:
+            list: A list of depths for all the leaves in the tree.
+        """
+        if leaf_depths is None:
+            leaf_depths = []
+        
+        if self.left is None and self.right is None:
+            leaf_depths.append(depth)
+        else:
+            if self.left is not None and self.right is not None:
+                self.left.get_leaf_depths(depth + 1, leaf_depths)
+                self.right.get_leaf_depths(depth + 1, leaf_depths)
+
+        return leaf_depths
+
+
+    def get_symmetry_score(self) -> float:
+        """
+        Returns a normalized score for the symmetry of the entire tree.
+        The score is computed based on the variance of the leaf depths:
+        - A perfect symmetry gives a score of 1.
+        - Higher variance in leaf depths lowers the symmetry score.
+        
+        Returns:
+            float: The symmetry score between 0 and 1.
+        """
+        leaf_depths = self.get_leaf_depths()
+        if len(leaf_depths) <= 1:
+            return 1.0  # trivially symmetric
+
+        variance = statistics.variance(leaf_depths)
+        
+        # Max variance corresponds to a situation where leaf depths are spread out
+        max_variance = max(leaf_depths)  
+        symmetry_score = max(0, 1 - (variance / max_variance))  # Symmetry score ranges between 0 and 1
+        return symmetry_score
+        
+
+    def count_nodes(self) -> int:
+        """
+        Returns the number of nodes in the subtree rooted at this node.
+        """
+        if not self:
+            return 0
+        left_count = self.left.count_nodes() if self.left else 0
+        right_count = self.right.count_nodes() if self.right else 0
+        return 1 + left_count + right_count
 
     def __repr__(self, level=0, indent="   ") -> str:
         """
@@ -156,6 +214,7 @@ def assign_dists_to_tree(tree: SwapTreeVertex, dists_comb: List[int]) -> SwapTre
     """
     Assigns distillation values to the vertices of a tree.
     """
+    # logging.info(f"Assigning distillation values {dists_comb} to the tree {tree}")
     def dfs(tree: SwapTreeVertex, dists_values: List[int], current_index: int) -> Tuple[SwapTreeVertex, int]:
         """
         Perform a DFS traversal of the tree and assign distillation values from the provided list.
@@ -170,7 +229,7 @@ def assign_dists_to_tree(tree: SwapTreeVertex, dists_comb: List[int]) -> SwapTre
         if (tree.left is None and tree.right is None) or (tree.left.visited and tree.right.visited):
             if not tree.visited: 
                 tree.visit()
-                tree.dists = dists_values[current_index]
+                tree.dists = dists_values[current_index]  # TODO: Maybe is better [current_index-1]
                 current_index += 1
         else:
             # Recursively apply DFS to the left and right subtrees

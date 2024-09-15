@@ -12,10 +12,10 @@ GENERAL_RESULT_DIR="./results_asymmetric"
 
 # Define parameters as tuples of t_coh, p_gen, p_swap, w0, nodes, max_dists
 PARAMETER_SETS=(
-    "360000  0.000000096 0.85 0.36  2  1"
+    # "360000  0.000000096 0.85 0.36  2  1"
     # "720000  0.000015    0.85 0.9   3  1"
     # "1400000 0.00092     0.85 0.952 5  1"
-    # "3600000 0.0026      0.85 0.958 11 1"
+    "3600000 0.0026      0.85 0.958 11 1"
 )
 
 # -----------------------------------------
@@ -36,7 +36,7 @@ PARAMETER_SETS=(
 if [ "$GP_HOMOGENEOUS" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
-        "bf"
+        "gp"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
@@ -114,26 +114,25 @@ fi
 # - max_dists: maximum distances between nodes
 
 PARAMETER_SETS=(
-    "20 [0.002588,0.0009187,0.0009082] 0.85 [0.9577,0.9524,0.9523] [19800,50400,60400] 4 3"
+    "[1080000,950000,720000,560000] [0.002588,0.0009187,0.0009082] 0.85 [0.9577,0.9524,0.9523] 4 2"
+    "[1080000,950000,720000,560000] [0.002588,0.0009187,0.0009082] 0.85 [0.9577,0.9524,0.9523] 4 3"
 )
 
 if [ "$GP_HETEROGENEOUS" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
         "bf"
-        "gp"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
         IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"
         
-        T_COH="${PARAM_ARRAY[0]}"
+        T_COH=$(echo "${PARAM_ARRAY[0]}" | sed 's/\[//g' | sed 's/\]//g' | tr ',' ' ')
         P_GEN=$(echo "${PARAM_ARRAY[1]}" | sed 's/\[//g' | sed 's/\]//g' | tr ',' ' ')
         P_SWAP="${PARAM_ARRAY[2]}"
         W0=$(echo "${PARAM_ARRAY[3]}" | sed 's/\[//g' | sed 's/\]//g' | tr ',' ' ')
-        L0=$(echo "${PARAM_ARRAY[4]}" | sed 's/\[//g' | sed 's/\]//g' | tr ',' ' ')
-        NODES="${PARAM_ARRAY[5]}"
-        MAX_DISTS="${PARAM_ARRAY[6]}"
+        NODES="${PARAM_ARRAY[4]}"
+        MAX_DISTS="${PARAM_ARRAY[5]}"
         
         for TUPLE in "${OPTIMIZER_COMBS[@]}"; do
             OPTIMIZER=$(echo $TUPLE | awk '{print $1}')
@@ -148,11 +147,10 @@ if [ "$GP_HETEROGENEOUS" = "True" ]; then
                 --max_dists=$MAX_DISTS \
                 --optimizer=$OPTIMIZER \
                 --filename=$FILENAME \
-                --t_coh=$T_COH \
+                --t_coh $T_COH \
                 --p_gen $P_GEN \
                 --p_swap=$P_SWAP \
                 --w0 $W0 \
-                --L0 $L0 \
             ; } 2>&1 | tee -a "$TMPFILE"
 
             # Extract the time taken and append it to the output file

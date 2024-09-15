@@ -3,10 +3,76 @@ import itertools
 import logging
 import time
 import pytest
-from gp_utils import catalan_number, get_asym_protocol_space, get_asym_protocol_space_size, get_protocol_enum_space, get_no_of_permutations_per_swap, get_swap_space
+from gp_utils import catalan_number, get_asym_protocol_space, get_asym_protocol_space_size, get_distillation_per_swap, get_joined_sequences, get_protocol_enum_space, get_no_of_permutations_per_swap, get_protocol_from_center_spacing_symmetricity, get_swap_space
 from repeater_types import checkAsymProtocol
 
 logging.basicConfig(level=logging.DEBUG)
+
+@pytest.mark.parametrize("nodes, expected_best_protocol", [
+    (5, ("s0", "s2", "s1")), 
+    (9, ("s0", "s2", "s1", "s4", "s6", "s5", "s3")),
+    (11, ('s0', 's2', 's1', 's4', 's6', 's8', 's7', 's5', 's3'))
+])
+def test_symmetricity_score(nodes, expected_best_protocol):
+    """
+    Test the symmetricity score of the asymmetric protocol space.
+    """
+    swap_space = get_swap_space(nodes-1)
+    best_protocol = swap_space[0][1]
+    assert best_protocol == expected_best_protocol, f"Expected {expected_best_protocol}, got {best_protocol}"
+
+
+@pytest.mark.parametrize("nodes, max_dists, gamma, kappa, zeta, tau, expected_protocol", [
+    (5, 2, 0, 0, 0, 0, ("s0", "s2", "s1")),
+    (5, 2, 0.5, 0.5, 0.5, 0.5, ("s0", "s2", "s1")),
+    (5, 2, 1, 1, 1, 1, ("s0", "s2", "s1")),
+    (7, 1, 0.5, 0.5, 0.5, 0.5, ("s0", "s2", "s1")),
+])
+def test_protocol_getter(nodes, max_dists, gamma, kappa, zeta, tau):
+    """
+    Test the protocol getter using a different method.
+    TODO: add 
+    """
+
+# @pytest.mark.parametrize("nodes, max_dists, gamma, zeta", [
+#     (5, 2, 0, 0),
+#     (5, 2, 0.5, 0.5),
+#     (5, 2, 1, 1),
+#     (7, 1, 0.5, 0.5),
+# ])
+# def test_protocol_getter(nodes, max_dists, gamma, zeta):
+#     """
+#     Test the protocol getter using a different method.
+#     """
+#     # Current method
+#     start_time = time.time()
+#     protocol = get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
+#     current_method_time = time.time() - start_time
+#     logging.debug(f"Current method time: {current_method_time:.6f} seconds")
+
+#     # Inefficient method
+#     start_time = time.time()
+#     # Sample the sequence of swaps
+#     swap_space = get_swap_space(nodes-1)
+#     selected_idx = round(gamma * (len(swap_space)-1))
+#     swap_tree, _ = swap_space[selected_idx][0], swap_space[selected_idx][1]
+
+#     # Sample the joined sequences    
+#     joined_combs = get_joined_sequences(nodes-1, swap_tree, max_dists)
+#     # joined_combs = sorted(joined_combs, key=lambda x: (len(x), x))
+
+#     len_joined_combs = len(joined_combs)
+#     assert len_joined_combs == get_distillation_per_swap(nodes-1, max_dists), \
+#         f"Expected {get_distillation_per_swap(nodes-1, max_dists)} joined sequences, got {len_joined_combs}"
+
+#     logging.debug(f"Number of joined sequences: {len_joined_combs}")
+#     selected_idx = round(zeta * (len_joined_combs-1))
+#     logging.debug(f"Selected index: {selected_idx+1}/{len_joined_combs}")
+#     protocol_cmp = tuple(joined_combs[selected_idx])
+#     inefficient_method_time = time.time() - start_time
+#     logging.debug(f"Inefficient method time: {inefficient_method_time:.6f} seconds")
+
+#     assert protocol == protocol_cmp, f"Expected {protocol_cmp}, got {protocol}"
 
 
 @pytest.mark.parametrize("nodes, max_dists", [(4, 3), (5, 0), (5, 2), (6, 1), (7, 0)])
@@ -59,4 +125,4 @@ def test_symmetric_protocol_space(min_dists, max_dists, number_of_swaps):
 
 
 if __name__ == "__main__":
-    pytest.main(["-sv", "test_gp.py"])
+    pytest.main(["-sv", "test_gp.py::test_protocol_getter"])

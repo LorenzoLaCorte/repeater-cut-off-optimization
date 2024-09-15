@@ -16,11 +16,12 @@ from scipy.optimize import OptimizeResult
 from skopt.space import Categorical
 from scipy.stats import norm
 
-from asymmetric_swaps import SwapTreeVertex, generate_swap_space, generate_dists_combs
+from protocol_asymmetric import SwapTreeVertex, assign_dists_to_tree, generate_swap_space, generate_dists_combs
 from repeater_types import checkAsymProtocol
 
 logging.basicConfig(level=logging.INFO)
 
+# TODO: move these types to repeater_types.py
 # Define the exception for the CDF coverage
 class ThresholdExceededError(Exception):
     """
@@ -175,7 +176,13 @@ def catalan_number(n):
     """
     return math.comb(2*n, n) // (n + 1)
 
-    
+
+def get_distillation_per_swap(S: int, max_dists: int) -> int:
+    """
+    Returns the number of distillations per swap.
+    """
+    return (max_dists+1)**(2*S-1)
+
 def get_asym_protocol_space_size(nodes: int, max_dists: int) -> int:
     """
     Returns the space of asymmetric protocols to be tested,
@@ -188,7 +195,7 @@ def get_asym_protocol_space_size(nodes: int, max_dists: int) -> int:
     
     S = nodes - 1
 
-    expected = catalan_number(nodes-2) * (max_dists+1)**(2*S-1)
+    expected = catalan_number(nodes-2) * get_distillation_per_swap(S, max_dists)
     return expected
 
 
@@ -228,31 +235,8 @@ def get_joined_sequences(S: int, swap_tree: SwapTreeVertex, max_dists: int) -> L
     return space
 
 
-def get_swap_shape(seq):
-    """
-    Returns the shape (evolution of the links) of a given sequence of swaps.
-    TODO: replace this function with a score given in the swap_space
-    """
-    left_segments = {f"{i}," for i in seq}
-    right_segments = {f"{i+1}," for i in seq}
-    segments = left_segments.union(right_segments)
-    shape = set()
-    for swap in seq:
-        # left_segm is the string in the set that has swap as last character
-        # right_segm is the string in the set that has left_segm+1 as first character
-        left_segm = next(segm for segm in segments if segm.split(",")[-2] == str(swap))
-        left_segm_num = int(left_segm.split(",")[-2])
-        right_segm = next((segm for segm in segments if segm.split(",")[0] == str(left_segm_num+1)), None)
-        segments.discard(left_segm)
-        segments.discard(right_segm)
-        new_segment = left_segm + right_segm if right_segm else left_segm
-        segments.add(new_segment)
-        shape.add(new_segment)
-    return shape
-
-
 @lru_cache(maxsize=None)
-def get_swap_space(S):
+def get_swap_space(S: int):
     """
     Returns the swap space for a given number of nodes.
     """
@@ -261,10 +245,9 @@ def get_swap_space(S):
     
     swap_space = []
     for tree, seq in generate_swap_space(S):
-        shape = get_swap_shape([int(s[1:]) for s in seq])
-        mean_length = sum(len(s) for s in shape) / len(shape) if shape else 0
-        swap_space.append((mean_length, tree, seq))
-    
+        symmetry_score = tree.get_symmetry_score()
+        swap_space.append((symmetry_score, tree, seq))
+
     # Sort the swap_space by the score of the simmetricity
     swap_space = sorted(swap_space, key=lambda x: x[0], reverse=True)
     logging.info(f"Most symmetric shapes: {[s[2] for s in swap_space[-3:]]}")
@@ -274,7 +257,6 @@ def get_swap_space(S):
 def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists):
     """
     This function generates a protocol from the symmetricity (gamma) and centering of dists (zeta) parameters.
-    TODO: try implementing another version with another parameter kappa, which is the number of distillations per segment.
     Parameters:
     - gamma: Symmetricity of the protocol, between 0 and 1.
     - zeta: Centering of the ro. of distillation, between 0 and 1.
@@ -309,18 +291,14 @@ def get_protocol_from_center_spacing_symmetricity(gamma, zeta, nodes, max_dists)
     logging.debug(f"Selected index: {selected_idx+1}/{len(swap_space)} \
                  \nSelected swap sequence: {swap_sequence}")
 
-    # Generate the joined sequences of distillations
-    # Sort the joined sequences by their length
-    joined_combs = get_joined_sequences(nodes-1, swap_tree, max_dists)
-    joined_combs = sorted(joined_combs, key=lambda x: (len(x), x))
+    # Chosen comb index is the decimal index of the chosen distillation combination
+    # Convert it to a string representation in base (max_dists+1), preceeded by zeros
+    chosen_comb_idx = round(zeta * (get_distillation_per_swap(nodes-1, max_dists)-1))
     
-    len_joined_combs = len(joined_combs)
-    logging.debug(f"Number of joined sequences: {len_joined_combs}")
-
-    # Sample the sequence of distillations
-    selected_idx = round(zeta * (len_joined_combs-1))
-    logging.debug(f"Selected index: {selected_idx+1}/{len_joined_combs}")
-    protocol = tuple(joined_combs[selected_idx])
+    tree_nodes = 2*(nodes-1) - 1
+    str_repr = str(np.base_repr(chosen_comb_idx, base=max_dists+1)).zfill(tree_nodes)
+    dist_tree = assign_dists_to_tree(swap_tree, tuple(map(int, str_repr)))
+    protocol = dist_tree.get_sequence()
 
     checkAsymProtocol(protocol, nodes-1)
     logging.debug(f"Generated protocol: {protocol}")
