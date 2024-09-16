@@ -12,11 +12,11 @@ GENERAL_RESULT_DIR="./results_asymmetric"
 
 # Define parameters as tuples of t_coh, p_gen, p_swap, w0, nodes, max_dists
 PARAMETER_SETS=(
-    # "360000  0.000000096 0.85 0.36  2  1"
-    # "720000  0.000015    0.85 0.9   3  1"
-    # "1400000 0.00092     0.85 0.952 5  1"
+    "360000  0.000000096 0.85 0.36  2  1"
+    "720000  0.000015    0.85 0.9   3  1"
+    "1400000 0.00092     0.85 0.952 5  1"
     # "1400000 0.00092     0.85 0.952 5  2"
-    "3600000 0.0026      0.85 0.958 11 1"
+    # "3600000 0.0026      0.85 0.958 11 1"
 )
 
 # -----------------------------------------
@@ -37,7 +37,7 @@ PARAMETER_SETS=(
 if [ "$GP_HOMOGENEOUS" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
-        "gp"
+        "bf"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do
@@ -81,8 +81,8 @@ if [ "$GP_HOMOGENEOUS" = "True" ]; then
 
             # Move the output file and the plots to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
-            if ls *_${OPTIMIZER}.png 1> /dev/null 2>&1; then
-                mv *_${OPTIMIZER}.png "$RESULT_DIR/"
+            if ls *${OPTIMIZER}.png 1> /dev/null 2>&1; then
+                mv *${OPTIMIZER}.png "$RESULT_DIR/"
             else
                 echo "No plots yielded for optimizer $OPTIMIZER"
             fi
@@ -166,8 +166,8 @@ if [ "$GP_HETEROGENEOUS" = "True" ]; then
 
             # Move the output file and the plots to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
-            if ls *_${OPTIMIZER}.png 1> /dev/null 2>&1; then
-                mv *_${OPTIMIZER}.png "$RESULT_DIR/"
+            if ls *${OPTIMIZER}.png 1> /dev/null 2>&1; then
+                mv *${OPTIMIZER}.png "$RESULT_DIR/"
             else
                 echo "No plots yielded for optimizer $OPTIMIZER"
             fi

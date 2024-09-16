@@ -183,10 +183,10 @@ The \((\zeta \times |P_{joined}|)\) sequence is selected, such that:
       Time Taken & Max. SKR & Time Taken & Max. SKR \\
       \hline
       \hline
-      35h & $0.78 \times 10^{-4}$ & 44m & $0.78 \times 10^{-4}$ \\
+      105h (exp.) & $0.78 \times 10^{-4}$ & 57m & $0.78 \times 10^{-4}$ \\
       \hline
   \end{tabular}
-  \caption{Bruteforce of all the \textbf{asymmetric protocols} and corresponding Bayesian optimization, considering $N=5$ and $\beta=2$, with protocol space size of $|P| = 3.645 \cdot 10^3$. The parameter regime is $p_{gen} = 9.2 \times 10^{-4}$, $w_0 = 0.952$, $t_{coh} = 1.4 \times 10^6$, equivalent to Case C of Table \ref{tab:hardware_regimes}. Bayesian optimizations are performed with 10 initial points and a total of 100 shots.}
+  \caption{Bruteforce of all the \textbf{asymmetric protocols} and corresponding Bayesian optimization, considering $N=5$ and $\beta=2$, with protocol space size of $|P| = 1.09 \cdot 10^4$. The parameter regime is $p_{gen} = 9.2 \times 10^{-4}$, $w_0 = 0.952$, $t_{coh} = 1.4 \times 10^6$, equivalent to Case C of Table \ref{tab:hardware_regimes}. Bayesian optimization is performed with 10 initial points and a total of 100 shots.}
   \label{tab:validation_regimes}
 \end{table}
 
@@ -199,8 +199,8 @@ which corresponds to the maximally symmetric protocol $(1,1,0,0)$.
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\linewidth, trim=10 10 10 40, clip]{asymmetric/gp5,2/skopt_gp.png}
-  \caption{Results of the Bayesian optimization for $N=5$ and $\beta=2$. The algorithm converges to the optimal protocol in less than 100 evaluations, while a bruteforce algorithm must evaluate all the 3645 protocols.}
-  \label{fig:gp_validation}
+  \caption{Results of the Bayesian optimization for $N=5$ and $\beta=2$. The algorithm converges to the optimal protocol in less than 100 evaluations, while a bruteforce algorithm must evaluate all the 10935 protocols.}
+  \label{fig:gp_validation} 
 \end{figure}
 
 \clearpage
@@ -257,13 +257,13 @@ In Tables \ref{tab:symmetric_protocols} and \ref{tab:asymmetric_protocols}, we p
         & BF time & BF Results & GP time & GP result & $|P|$ \\
         \hline
         \hline
-        A & 5m & 0.0 & - & - & 2 \\
+        A & ... & 0.0 & - & - & 2 \\
         \hline
-        B & 95m & 0.0 & - & - & 4 \\
+        B & ... & 0.0 & - & - & 8 \\
         \hline
-        C & 116m & $0.74 \times 10^{-4}$ & 26m & $0.74 \times 10^{-4}$ & 320 \\
+        C & ... & ... & ... & ... & 640 \\
         \hline
-        D & - & - & 6h & $4.21 \times 10^{-5}$ & $1.27 \times 10^9$ \\
+        D & - & - & 3.5h & $5.27 \times 10^{-5}$ & $2.54 \times 10^9$ \\
         \hline
     \end{tabular}
     \caption{\textbf{Asymmetric Protocols} results. For all the cases we allowed $\beta=1$ possible rounds of distillation for each segment. All the simulations have been run on the Deigo cluster. Bayesian optimizations are performed with 10 initial points and a total of 100 shots.}
@@ -274,14 +274,14 @@ We present Case C of Table \ref{tab:symmetric_protocols} in Figure \ref{fig:symm
 \\\\
 We also present Case D of Table \ref{tab:asymmetric_protocols} in Figure \ref{fig:asymmetric_11_nodes}. The protocol that maximizes the secret key rate is 
 \begin{equation*}
-  \text{('s0', 's2', 'd1', 'd3', 's1', 'd4', 'd5', 's4', 'd3', 'd5', 's3', 's7', 'd8', 'd9', 's8', 'd6', 'd9', 's6', 'd5', 'd9', 's5', 'd9')} . 
+  \text{('d0', 'd1', 's0', 'd2', 'd3', 's2', 'd1', 'd3', 's1', 'd4', 'd5', 's4', 'd3', 'd5', 's3', 'd6', 'd7', 's6', 'd8', 'd9', 's8', 'd7', 'd9', 's7', 'd5', 'd9', 's5')} . 
 \end{equation*}
 
 
 % TODO: update with the new results
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=\linewidth, trim = 10 10 10 50, clip]{symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png}
+  \includegraphics[width=\linewidth, trim = 10 10 10 50, clip]{symmetric/results_gp_centerspace/skopt_gp.png}
   \caption{Results of the GP optimization for 5 nodes (2 symmetric swaps), and up to 5 rounds of distillation (applied to all links in the level). The algorithm converges to the optimal protocol in less than 20 evaluations, while a bruteforce algorithm must evaluate 56 protocols.}
   \label{fig:symmetric_5_nodes}
 \end{figure}
@@ -289,7 +289,7 @@ We also present Case D of Table \ref{tab:asymmetric_protocols} in Figure \ref{fi
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\linewidth, trim = 10 10 10 50, clip]{asymmetric/gp11,1/skopt_gp.png}
-  \caption{Results of the GP optimization for 11 nodes (asymmetric protocol), and up to 1 round of distillation for each link at any level. The algorithm converges to the maximum in less then $100$ evaluations, out of the $1.27 \times 10^9$ possible protocols.}
+  \caption{Results of the GP optimization for 11 nodes (asymmetric protocol), and up to 1 round of distillation for each link at any level.}
   \label{fig:asymmetric_11_nodes}
 \end{figure}
 

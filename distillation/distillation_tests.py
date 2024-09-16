@@ -65,15 +65,14 @@ def single_asym_test():
      ```py -c "from distillation_tests.py import single_test; single_test()"```
     """
     parameters = {
-        't_coh': [700000, 700000, 700000, 700000, 700000],
-        'p_gen': [0.002588, 0.0009187, 0.0009082, 0.0009082],
+        't_coh': 3600000,
+        'p_gen': 0.0026,
         'p_swap': 0.85,
-        'w0': [0.9577, 0.9524, 0.9523, 0.9523],
+        'w0': 0.958,
         "t_trunc": 321168,
-        "L0": [19800, 50400, 60400, 60400] # meters
     }
     
-    parameters["protocol"] = ('d0', 'd2', 's0', 'd2', 's1', 's2')
+    parameters["protocol"] = ('d0', 'd1', 's0', 'd2', 'd3', 's2', 'd1', 'd3', 's1', 'd4', 'd5', 's4', 'd3', 'd5', 's3', 'd6', 'd7', 's6', 'd8', 'd9', 's8', 'd7', 'd9', 's7', 'd5', 'd9', 's5')
     print(get_protocol_rate(parameters))
 
 

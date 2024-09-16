@@ -4,6 +4,6 @@
 
 Unique values: 1
 Time taken:
-real	7m13.955s
-user	6m41.965s
-sys	0m32.821s
+real	6m27.815s
+user	4m54.050s
+sys	0m32.708s

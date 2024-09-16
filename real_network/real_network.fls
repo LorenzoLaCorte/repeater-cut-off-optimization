@@ -788,11 +788,11 @@ INPUT asymmetric/gp5,2/skopt_gp.png
 INPUT ./asymmetric/gp5,2/skopt_gp.png
 INPUT ./asymmetric/gp5,2/skopt_gp.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
-INPUT ./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png
-INPUT ./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png
-INPUT symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png
-INPUT ./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png
-INPUT ./symmetric/results_gp_centerspace/0.9524_2_swaps_skopt_gp.png
+INPUT ./symmetric/results_gp_centerspace/skopt_gp.png
+INPUT ./symmetric/results_gp_centerspace/skopt_gp.png
+INPUT symmetric/results_gp_centerspace/skopt_gp.png
+INPUT ./symmetric/results_gp_centerspace/skopt_gp.png
+INPUT ./symmetric/results_gp_centerspace/skopt_gp.png
 INPUT ./asymmetric/gp11,1/skopt_gp.png
 INPUT ./asymmetric/gp11,1/skopt_gp.png
 INPUT asymmetric/gp11,1/skopt_gp.png
