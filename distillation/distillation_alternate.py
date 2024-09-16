@@ -21,8 +21,8 @@ include_markers = False
 markers = itertools.cycle(['.']*2+['+']*2+['x']*2)
 
 from repeater_algorithm import repeater_sim
-from utility_functions import secret_key_rate, pmf_to_cdf
-from gp_utils import load_config, remove_unstable_werner
+from utility_functions import secret_key_rate, pmf_to_cdf, remove_unstable_werner
+from gp_utils import load_config
 
 from enum import Enum
 

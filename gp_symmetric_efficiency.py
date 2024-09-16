@@ -6,7 +6,7 @@ from argparse import ArgumentParser, Namespace
 import logging
 import time
 
-from gp_utils import OptimizerType, SimParameters, SpaceType, get_protocol_space_size
+from gp_utils import OptimizerType, SimParameters, SpaceType, get_sym_protocol_space_size
 from repeater_algorithm import RepeaterChainSimulation
 from gp_symmetric import gaussian_optimization, brute_force_optimization
 from gp_plots import plot_gp_optimization_efficiency
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     for percentage in gp_shots_percentages:
         logging.info(f"Testing percentage {percentage}...")
 
-        protocol_space_size = get_protocol_space_size("enumerate", min_dists, max_dists, swaps)
+        protocol_space_size = get_sym_protocol_space_size("enumerate", min_dists, max_dists, swaps)
         gp_shots = gp_initial_points + 1 + int(protocol_space_size * percentage)
 
         times[percentage] = {}

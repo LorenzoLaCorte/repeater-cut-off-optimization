@@ -30,11 +30,10 @@ from repeater_mc import repeater_mc, plot_mc_simulation
 from optimize_cutoff import CutoffOptimizer
 from logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data)
-from utility_functions import secret_key_rate, pmf_to_cdf, get_mean_werner, get_mean_waiting_time
-from gp_utils import get_protocol_enum_space, load_config
+from utility_functions import secret_key_rate, pmf_to_cdf, remove_unstable_werner, get_mean_werner, get_mean_waiting_time
+from gp_utils import get_sym_protocol_space, load_config
 
 from matplotlib.ticker import MaxNLocator
-import itertools
 
 from enum import Enum
 
@@ -94,26 +93,6 @@ def single_test():
     
     parameters["protocol"] = (1,1,0,0)
     print(get_protocol_rate(parameters))
-
-
-def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
-    """
-    Removes unstable Werner parameters where the probability mass is below a specified threshold
-    and returns a new Werner parameter array without modifying the input array.
-    
-    Parameters:
-    - pmf (np.array): The probability mass function array.
-    - w_func (np.array): The input Werner parameter array.
-    - threshold (float): The threshold below which Werner parameters are considered unstable.
-    
-    Returns:
-    - np.array: A new Werner parameter array with unstable parameters removed.
-    """
-    new_w_func = w_func.copy()
-    for t in range(len(pmf)):
-        if pmf[t] < threshold:
-            new_w_func[t] = np.nan
-    return new_w_func
 
 
 def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False):
@@ -453,8 +432,8 @@ def optimality_test_seven_nodes_protocols(parameters, min_dists, max_dists):
     """
 
     # Get the permutation spaces for the two blocks
-    b1_space = [(0,0), (0,1,0), (1,0,0)] # get_protocol_enum_space(min_dists, max_dists, number_of_swaps=2)
-    b2_space = [(0,), (1,0), (0,1)] # get_protocol_enum_space(min_dists, max_dists, number_of_swaps=1)
+    b1_space = [(0,0), (0,1,0), (1,0,0)] # get_sym_protocol_space(min_dists, max_dists, number_of_swaps=2)
+    b2_space = [(0,), (1,0), (0,1)] # get_sym_protocol_space(min_dists, max_dists, number_of_swaps=1)
 
     b1_results = {}
     b2_results = {}
@@ -498,7 +477,7 @@ def hw_varying_experiment(hw_param_name: str, hw_param_val_range,
     and plots the results for the different protocols for different metrics
     """
     parameters = copy.deepcopy(parameters)
-    protocol_space = get_protocol_enum_space(min_dists, max_dists, number_of_swaps)
+    protocol_space = get_sym_protocol_space(min_dists, max_dists, number_of_swaps)
     val_range = hw_param_val_range
 
     results = {}

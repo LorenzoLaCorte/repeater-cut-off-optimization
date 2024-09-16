@@ -3,7 +3,7 @@ import itertools
 import logging
 import time
 import pytest
-from gp_utils import catalan_number, get_asym_protocol_space, get_asym_protocol_space_size, get_distillation_per_swap, get_joined_sequences, get_protocol_enum_space, get_no_of_permutations_per_swap, get_protocol_from_center_spacing_symmetricity, get_swap_space
+from gp_utils import get_catalan_number, get_asym_protocol_space, get_asym_protocol_space_size, get_distillation_per_shape, get_joined_space, get_sym_protocol_space, get_no_of_permutations_per_swap, get_protocol_from_center_spacing_symmetricity, get_swap_space
 from repeater_types import checkAsymProtocol
 
 logging.basicConfig(level=logging.DEBUG)
@@ -23,18 +23,18 @@ def test_symmetricity_score(nodes, expected_best_protocol):
     assert best_protocol == expected_best_protocol, f"Expected {expected_best_protocol}, got {best_protocol}"
 
 
-@pytest.mark.parametrize("nodes, max_dists, gamma, kappa, zeta, tau, expected_protocol", [
-    (5, 2, 1, 8, 0, 0, ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 'd2', 'd3', 'd3', 's2', 's1')),
-    (5, 2, 1, 0, 0, 0, ("s0", "s2", "s1")),
-    (5, 2, 1, 1, 0, 0, ("d0", "s0", "s2", "s1")),
+@pytest.mark.parametrize("nodes, max_dists, gamma, kappa, eta, tau, expected_protocol", [
+    (5, 2, 1, 4, -1, 0, ('d0', 'd0', 'd1', 'd1', 's0', 's2', 's1')),
+    (5, 2, 1, 0, -1, 0, ("s0", "s2", "s1")),
+    (5, 2, 1, 1, -1, 0, ("d0", "s0", "s2", "s1")),
     (5, 2, 1, 2, 1, 0, ("s0", "s2", "s1", "d3", "d3")),
     (5, 1, 1, 1*(2*4-1), 0.5, 0.5, ('d0', 'd1', 's0', 'd2', 'd3', 's2', 'd1', 'd3', 's1', 'd3')),
 ])
-def test_protocol_getter(nodes, max_dists, gamma, kappa, zeta, tau, expected_protocol):
+def test_protocol_getter(nodes, max_dists, gamma, kappa, eta, tau, expected_protocol):
     """
     Test the protocol getter.
     """
-    protocol = get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, zeta, tau)
+    protocol = get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, eta, tau)
     assert protocol == expected_protocol, f"Expected {expected_protocol}, got {protocol}"
 
 
@@ -45,7 +45,7 @@ def test_asymmetric_protocol_space(nodes, max_dists):
     """
     S = nodes - 1
     swap_space = get_swap_space(S)
-    assert len(swap_space) == catalan_number(nodes-2), f"Expected {catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
+    assert len(swap_space) == get_catalan_number(nodes-2), f"Expected {get_catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
     
     space = get_asym_protocol_space(nodes, max_dists)
     for sequence in space:
@@ -68,7 +68,7 @@ def test_symmetric_protocol_space(min_dists, max_dists, number_of_swaps):
     Test the symmetric protocol space, including a different (and slower) implementation, which is used for testing.
     """
     start_time = time.time()
-    test_space = get_protocol_enum_space(min_dists, max_dists, number_of_swaps)
+    test_space = get_sym_protocol_space(min_dists, max_dists, number_of_swaps)
     print(f"\nElapsed time: {time.time() - start_time} seconds (getter, i.e. current implementation)")
 
     start_time = time.time()

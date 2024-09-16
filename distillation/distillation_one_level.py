@@ -28,11 +28,17 @@ plt.rcParams['axes.prop_cycle'] = plt.cycler(color=colorblind_palette)
 markers = itertools.cycle(['.', '+', 'x'])
 
 from repeater_algorithm import repeater_sim
-from utility_functions import secret_key_rate, pmf_to_cdf
-from gp_utils import load_config, index_lowercase_alphabet, remove_unstable_werner
+from utility_functions import secret_key_rate, pmf_to_cdf, remove_unstable_werner
+from gp_utils import load_config
 
 config = load_config('config.json')
 
+
+def index_lowercase_alphabet(i):
+    """
+    Takes in input an integer i and returns the corresponding lowercase letter in the alphabet.
+    """
+    return chr(i + 97)
 
 def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False, general_title=None):
     """

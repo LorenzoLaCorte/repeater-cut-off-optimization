@@ -32,12 +32,13 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 
 from gp_plots import plot_optimization_process
 from gp_utils import (
-    spaceType, SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
-    index_lowercase_alphabet, remove_unstable_werner, write_results, # Utils
-    get_protocol_enum_space, get_protocol_space_size,  # Getters for Spaces
+    write_results, # Utils
+    get_sym_protocol_space, get_sym_protocol_space_size,  # Getters for Spaces
     get_protocol_from_distillations, get_protocol_from_strategy, get_protocol_from_center_and_spacing, # Getters for Protocols
     get_all_maxima, get_t_trunc, get_ordered_results, # Other Getters
 ) 
+
+from repeater_types import SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, spaceType # Typing
 
 from repeater_algorithm import RepeaterChainSimulation
 from utility_functions import secret_key_rate, pmf_to_cdf
@@ -100,9 +101,9 @@ def brute_force_optimization(simulator, parameters: SimParameters, space_type: S
                 for where_to_distill in range(number_of_swaps+1):
                     space.append(get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_distill))
         elif space_type == "enumerate":
-            space = get_protocol_enum_space(min_dists, max_dists, number_of_swaps)
+            space = get_sym_protocol_space(min_dists, max_dists, number_of_swaps)
         
-        protocol_space_size = get_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
+        protocol_space_size = get_sym_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
         assert len(space) == protocol_space_size, \
             f"Expected {protocol_space_size} protocols, got {len(space)}"
 
@@ -221,7 +222,7 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
         logging.info(f"\n\nNumber of swaps: {number_of_swaps}")
         
         global protocol_space_size # TODO: refactor in order to avoid using global variables
-        protocol_space_size = get_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
+        protocol_space_size = get_sym_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
 
         # Define reasonable default values (in terms of a percentage of the protocol space size)
         if gp_initial_points is None:
@@ -310,10 +311,10 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
 if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
-    parser.add_argument("--min_swaps", type=int, default=3, help="Minimum number of levels of SWAP to be performed")
-    parser.add_argument("--max_swaps", type=int, default=3, help="Maximum number of levels of SWAP to be performed")
+    parser.add_argument("--min_swaps", type=int, default=2, help="Minimum number of levels of SWAP to be performed")
+    parser.add_argument("--max_swaps", type=int, default=2, help="Maximum number of levels of SWAP to be performed")
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum round of distillations to be performed")
-    parser.add_argument("--max_dists", type=int, default=5, help="Maximum round of distillations to be performed")
+    parser.add_argument("--max_dists", type=int, default=2, help="Maximum round of distillations to be performed")
     
     parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
@@ -392,7 +393,7 @@ if __name__ == "__main__":
         raise ValueError("Gaussian Process not supported for enumerate space, use 'one_level' or 'strategy'")
     
     # If the gp shots are enough to bruteforce the biggest (max. swap) solution, use a bf algorithm
-    if gp_shots is not None and gp_shots >= get_protocol_space_size(space, min_dists, max_dists, max_swaps):
+    if gp_shots is not None and gp_shots >= get_sym_protocol_space_size(space, min_dists, max_dists, max_swaps):
         logging.info("GP shots are enough to bruteforce the solutions, using brute force algorithm")
         optimizer = "bf"
         gp_shots = None

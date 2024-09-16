@@ -8,7 +8,7 @@ import os
 # Add the parent directory to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 
-from gp_utils import get_protocol_enum_space, get_no_of_permutations_per_swap
+from gp_utils import get_sym_protocol_space, get_no_of_permutations_per_swap
 import matplotlib.pyplot as plt
 
 logging.getLogger().level = logging.INFO
@@ -47,7 +47,7 @@ def compute_complexity(min_dists, max_dists, min_swaps, max_swaps, dp=False):
 
         if to_check:
             logging.info(f"\n\nChecking complexity for swaps={number_of_swaps}")
-            protocol_space = get_protocol_enum_space(min_dists, max_dists, number_of_swaps)
+            protocol_space = get_sym_protocol_space(min_dists, max_dists, number_of_swaps)
 
         if not dp:
             round_complexity = analytical_no_dp_complexity(min_dists, max_dists, number_of_swaps)

@@ -17,11 +17,12 @@ from skopt.utils import use_named_args
 
 from gp_plots import plot_optimization_process
 from gp_utils import (
-    optimizerType, OptimizerType, ThresholdExceededError, SimParameters, # Typing
     get_asym_protocol_space,  # Getters for Spaces
     get_protocol_from_center_spacing_symmetricity, # Getters for Protocols
     get_t_trunc, get_ordered_results, # Other Getters
 ) 
+
+from repeater_types import optimizerType, OptimizerType, ThresholdExceededError, SimParameters # Typing
 
 from repeater_algorithm import RepeaterChainSimulation
 from utility_functions import pmf_to_cdf, secret_key_rate
@@ -125,14 +126,14 @@ def objective_key_rate(space, nodes, max_dists, shot_count, gp_shots, parameters
     """
     shot_count[0] += 1
     gamma = space["gamma"]
-    zeta = space["zeta"]
+    eta = space["eta"]
     tau = space["tau"]
     kappa = space["rounds of distillation"]
 
-    logging.info(f"\n\nGenerating a protocol with gamma={gamma}, zeta={zeta}, tau={tau}, kappa={kappa}")
-    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, zeta, tau)
+    logging.info(f"\n\nGenerating a protocol with gamma={gamma}, eta={eta}, tau={tau}, kappa={kappa}")
+    parameters["protocol"] = get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, eta, tau)
     logging.info(f"Protocol generated: {parameters['protocol']}")
-    strategy_to_protocol[(kappa, gamma, zeta, tau)] = parameters["protocol"]
+    strategy_to_protocol[(kappa, gamma, eta, tau)] = parameters["protocol"]
 
     if parameters["protocol"] in cache_results:
         logging.info("Already evaluated protocol, returning cached result")
@@ -176,7 +177,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
         Integer(0, v * max_dists, name='rounds of distillation') \
             if max_dists != 0 else Categorical([0], name='rounds of distillation'),
         Real(0, 1, name='gamma'),
-        Real(0, 1, name='zeta'),
+        Real(-1, 1, name='eta'),
         Real(0, 1, name='tau')
     ]
 
@@ -218,15 +219,15 @@ if __name__ == "__main__":
     parser: ArgumentParser = ArgumentParser()
 
     parser.add_argument("--nodes", type=int, default=5, help="Number of nodes in the chain")
-    parser.add_argument("--max_dists", type=int, default=3, help="Maximum round of distillations of each segment per level")
+    parser.add_argument("--max_dists", type=int, default=2, help="Maximum round of distillations of each segment per level")
 
     parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--gp_shots", type=int, default=500,
+    parser.add_argument("--gp_shots", type=int, default=100,
                         help=(  "Number of shots for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
     
-    parser.add_argument("--gp_initial_points", type=int, default=50,
+    parser.add_argument("--gp_initial_points", type=int, default=10,
                         help=(  "Number of initial points for Gaussian Process optimization"
                                 "If not specified, it is computed dynamically based on the protocol"))
        

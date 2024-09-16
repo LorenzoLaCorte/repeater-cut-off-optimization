@@ -34,31 +34,12 @@ from repeater_mc import repeater_mc, plot_mc_simulation
 from optimize_cutoff import CutoffOptimizer
 from logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data, load_data)
-from utility_functions import secret_key_rate, pmf_to_cdf
+from utility_functions import remove_unstable_werner, secret_key_rate, pmf_to_cdf
 from distillation.distillation_alternate import save_plot, plot_pmf_cdf_werner
 
 from matplotlib.ticker import MaxNLocator
 import itertools
 
-
-def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
-    """
-    Removes unstable Werner parameters where the probability mass is below a specified threshold
-    and returns a new Werner parameter array without modifying the input array.
-    
-    Parameters:
-    - pmf (np.array): The probability mass function array.
-    - w_func (np.array): The input Werner parameter array.
-    - threshold (float): The threshold below which Werner parameters are considered unstable.
-    
-    Returns:
-    - np.array: A new Werner parameter array with unstable parameters removed.
-    """
-    new_w_func = w_func.copy()
-    for t in range(len(pmf)):
-        if pmf[t] < threshold:
-            new_w_func[t] = np.nan
-    return new_w_func
 
 
 def entanglement_generation(p_gen=0.5, t_trunc=20):

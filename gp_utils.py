@@ -4,12 +4,10 @@ import logging
 import math
 import numpy as np
 
-from argparse import ArgumentTypeError
-
 import itertools
 import ast
 
-from typing import List, Literal, Tuple, TypedDict
+from typing import List, Tuple
 
 from scipy.special import binom
 from scipy.optimize import OptimizeResult
@@ -17,77 +15,96 @@ from skopt.space import Categorical
 from scipy.stats import norm
 
 from protocol_asymmetric import SwapTreeVertex, assign_dists_to_tree, generate_swap_space, generate_dists_combs
-from repeater_types import checkAsymProtocol
+from repeater_types import SpaceType, checkAsymProtocol
 
 logging.basicConfig(level=logging.INFO)
 
-# TODO: move these types to repeater_types.py
-# Define the exception for the CDF coverage
-class ThresholdExceededError(Exception):
+# -------------------------------
+# Plotting and Storing of Results
+# -------------------------------
+
+def load_config(config_file):
     """
-    This exception is raised when the CDF coverage is below the threshold.
+    Load configuration file.
     """
-    def __init__(self, message="CDF under threshold count incremented", extra_info=None):
-        super().__init__(message)
-        self.extra_info = extra_info
-
-# Define a type for the parameters
-class SimParameters(TypedDict):
-    protocol: Tuple[int]
-    t_coh: float
-    p_gen: float
-    p_swap: float
-    w0: float
-
-# Define the type for the optimizer
-OptimizerType = Literal["bf", "gp"]
-
-# Validation function for the optimizer type
-def optimizerType(value: str) -> OptimizerType:
-    valid_options = ("gp", "bf")
-    if value not in valid_options:
-        raise ArgumentTypeError(f"Invalid optimizer type: {value}. Available options are: {', '.join(valid_options)}")
-    return value
-
-# Define the type for space_type
-SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace", "asymmetric"]
-
-# Validation function for the space type
-def spaceType(value: str) -> SpaceType:
-    # TODO: refactor: valid_options = SpaceType.__args__
-    valid_options = ("one_level", "strategy", "enumerate", "centerspace", "asymmetric")
-    if value not in valid_options:
-        raise ArgumentTypeError(f"Invalid space type: {value}. Available options are: {', '.join(valid_options)}")
-    return value
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
 
 
-def index_lowercase_alphabet(i):
+def get_t_trunc(p_gen, p_swap, t_coh, nested_swaps, nested_dists, epsilon=0.01):
     """
-    Takes in input an integer i and returns the corresponding lowercase letter in the alphabet.
+    This function is derived from Brand et. al, with an adjustment for distillation.
+    TODO: it is a very lossy bound, it should be improved, to get the simulation going faster (mantaining cdf coverage).
+    Returns the truncation time based on a lower bound of what is sufficient to reach (1-epsilon) of the simulation cdf.
     """
-    return chr(i + 97)
+    t_trunc = int((2/p_swap)**(nested_swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
+
+    p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
+    t_trunc *= (1/p_dist)**(nested_dists) # considering distillation, but very unprecise
+
+    # Introduce a factor to reduce the truncation time, as the previous bound is very lossy
+    reduce_factor = 10
+    t_trunc = min(max(t_coh, t_trunc//reduce_factor), t_coh * 300)
+    return int(t_trunc)
 
 
-def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
+def get_ordered_results(result: OptimizeResult, space_type: SpaceType, number_of_swaps) -> List[Tuple[np.float64, Tuple[int]]]:
     """
-    Removes unstable Werner parameters where the probability mass is below a specified threshold
-    and returns a new Werner parameter array without modifying the input array.
-
-    Parameters:
-    - pmf (np.array): The probability mass function array.
-    - w_func (np.array): The input Werner parameter array.
-    - threshold (float): The threshold below which Werner parameters are considered unstable.
+    This function adjust the results to be positive and returns an ordered list of (key_rate, protocol)
+    """
+    result.fun = -result.fun
+    result.func_vals = [-val for val in result.func_vals]
+    assert len(result.x_iters) == len(result.func_vals)
     
-    Returns:
-    - np.array: A new Werner parameter array with unstable parameters removed.
+    if space_type == "one_level":
+        result_tuples = [(  result.func_vals[i], 
+                            get_protocol_from_distillations(
+                                number_of_swaps=number_of_swaps,
+                                number_of_dists=result.x_iters[i][0], 
+                                where_to_distill=result.x_iters[i][1])
+                         )  
+                        for i in range(len(result.func_vals))]
 
-     note: it is used in plots to remove oscillations in the plot.
+    elif space_type == "enumerate":
+        result_tuples = [(result.func_vals[i], ast.literal_eval(result.x_iters[i][0])) for i in range(len(result.func_vals))]
+
+    elif space_type == "strategy" or space_type == "centerspace" or space_type == "asymmetric":
+        result_tuples = [(result.func_vals[i], result.x_iters[i][-1]) for i in range(len(result.func_vals))]
+
+    ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)
+    return ordered_results
+
+
+def write_results(filename, parameters, best_results):
     """
-    new_w_func = w_func.copy()
-    for t in range(len(pmf)):
-        if pmf[t] < threshold:
-            new_w_func[t] = np.nan
-    return new_w_func
+    Write optimization results to file.
+    """
+    with open(filename, 'a') as file:
+        output = (
+                    f"\nProtocol parameters:\n"
+                    f"{{\n"
+                    f"    't_coh': {parameters['t_coh']},\n"
+                    f"    'p_gen': {parameters['p_gen']},\n"
+                    f"    'p_swap': {parameters['p_swap']},\n"
+                    f"    'w0': {parameters['w0']}\n"
+                    f"}}\n\n")
+            
+        for number_of_swaps, (best_protocol, best_score, error_coverage) in best_results.items():
+            if best_protocol is None:
+                print(f"CDF under threshold for {number_of_swaps} swaps")
+                output += (
+                        f"CDF under threshold for {number_of_swaps} swaps:\n"
+                        f"    CDF coverage: {error_coverage*100}%\n\n"
+                    )
+            else:
+                output += (
+                        f"Best configuration for {number_of_swaps} swaps:\n"
+                        f"    Best Protocol: {best_protocol}\n"
+                        f"    Best secret key rate: {best_score}\n\n"
+                    )
+            
+        file.write(output)
 
 
 def get_all_maxima(ordered_results: List[Tuple[np.float64, Tuple[int]]], min_dists, max_dists) -> List[Tuple[np.float64, Tuple[int]]]:
@@ -108,7 +125,184 @@ def get_all_maxima(ordered_results: List[Tuple[np.float64, Tuple[int]]], min_dis
     return maxima
 
 
-def get_protocol_space_size(space_type: SpaceType, min_dists, max_dists, number_of_swaps):
+# -------------------------------
+# Asymmetric Spaces
+# -------------------------------
+
+
+def get_catalan_number(n):
+    """
+    Returns the n-th Catalan number.
+    """
+    return math.comb(2*n, n) // (n + 1)
+
+
+def get_distillation_per_shape(S: int, max_dists: int) -> int:
+    """
+    Returns the number of distillations per swapTree (shape).
+    """
+    return (max_dists+1)**(2*S-1)
+
+
+def get_asym_protocol_space_size(nodes: int, max_dists: int) -> int:
+    """
+    Returns the space of asymmetric protocols to be tested,
+     by analytical derivation.
+    """
+    if nodes < 2:
+        raise ValueError("N should be at least 2")
+    elif nodes == 2:
+        return max_dists + 1
+    
+    S = nodes - 1
+
+    expected = get_catalan_number(nodes-2) * get_distillation_per_shape(S, max_dists)
+    return expected
+
+
+def get_asym_protocol_space(nodes: int, max_dists: int) -> List[Tuple[str]]:
+    """
+    Returns the space of asymmetric protocols to be tested, sorted by length of the protocols.
+    """
+    space = []
+    S = nodes - 1
+
+    swap_space = get_swap_space(S)
+    assert len(swap_space) == get_catalan_number(nodes-2), f"Expected {get_catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
+
+    for idx, (_, swap_tree, swap_sequence) in enumerate(swap_space):
+        logging.info(f"{idx+1}/{len(swap_space)} Generating protocols for swap sequence {swap_sequence}...")
+        space.extend(get_joined_space(S, swap_tree, max_dists))
+
+    expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
+    assert len(space) == expected_protocols, \
+        f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
+    
+    space = sorted(space, key=lambda x: (len(x), x))
+    return space
+
+
+def get_joined_space(S: int, swap_tree: SwapTreeVertex, max_dists: int) -> List[Tuple[str]]:
+    """
+    Returns the space of all combinations for a given swap tree and a maximum number of distillations.
+    """
+    vertices = 2*S - 1
+    space: List[Tuple[str]] = []
+
+    for edgeLabeledShape in generate_dists_combs(vertices, swap_tree, max_dists):
+        space.append(edgeLabeledShape.get_sequence())
+
+    return space
+
+
+@lru_cache(maxsize=None) 
+def get_swap_space(S: int):
+    """
+    Returns the swap space for a given number of nodes
+        with information about
+        - the simmetricity score 
+        - the swap tree
+        - the swap sequence
+
+    Cached to avoid asking the same swap space multiple times
+    """
+    if S < 1:
+        raise ValueError("S should be at least 1")
+    
+    swap_space = []
+    for tree, seq in generate_swap_space(S):
+        symmetry_score = tree.get_symmetry_score()
+        swap_space.append((symmetry_score, tree, seq))
+
+    return swap_space
+
+
+def sample_asymmetric_protocol_distillations(kappa, mu, sigma, v, beta):
+    """
+    Generates a sequence of values for the distillation rounds in the segments
+      by sampling them from a normal distribution.
+
+    Parameters:
+    - kappa (float): The total number of rounds of distillation to be performed among all segments.
+    - mu (float): The mean of the distribution from which to sample distillation rounds per segment.
+    - sigma (float): The std. dev. of the distribution from which to sample distillation rounds per segment.
+    - v (float): The parameter for the total number of rounds of distillation to be performed among all segments.
+    - beta (float): The parameter for the simmetricity of the swap tree.
+    """
+    if kappa == 0:
+        return []
+    
+    dists = [0]*v
+    
+    while sum(dists) < kappa:
+        # Generate a sample from the normal distribution
+        # Assign out-of-bound values to the closest limit (0 or v-1)
+        sample = int(np.round(np.random.normal(mu, sigma)))
+        sample = np.clip(sample, 0, v-1)
+        
+        # Add the sample if it hasn't been chosen more than beta times
+        if dists[sample] < beta:
+            dists[sample] += 1
+        else:
+            # Increase sigma to avoid infinite loops
+            sigma += 0.01
+
+    return dists
+
+
+def get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, eta, tau):
+    """
+    Generates a protocol from its parameters.
+
+    Parameters:
+    - nodes (int): The number of nodes in the repeater chain.
+    - max_dists (int): The maximum number of rounds of distillation to be performed.
+    - gamma (float): The simmetricity of the swap tree.
+    - kappa (float): The total number of rounds of distillation to be performed among all segments.
+    - eta (float): The parameter for deriving the mean of the distribution from which to sample distillation rounds per segment.
+    - tau (float): The parameter for deriving the std. dev. of the distribution from which to sample distillation rounds per segment.
+    
+    """
+    # Get and order the swap space by symmetry score (ascending)
+    swap_space = get_swap_space(nodes-1)
+    swap_space = sorted(swap_space, key=lambda x: x[0])
+    logging.debug(f"Most symmetric shapes: {swap_space[-1][1]}, {swap_space[-2][1]}, {swap_space[-3][1]}") 
+                 
+    # Sample the sequence of swaps
+    selected_idx = round(gamma * (len(swap_space)-1))
+    _, swap_tree, swap_sequence = swap_space[selected_idx]
+    logging.debug(f"Selected index: {selected_idx+1}/{len(swap_space)} \
+                 \nSelected swap sequence: {swap_sequence}")
+
+    # Define the parameters for sampling the distillation rounds
+    v = 2 * (nodes - 1) - 1 # number of segments
+    mu = ((eta + 1) * (v - 1)) // 2 # mean of the distribution (if low, distillations are happening at the leaves (beginning))
+    sigma = tau * (v-1) # std. dev. of the distribution
+
+    # Sample the values for the rounds distillations for segments, from a normal distribution N(mu, sigma)
+    dists_tuple = sample_asymmetric_protocol_distillations(kappa, mu, sigma, v, beta=max_dists)
+    logging.debug(f"Sampled distillation rounds: {dists_tuple}")
+    dist_tree = assign_dists_to_tree(swap_tree, dists_tuple)
+    protocol = dist_tree.get_sequence()
+
+    checkAsymProtocol(protocol, nodes-1)
+    logging.debug(f"Generated protocol: {protocol}")
+    return protocol
+
+
+# -------------------------------
+# Symmetric Spaces
+# -------------------------------
+
+
+def get_no_of_permutations_per_swap(min_dists, max_dists, s):
+    """
+    Returns the total number of permutations to be tested for a fixed number of swaps.
+    """
+    return int(sum([binom(s + d, d) for d in range(min_dists, max_dists + 1)]))
+
+
+def get_sym_protocol_space_size(space_type: SpaceType, min_dists, max_dists, number_of_swaps):
     """
     Returns the total number of protocols to be tested 
         for a specific space type and number of swaps.
@@ -122,25 +316,7 @@ def get_protocol_space_size(space_type: SpaceType, min_dists, max_dists, number_
         return get_no_of_permutations_per_swap(min_dists, max_dists, number_of_swaps)
 
 
-def get_no_of_permutations_per_swap(min_dists, max_dists, s):
-    """
-    Returns the total number of permutations to be tested for a fixed number of swaps.
-    """
-    return int(sum([binom(s + d, d) for d in range(min_dists, max_dists + 1)]))
-
-
-def get_analytical_permutations(min_dists, max_dists, min_swaps, max_swaps):
-    """
-    Returns the total number of permutations to be tested.
-    """
-    total_permutations = 0
-    for s in range(min_swaps, max_swaps + 1):
-        permutations = get_no_of_permutations_per_swap(s, min_dists, max_dists)
-        total_permutations += permutations
-    return total_permutations
-
-
-def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=False):
+def get_sym_protocol_space(min_dists, max_dists, number_of_swaps, skopt_space=False):
     """
     The permutation space is used to test all the possible combinations of distillations for a fixed number of swaps.
     For each number of distillation tested, we test all the possible permutations of distillations. 
@@ -170,167 +346,7 @@ def get_protocol_enum_space(min_dists, max_dists, number_of_swaps, skopt_space=F
     return space
 
 
-def catalan_number(n):
-    """
-    Returns the n-th Catalan number.
-    """
-    return math.comb(2*n, n) // (n + 1)
-
-
-def get_distillation_per_swap(S: int, max_dists: int) -> int:
-    """
-    Returns the number of distillations per swap.
-    """
-    return (max_dists+1)**(2*S-1)
-
-def get_asym_protocol_space_size(nodes: int, max_dists: int) -> int:
-    """
-    Returns the space of asymmetric protocols to be tested,
-     by analytical derivation.
-    """
-    if nodes < 2:
-        raise ValueError("N should be at least 2")
-    elif nodes == 2:
-        return max_dists + 1
-    
-    S = nodes - 1
-
-    expected = catalan_number(nodes-2) * get_distillation_per_swap(S, max_dists)
-    return expected
-
-
-def get_asym_protocol_space(nodes: int, max_dists: int) -> List[Tuple[str]]:
-    """
-    Returns the space of asymmetric protocols to be tested, sorted by length of the protocols.
-    For each number of distillation tested, we test all the possible asymmetric protocols.
-    TODO: consider ordering the swap space by symmetry score.
-    """
-    space = []
-    S = nodes - 1
-
-    swap_space = get_swap_space(S)
-    assert len(swap_space) == catalan_number(nodes-2), f"Expected {catalan_number(nodes-2)} swap sequences, got {len(swap_space)}"
-
-    for idx, (_, swap_tree, swap_sequence) in enumerate(swap_space):
-        logging.info(f"{idx+1}/{len(swap_space)} Generating protocols for swap sequence {swap_sequence}...")
-        space.extend(get_joined_sequences(S, swap_tree, max_dists))
-
-    expected_protocols = get_asym_protocol_space_size(nodes, max_dists)
-    assert len(space) == expected_protocols, \
-        f"Expected {get_asym_protocol_space_size(nodes, max_dists)} protocols, got {len(space)}"
-    
-    space = sorted(space, key=lambda x: (len(x), x))
-    return space
-
-
-def get_joined_sequences(S: int, swap_tree: SwapTreeVertex, max_dists: int) -> List[Tuple[str]]:
-    """
-    Returns the space of edge combinations for a given swap tree and a maximum number of distillations.
-    """
-    vertices = 2*S - 1
-    space: List[Tuple[str]] = []
-
-    for edgeLabeledShape in generate_dists_combs(vertices, swap_tree, max_dists):
-        space.append(edgeLabeledShape.get_sequence())
-
-    return space
-
-
-@lru_cache(maxsize=None)
-def get_swap_space(S: int):
-    """
-    Returns the swap space for a given number of nodes
-        with information about
-        - the simmetricity score 
-        - the swap tree
-        - the swap sequence
-    """
-    if S < 1:
-        raise ValueError("S should be at least 1")
-    
-    swap_space = []
-    for tree, seq in generate_swap_space(S):
-        symmetry_score = tree.get_symmetry_score()
-        swap_space.append((symmetry_score, tree, seq))
-
-    return swap_space
-
-
-def sample_asymmetric_protocol_distillations(kappa, mu, sigma, v, beta):
-    """
-    Generates a sequence of values for the distillation rounds in the segments
-      by sampling them from a normal distribution.
-
-    Parameters:
-    - kappa (float): The total number of rounds of distillation to be performed among all segments.
-    - mu (float): The mean of the distribution from which to sample distillation rounds per segment.
-    - sigma (float): The std. dev. of the distribution from which to sample distillation rounds per segment.
-    - v (float): The parameter for the total number of rounds of distillation to be performed among all segments.
-    - beta (float): The parameter for the simmetricity of the swap tree.
-    
-    TODO: Increase sigma to avoid infinite loops (maybe a better approach is needed)
-    """
-    if kappa == 0:
-        return []
-    
-    dists = [0]*v
-    
-    while sum(dists) < kappa:
-        # Generate a sample from the normal distribution
-        # Assign out-of-bound values to the closest limit (0 or v-1)
-        sample = int(np.round(np.random.normal(mu, sigma)))
-        sample = np.clip(sample, 0, v-1)
-        
-        # Add the sample if it hasn't been chosen more than beta times
-        if dists[sample] < beta:
-            dists[sample] += 1
-        else:
-            # Increase sigma to avoid infinite loops
-            sigma += 0.01
-
-    return dists
-
-
-def get_protocol_from_center_spacing_symmetricity(nodes, max_dists, gamma, kappa, zeta, tau):
-    """
-    Generates a protocol from its parameters.
-
-    Parameters:
-    - nodes (int): The number of nodes in the repeater chain.
-    - max_dists (int): The maximum number of rounds of distillation to be performed.
-    - gamma (float): The simmetricity of the swap tree.
-    - kappa (float): The total number of rounds of distillation to be performed among all segments.
-    - zeta (float): The parameter for deriving the mean of the distribution from which to sample distillation rounds per segment.
-    - tau (float): The parameter for deriving the std. dev. of the distribution from which to sample distillation rounds per segment.
-    """
-    # Get and order the swap space by symmetry score (ascending)
-    swap_space = get_swap_space(nodes-1)
-    swap_space = sorted(swap_space, key=lambda x: x[0])
-    logging.debug(f"Most symmetric shapes: {swap_space[-1][1]}, {swap_space[-2][1]}, {swap_space[-3][1]}") 
-                 
-    # Sample the sequence of swaps
-    selected_idx = round(gamma * (len(swap_space)-1))
-    _, swap_tree, swap_sequence = swap_space[selected_idx]
-    logging.debug(f"Selected index: {selected_idx+1}/{len(swap_space)} \
-                 \nSelected swap sequence: {swap_sequence}")
-
-    # Define the parameters for sampling the distillation rounds
-    v = 2 * (nodes - 1) - 1 # number of segments
-    mu = zeta * (v-1) # mean of the distribution (if low, distillations are happening at the leaves (beginning))
-    sigma = tau * (v-1) # std. dev. of the distribution
-
-    # Sample the values for the rounds distillations for segments, from a normal distribution N(mu, sigma)
-    dists_tuple = sample_asymmetric_protocol_distillations(kappa, mu, sigma, v, beta=max_dists)
-    logging.debug(f"Sampled distillation rounds: {dists_tuple}")
-    dist_tree = assign_dists_to_tree(swap_tree, dists_tuple)
-    protocol = dist_tree.get_sequence()
-
-    checkAsymProtocol(protocol, nodes-1)
-    logging.debug(f"Generated protocol: {protocol}")
-    return protocol
-
-
-def sample_symmetric_protocol_element(strategy, strategy_weight, protocol, idx, dists_target):
+def sample_protocol_element(strategy, strategy_weight, protocol, idx, dists_target):
     """
     Returns 0 (swap) or 1 (distillation) based on the input parameters.
 
@@ -387,7 +403,7 @@ def get_protocol_from_strategy(strategy, strategy_weight, number_of_swaps, numbe
     protocol = [None] * (number_of_swaps + number_of_dists)
 
     for idx, _ in enumerate(protocol):
-        protocol[idx] = int(sample_symmetric_protocol_element(strategy, strategy_weight, protocol, idx, number_of_dists))
+        protocol[idx] = int(sample_protocol_element(strategy, strategy_weight, protocol, idx, number_of_dists))
 
     assert protocol.count(1) == number_of_dists, f"Expected {number_of_dists} distillations, got {protocol.count(1)}"
     return tuple(protocol)
@@ -465,84 +481,3 @@ def get_protocol_from_distillations(number_of_swaps, number_of_dists, where_to_d
         protocol = swaps[:where_to_distill] + distillations + swaps[where_to_distill:]
     
     return tuple(protocol)
-
-
-def get_t_trunc(p_gen, p_swap, t_coh, nested_swaps, nested_dists, epsilon=0.01):
-    """
-    This function is derived from Brand et. al, with an adjustment for distillation.
-    TODO: it is a very lossy bound, it should be improved, to get the simulation going faster (mantaining cdf coverage).
-    Returns the truncation time based on a lower bound of what is sufficient to reach (1-epsilon) of the simulation cdf.
-    """
-    t_trunc = int((2/p_swap)**(nested_swaps) * (1/p_gen) * (1/epsilon)) # not considering distillation
-
-    p_dist = 0.5 # in the worst case, p_dist will never go below 0.5
-    t_trunc *= (1/p_dist)**(nested_dists) # considering distillation, but very unprecise
-
-    # Introduce a factor to reduce the truncation time, as the previous bound is very lossy
-    reduce_factor = 5
-    t_trunc = min(max(t_coh, t_trunc//reduce_factor), t_coh * 300)
-    return int(t_trunc)
-
-
-def get_ordered_results(result: OptimizeResult, space_type: SpaceType, number_of_swaps) -> List[Tuple[np.float64, Tuple[int]]]:
-    """
-    This function adjust the results to be positive and returns an ordered list of (key_rate, protocol)
-    """
-    result.fun = -result.fun
-    result.func_vals = [-val for val in result.func_vals]
-    assert len(result.x_iters) == len(result.func_vals)
-    
-    if space_type == "one_level":
-        result_tuples = [(  result.func_vals[i], 
-                            get_protocol_from_distillations(
-                                number_of_swaps=number_of_swaps,
-                                number_of_dists=result.x_iters[i][0], 
-                                where_to_distill=result.x_iters[i][1])
-                         )  
-                        for i in range(len(result.func_vals))]
-
-    elif space_type == "enumerate":
-        result_tuples = [(result.func_vals[i], ast.literal_eval(result.x_iters[i][0])) for i in range(len(result.func_vals))]
-
-    elif space_type == "strategy" or space_type == "centerspace" or space_type == "asymmetric":
-        result_tuples = [(result.func_vals[i], result.x_iters[i][-1]) for i in range(len(result.func_vals))]
-
-    ordered_results = sorted(result_tuples, key=lambda x: x[0], reverse=True)
-    return ordered_results
-
-
-def write_results(filename, parameters, best_results):
-    """
-    Write optimization results to file.
-    """
-    with open(filename, 'a') as file:
-        output = (
-                    f"\nProtocol parameters:\n"
-                    f"{{\n"
-                    f"    't_coh': {parameters['t_coh']},\n"
-                    f"    'p_gen': {parameters['p_gen']},\n"
-                    f"    'p_swap': {parameters['p_swap']},\n"
-                    f"    'w0': {parameters['w0']}\n"
-                    f"}}\n\n")
-            
-        for number_of_swaps, (best_protocol, best_score, error_coverage) in best_results.items():
-            if best_protocol is None:
-                print(f"CDF under threshold for {number_of_swaps} swaps")
-                output += (
-                        f"CDF under threshold for {number_of_swaps} swaps:\n"
-                        f"    CDF coverage: {error_coverage*100}%\n\n"
-                    )
-            else:
-                output += (
-                        f"Best configuration for {number_of_swaps} swaps:\n"
-                        f"    Best Protocol: {best_protocol}\n"
-                        f"    Best secret key rate: {best_score}\n\n"
-                    )
-            
-        file.write(output)
-
-
-def load_config(config_file):
-    with open(config_file, 'r') as file:
-        config = json.load(file)
-    return config

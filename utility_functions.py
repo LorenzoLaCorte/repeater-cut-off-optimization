@@ -221,3 +221,25 @@ def get_fidelity(state, ket):
         for i in range(len(state)):
             result[i] = matrix_to_werner(state[i])
         return result
+
+
+def remove_unstable_werner(pmf, w_func, threshold=1.0e-15):
+    """
+    Removes unstable Werner parameters where the probability mass is below a specified threshold
+    and returns a new Werner parameter array without modifying the input array.
+
+    Parameters:
+    - pmf (np.array): The probability mass function array.
+    - w_func (np.array): The input Werner parameter array.
+    - threshold (float): The threshold below which Werner parameters are considered unstable.
+    
+    Returns:
+    - np.array: A new Werner parameter array with unstable parameters removed.
+
+     note: it is used in plots to remove oscillations in the plot.
+    """
+    new_w_func = w_func.copy()
+    for t in range(len(pmf)):
+        if pmf[t] < threshold:
+            new_w_func[t] = np.nan
+    return new_w_func

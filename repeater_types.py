@@ -2,8 +2,18 @@
 
 TODO: types and exception defined in gp_utils should be moved here
 """
+from argparse import ArgumentTypeError
 import re
-from typing import Tuple, TypedDict, Union
+from typing import Tuple, TypedDict, Union, Literal, List
+
+class ThresholdExceededError(Exception):
+    """
+    This exception is raised when the CDF coverage is below the threshold.
+    """
+    def __init__(self, message="CDF under threshold count incremented", extra_info=None):
+        super().__init__(message)
+        self.extra_info = extra_info
+
 
 class SimParameters(TypedDict):
     """
@@ -14,6 +24,29 @@ class SimParameters(TypedDict):
     p_gen: float
     p_swap: float
     w0: float
+
+# Define the type for the optimizer and space_type
+OptimizerType = Literal["bf", "gp"]
+SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace", "asymmetric"]
+
+def optimizerType(value: str) -> OptimizerType:
+    """
+    Validates the optimizer type passed in input
+    """
+    valid_options = ("gp", "bf")
+    if value not in valid_options:
+        raise ArgumentTypeError(f"Invalid optimizer type: {value}. Available options are: {', '.join(valid_options)}")
+    return value
+
+def spaceType(value: str) -> SpaceType:
+    """
+    Validates the space type passed in input
+    """
+    # TODO: refactor: valid_options = SpaceType.__args__
+    valid_options = ("one_level", "strategy", "enumerate", "centerspace", "asymmetric")
+    if value not in valid_options:
+        raise ArgumentTypeError(f"Invalid space type: {value}. Available options are: {', '.join(valid_options)}")
+    return value
 
 
 def checkProtocolUnit(punit: str) -> bool:
