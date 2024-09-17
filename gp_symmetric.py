@@ -119,7 +119,7 @@ def brute_force_optimization(simulator, parameters: SimParameters, space_type: S
                 results.append((secret_key_rate, protocol))
             
             except ThresholdExceededError as e:
-                logging.warn((f"Simulation under coverage for {number_of_swaps}"
+                logging.warning((f"Simulation under coverage for {number_of_swaps}"
                               "\nSet a (higher) fixed truncation time (--t_trunc)"))
                 best_results[number_of_swaps] = (None, None, e.extra_info['cdf_coverage'])
                 break
@@ -133,6 +133,7 @@ def brute_force_optimization(simulator, parameters: SimParameters, space_type: S
     if store_results:
         write_results(filename, parameters, best_results)
     return best_results
+
 
 # Cache results of the objective function to avoid re-evaluating the same point and speed up the optimization
 cache_results = defaultdict(np.float64)
@@ -186,13 +187,12 @@ def objective_key_rate(space, space_type: SpaceType, number_of_swaps, parameters
 def is_gp_done(result: OptimizeResult):
     """
     Callback function to stop the optimization if all the points have been evaluated.
+    TODO: the check can be done in some other way (type checking), in order to be more robust
+        -> one possible option is to simply use a list comprehension on the length of result.x_iters[-1]
+        i.e. -> strategy_to_protocol[tuple(result.x_iters[-1][i] for i in range(len(result.x_iters[-1])))] 
+    TODO: also, it seems to be valid only for one space? -> Test all the spaces again and ensure roubustness
     """
-    # TODO: maybe, I can result.space.bounds to substitute protocol_space_size
-    # protocols_evaluated = len(list(set([ast.literal_eval(r[0]) for r in result.x_iters])))
-    # assert protocols_evaluated == len(cache_results), f"Expected {protocols_evaluated} protocols, got {len(cache_results)}"
-    
     # Add protocol to result dict, to then retrieve it later
-    # TODO: the check can be done in some other way (type checking), in order to be more robust
     if len(result.x_iters[-1]) == 3:
         result.x_iters[-1].append(strategy_to_protocol[(result.x_iters[-1][0], result.x_iters[-1][1], result.x_iters[-1][2])])
     
@@ -221,7 +221,7 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
     for number_of_swaps in range(min_swaps, max_swaps+1):
         logging.info(f"\n\nNumber of swaps: {number_of_swaps}")
         
-        global protocol_space_size # TODO: refactor in order to avoid using global variables
+        global protocol_space_size
         protocol_space_size = get_sym_protocol_space_size(space_type, min_dists, max_dists, number_of_swaps)
 
         # Define reasonable default values (in terms of a percentage of the protocol space size)
@@ -265,14 +265,16 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
                 return objective_key_rate(space_params, space_type, number_of_swaps, parameters, simulator)
 
         try:
-            # TODO: if min_dist > 0, I clearly wanna skip this
             # Give NO-DIST (only swaps) protocol as initial point
-            if space_type == "one_level":
-                x0 = [0, 0]
-            elif space_type == "strategy":
-                x0 = [0, "dists_first", 1.0]
-            elif space_type == "centerspace":
-                x0 = [0, -1, 0.1]
+            if min_dists != 0:
+                if space_type == "one_level":
+                    x0 = [0, 0]
+                elif space_type == "strategy":
+                    x0 = [0, "dists_first", 1.0]
+                elif space_type == "centerspace":
+                    x0 = [0, -1, 0.1]
+            else:
+                x0 = None
 
             # Perform the optimization
             result: OptimizeResult = gp_minimize(
@@ -283,7 +285,7 @@ def gaussian_optimization(simulator, parameters: SimParameters, space_type: Spac
                 callback=[is_gp_done],
                 x0=x0,
                 acq_func='LCB',
-                kappa=1.96 * 2, # Double the default kappa, to prefer exploration
+                kappa=1.96,
                 noise=1e-10,    # There is no noise in results
             )
             
