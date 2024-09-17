@@ -43,7 +43,7 @@ def get_links_t_coh(t_coh):
         links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1])]*2
     # Swap
     else:
-        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1]), get_link_t_coh(t_coh[0], t_coh[2])]
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1]), get_link_t_coh(t_coh[1], t_coh[2])]
     return links_t_coh
 
 
