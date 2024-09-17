@@ -57,6 +57,76 @@ def test_asym_repeater_sim(protocol, benchmark):
     assert np.array_equal(w_func1, w_func2), "The w_func is not the same."
 
 
+def test_heterogeneus_repeater_sim_manual():
+    """
+    Verifies the decay factors for the heterogeneus protocol simulation.    
+    TODO: the second test is not working, understand why
+    """
+    # ----------------
+    # Homogeneous protocol, 2 segments
+    # ----------------
+    p_swap = 0.9999
+
+    # parameters = {
+    #     "protocol": (0,),
+    #     "p_gen": 0.5,
+    #     "p_swap": p_swap,
+    #     "w0": 0.9999,
+    #     "t_coh": 10,
+    #     "t_trunc": 1000,
+    # }
+    # pmf, w_func = repeater_sim(parameters)
+
+    # # Consider t=1
+
+
+    # ----------------
+    # Heterogeneous protocol, 2 segments
+    # ----------------
+
+    N, S, protocol = 3, 2, ('s0',)
+    t_coh_A, t_coh_B, t_coh_C = 5, 10, 20
+    p_gen_AB, p_gen_BC = 0.5, 0.9999
+    w0_AB, w0_BC = 0.9, 0.9999
+
+    parameters = {
+        "protocol": protocol,
+        "p_gen": [p_gen_AB, p_gen_BC],
+        "p_swap": p_swap,
+        "w0": [w0_AB, w0_BC],
+        "t_coh": [t_coh_A, t_coh_B, t_coh_C],
+        "t_trunc": 1000,
+    }
+
+    # Run the simulation
+    pmf, w_func = repeater_sim(parameters)
+
+    print(w_func)
+    # Consider t=1
+    # w_AB (t) should be costant 0.9, as it is for sure generated last 
+    # w_BC (t) starts from near 1 and decays accordingly to
+        # exp ( - deltaT * (1/t_coh_B + 1/t_coh_C) )
+    # The two multiplied (SWAP) should give the same result as the simulation
+    w_BC_all = w0_BC * np.exp((1/t_coh_B + 1/t_coh_C)) * np.arange(1000)
+
+    w_AB_1 = w0_AB
+    w_BC_1 = w_BC_all[1]
+    w_func_1 = w_AB_1 * w_BC_1
+
+    assert np.isclose(w_func[1], w_func_1, rtol=1e-3), "The output Werner for t=1 is not the same."
+
+    # Consider t=2
+    # w_AB (t) should be costant 0.9, as it is for sure generated last
+    # w_BC (t) now decays accordingly to
+        # exp ( - deltaT * (2/t_coh_B + 2/t_coh_C) )
+
+    w_AB_2 = w0_AB
+    w_BC_2 = w_BC_all[2]
+    w_func_2 = w_AB_2 * w_BC_2
+
+    assert np.isclose(w_func[2], w_func_2, rtol=1e-3), "The output Werner for t=2 is not the same."
+
+
 @pytest.mark.parametrize("p_gen, p_swap, w0, t_coh, t_trunc", [
     (0.00092, 0.85, 0.952, 1400000, 400000),
     (0.000015, 0.85, 0.867, 720000, 400000),
@@ -114,4 +184,4 @@ def test_heterogeneus_repeater_sim(p_gen, p_swap, w0, t_coh, t_trunc, heterogene
 
 
 if __name__ == "__main__":
-    pytest.main(["-sv", "test_asym.py::test_heterogeneus_repeater_sim"])
+    pytest.main(["-sv", "test_asym.py::test_heterogeneus_repeater_sim_manual"])

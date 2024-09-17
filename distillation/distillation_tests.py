@@ -81,8 +81,6 @@ def single_test():
      You can call this function from command line:
      ```py -c "from distillation_ml_gp import single_test; single_test()"```
     """
-    # "1400000 0.00092     0.85 0.952 5  1"
-
     parameters = {
         't_coh': 1400000,
         'p_gen': 0.00092,
