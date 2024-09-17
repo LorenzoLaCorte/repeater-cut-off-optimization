@@ -12,8 +12,8 @@ GENERAL_RESULT_DIR="./results_asymmetric"
 
 # Define parameters as tuples of t_coh, p_gen, p_swap, w0, nodes, max_dists
 PARAMETER_SETS=(
-    "360000  0.000000096 0.85 0.36  2  1"
-    "720000  0.000015    0.85 0.9   3  1"
+    # "360000  0.000000096 0.85 0.36  2  1"
+    # "720000  0.000015    0.85 0.9   3  1"
     "1400000 0.00092     0.85 0.952 5  1"
     # "1400000 0.00092     0.85 0.952 5  2"
     # "3600000 0.0026      0.85 0.958 11 1"
@@ -37,7 +37,7 @@ PARAMETER_SETS=(
 if [ "$GP_HOMOGENEOUS" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_COMBS=(
-        "bf"
+        "gp"
     )
 
     for PARAMETERS in "${PARAMETER_SETS[@]}"; do

@@ -94,32 +94,27 @@ For example, a 4 nodes chain
     \fill (D) circle (2pt);
   \end{tikzpicture}
 \end{equation*}
-can have different lengths for the segments, for example 20 km, 50 km, and 60 km, for segments A-B, B-C, and C-D, respectively, and each link can have different hardware regimes, for example:
+can have different hardware regimes for its freshly-generated entangled links, for example:
 \begin{itemize}
   \item $p_{gen} = 2.6 \cdot 10^{-3}$, $w_0 = 0.9577$ for A-B,
   \item $p_{gen} = 9.2 \cdot 10^{-4}$, $w_0 = 0.9524$ for B-C,
   \item $p_{gen} = 9.1 \cdot 10^{-4}$, $w_0 = 0.9523$ for C-D.
 \end{itemize}
 
-We can consider a time of coherence $t_{coh}^S$ for the chain given in seconds, and compute the time of coherence for each freshly generated link in time units of the simulation as:
+Furthermore, we can consider different times of coherence for each node in the chain:
 \begin{equation*}
-  t_{coh}^U = t_{coh}^S \cdot \frac{c}{L_i} \quad \text{for each segment $i$ of length $L_i$} .
+  t_{coh}^A, t_{coh}^B, t_{coh}^C, t_{coh}^D .
 \end{equation*}
 
 Then, when performing entanglement swapping between two segments, the joint time of coherence of the memories of the two input links is given by
 \begin{equation*}
-  t_{\text{coh}_{i-j}} = \min(t_{\text{coh}_i}, t_{\text{coh}_j}) 
+  ...  
 \end{equation*}
-which is the minimum time of coherence of the two input links.
+which is the ...
 \\\\
-For example, we can consider a coherence time of $t_{coh}^S = 20s$ for the chain, and compute the coherence times for the links as:
-\begin{align*}
-  t_{coh}^U &= 20s \cdot \frac{c}{20km} = 3.03 \cdot 10^{5} \quad \quad \text{for segment A-B}, \\
-  t_{coh}^U &= 20s \cdot \frac{c}{50km} = 1.19 \cdot 10^{5} \quad \quad \text{for segment B-C}, \\
-  t_{coh}^U &= 20s \cdot \frac{c}{60km} = 9.93 \cdot 10^{4} \quad \quad \text{for segment C-D}.
-\end{align*}
+For example, we can consider coherence times of ...
 
-When performing entanglement swapping between segments A-B and B-C, the joint coherence time will be the most restrictive one, i.e. the one of segment B-C.
+When performing entanglement swapping between segments A-B and B-C, the joint coherence time will be ...
 
 \section*{Size of the Protocol Space}
 
@@ -144,31 +139,44 @@ is the $n$-th Catalan number.
 \clearpage
 \section*{Encoding for Bayesian optimization}
 
-We encode a protocol by starting from two real values $\gamma$ and $\zeta$:
-\begin{itemize}
-    \item \(\gamma\) represents the symmetricity of the protocol,
-    \item \(\zeta\): represents the centering of the rounds of distillation,
-\end{itemize}
-they are both arbitrary real values between $0$ and $1$.
+The encoding returns a protocol, i.e. a tuple which represents the sequence of operations to be performed to distribute entanglement in the chain.
 \\\\
+We consider a protocol as a binary tree with $v = 2S - 1$ vertices, as shown in Figure \ref{fig:binary_tree_notation}. From the tree representation, we can derive the tuple representation of the protocol.
+\\\\
+We consider a maximum of $\beta$ rounds of distillation for each link at any level of the chain, and we encode a protocol by starting from an integer value $\kappa$ and real values $\gamma$, $\eta$ and $\tau$, where:
+\begin{itemize}
+    \item $\gamma \in [0,1]$ represents the simmetricity of the tree, i.e. how close is the protocol to the most symmetric one,
+    \item $\kappa \in [0, \beta]$ is the total rounds of distillations performed on the entangled links at any level of the chain,
+    \item $\eta \in [-1, 1]$ and $\tau \in [0,1]$ are used to derive how the $\kappa$ rounds of distillations are distributed among the vertices of the tree.  
+\end{itemize}
 Considering a protocol with $N=2^n+1$ for an integer $n$, the most symmetric protocol (yielded by \(\gamma=1\)), corresponds to the protocol which can be run by Boxi Li machinery.
 For example, for $N=5$, the most symmetric protocol $(s0, s2, s1)$ corresponds to the protocol $(0,0)$.
 All the non-symmetric protocols considered cannot be represented in the Boxi Li machinery.
 \\\\
-The encoding returns protocol, i.e. a tuple which represents the sequence of operations to be performed to distribute entanglement in the chain. The protocol is generated as follows.
-\\\\
-The set of all possible sequences of swaps $P_{swap}$ is generated. 
-They are ordered by the symmetricity of the shape of the swaps, from the least symmetric to the most symmetric. The \((\gamma \times |P_{swap}|\)) sequence is selected, so that:
+First, the set of all possible sequences of swaps $P_{swap}$ is generated, by considering all the possible binary trees with $v = 2S - 1$ vertices. 
+They are ordered by the symmetricity of their shape, from the least symmetric to the most symmetric. 
+The \((\gamma \times |P_{swap}|\)) tree is selected, so that:
 \begin{itemize}
-    \item if \(\gamma = 0\), the least symmetric sequence is selected,
-    \item if \(\gamma = 1\), the most symmetric sequence is selected.
+    \item if \(\gamma = 0\), the least symmetric sequence of SWAPs is selected,
+    \item if \(\gamma = 1\), the most symmetric sequence of SWAPs is selected.
 \end{itemize}
-For the selected sequence of swaps, the space $P_{joined}$ is generated. This is the set of all possible sequences involving the sequence of entanglement swapping operations and a maximum of $\beta$ rounds of distillation for each segment.
-We consider all the possible joined sequences of swaps and distillations $P_{joined}$, ordered from the lowest to the highest  number of rounds of distillations performed. 
-The \((\zeta \times |P_{joined}|)\) sequence is selected, such that:
+For the selected sequence, we get a shape of a binary tree with $v$ vertices, in which we aim to distribute the $\kappa$ rounds of distillation.
+We can visualize the $v$ vertices rounds of distillation as a tuple:
+\begin{equation*}
+    (\kappa_1, \kappa_2, \ldots, \kappa_v) \quad \text{with} \quad \sum_{i=1}^{v} \kappa_i = \kappa ,
+\end{equation*}
+where the leftmost values correspond to the rounds of distillation assigned to the leaves of the binary tree, i.e., the freshly-generated segments, whereas the rightmost value correspond to the rounds of distillation assigned to the root of the tree, i.e., the end-to-end link.
+\\\\
+We can sample the values for this tuple from a normal distribution $\mathcal{N}(\mu, \sigma)$, where
+\begin{equation*}
+  \mu = \frac{(\eta + 1) \cdot v}{2} \quad \sigma = \tau \cdot v ,
+\end{equation*}
+and restrict the maximum value of $\kappa_i$ to $\beta$.
+\\\\
+Thus, the final sequence is selected, so that:
 \begin{itemize}
-    \item if \(\zeta = 0\), the sequence with no rounds of distillation is selected,
-    \item if \(\zeta = 1\), the sequence with the maximum number of rounds of distillation is selected.
+    \item if $\eta = 0$, the sequence which tends to perform the rounds of distillation immediately after generation (link-level) is selected,
+    \item if $\eta = 1$, the sequence which tends to perform the rounds of distillation at the end of the protocol (end-to-end level) is selected.
 \end{itemize}
 
 \clearpage
@@ -257,13 +265,13 @@ In Tables \ref{tab:symmetric_protocols} and \ref{tab:asymmetric_protocols}, we p
         & BF time & BF Results & GP time & GP result & $|P|$ \\
         \hline
         \hline
-        A & ... & 0.0 & - & - & 2 \\
+        A & 7m & 0.0 & - & - & 2 \\
         \hline
-        B & ... & 0.0 & - & - & 8 \\
+        B & 8m & 0.0 & - & - & 8 \\
         \hline
-        C & ... & ... & ... & ... & 640 \\
+        C & 3.5h & $0.74 \times 10^{-4}$ & ... & ... & 640 \\
         \hline
-        D & - & - & 3.5h & $5.27 \times 10^{-5}$ & $2.54 \times 10^9$ \\
+        D & - & - & 3.5h & $0.53 \times 10^{-4}$ & $2.54 \times 10^9$ \\
         \hline
     \end{tabular}
     \caption{\textbf{Asymmetric Protocols} results. For all the cases we allowed $\beta=1$ possible rounds of distillation for each segment. All the simulations have been run on the Deigo cluster. Bayesian optimizations are performed with 10 initial points and a total of 100 shots.}
@@ -278,7 +286,6 @@ We also present Case D of Table \ref{tab:asymmetric_protocols} in Figure \ref{fi
 \end{equation*}
 
 
-% TODO: update with the new results
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\linewidth, trim = 10 10 10 50, clip]{symmetric/results_gp_centerspace/skopt_gp.png}

@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1726454740 "/home/lax/University/OIST/repeater-cut-off-optimization/real_network/real_network.tex" "real_network.pdf" "real_network" 1726454746
+["pdflatex"] 1726534780 "/home/lax/University/OIST/repeater-cut-off-optimization/real_network/real_network.tex" "real_network.pdf" "real_network" 1726534784
   "/etc/texmf/web2c/texmf.cnf" 1707324512 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/lax/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1714036883 11524 f4e0d881e35df668e0d77e9385f3a3b6 ""
-  "/home/lax/University/OIST/repeater-cut-off-optimization/real_network/real_network.tex" 1726454705 16009 57b19a091cec5e0e783a47b4c6681d3d ""
+  "/home/lax/University/OIST/repeater-cut-off-optimization/real_network/real_network.tex" 1726534779 16278 7ef7ce60ee12e7783a797afbd6bf53d1 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -14,12 +14,10 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1248133631 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb" 1248133631 37912 77d683123f92148345f3fc36a38d9ab1 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1248133631 36281 c355509802a035cadc5f15869451dcee ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1248133631 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -147,9 +145,9 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1712656855 1435891 fabd729e99dc3a71b9c1c6659466e5db ""
   "asymmetric/gp11,1/skopt_gp.png" 1726454274 512640 7c2b59a8ec0f489b06ddb9754b14ebe8 ""
   "asymmetric/gp5,2/skopt_gp.png" 1726405274 553332 a3ff2274f2a267e9061f581974d644b6 ""
-  "real_network.aux" 1726454746 7014 5c1c093532eb546e943db60e58dc6746 "pdflatex"
-  "real_network.out" 1726454741 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "real_network.tex" 1726454705 16009 57b19a091cec5e0e783a47b4c6681d3d ""
+  "real_network.aux" 1726534784 6772 0a8705cc9dc7ff6e8b38255e13aa4b27 "pdflatex"
+  "real_network.out" 1726534781 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "real_network.tex" 1726534779 16278 7ef7ce60ee12e7783a797afbd6bf53d1 ""
   "symmetric/results_gp_centerspace/skopt_gp.png" 1726211965 394255 029a11deaacafd86bffc57933f084a6b ""
   (generated)
   "real_network.aux"
