@@ -12,7 +12,7 @@ GENERAL_RESULT_DIR="./results_symmetric"
 
 # Define the space of rounds of distillation to be simulated
 MIN_DISTS=0
-MAX_DISTS=5
+MAX_DISTS=1
 
 # Define parameters as tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
 PARAMETER_SETS=(
@@ -39,6 +39,7 @@ PARAMETER_SETS=(
 if [ "$GP" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_SPACE_DP_COMBS=(
+        "bf enumerate"
         "gp centerspace"
     )
 

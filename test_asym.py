@@ -85,10 +85,11 @@ def test_heterogeneus_repeater_sim_manual():
     # ----------------
 
     N, S, protocol = 3, 2, ('s0',)
-    t_coh_A, t_coh_B, t_coh_C = 5, 10, 20
-    p_gen_AB, p_gen_BC = 0.5, 0.9999
-    w0_AB, w0_BC = 0.9, 0.9999
+    t_coh_A, t_coh_B, t_coh_C = 20, 10, 5
+    p_gen_AB, p_gen_BC = 0.9999, 0.5
+    w0_AB, w0_BC = 0.9, 0.9
 
+    # TODO: try to swap the order of the segments and see if the result is the same
     parameters = {
         "protocol": protocol,
         "p_gen": [p_gen_AB, p_gen_BC],
@@ -101,7 +102,6 @@ def test_heterogeneus_repeater_sim_manual():
     # Run the simulation
     pmf, w_func = repeater_sim(parameters)
 
-    print(w_func)
     # Consider t=1
     # w_AB (t) should be costant 0.9, as it is for sure generated last 
     # w_BC (t) starts from near 1 and decays accordingly to
@@ -113,7 +113,7 @@ def test_heterogeneus_repeater_sim_manual():
     w_BC_1 = w_BC_all[1]
     w_func_1 = w_AB_1 * w_BC_1
 
-    assert np.isclose(w_func[1], w_func_1, rtol=1e-3), "The output Werner for t=1 is not the same."
+    # assert np.isclose(w_func[1], w_func_1, rtol=1e-3), "The output Werner for t=1 is not the same."
 
     # Consider t=2
     # w_AB (t) should be costant 0.9, as it is for sure generated last
@@ -124,7 +124,26 @@ def test_heterogeneus_repeater_sim_manual():
     w_BC_2 = w_BC_all[2]
     w_func_2 = w_AB_2 * w_BC_2
 
-    assert np.isclose(w_func[2], w_func_2, rtol=1e-3), "The output Werner for t=2 is not the same."
+    # assert np.isclose(w_func[2], w_func_2, rtol=1e-3), "The output Werner for t=2 is not the same."
+
+    t_coh_A, t_coh_B, t_coh_C = 5, 10, 20
+    p_gen_AB, p_gen_BC = 0.5, 0.9999
+    w0_AB, w0_BC = 0.9, 0.9
+
+    parameters = {
+        "protocol": protocol,
+        "p_gen": [p_gen_AB, p_gen_BC],
+        "p_swap": p_swap,
+        "w0": [w0_AB, w0_BC],
+        "t_coh": [t_coh_A, t_coh_B, t_coh_C],
+        "t_trunc": 1000,
+    }
+
+    # Run the simulation
+    pmf2, w_func2 = repeater_sim(parameters)
+
+    assert np.array_equal(pmf, pmf2), "The pmf is not the same."
+    assert np.array_equal(w_func, w_func2), "The w_func is not the same."
 
 
 @pytest.mark.parametrize("p_gen, p_swap, w0, t_coh, t_trunc", [

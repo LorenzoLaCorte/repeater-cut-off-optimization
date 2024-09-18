@@ -459,7 +459,7 @@ def join_links_efficient(
     return final_result
 
 
-@nb.jit(nopython=True, error_model="python")
+# @nb.jit(nopython=True, error_model="python")
 def join_with_suc_cutoff(
         cutoff, result, minus_result, cum_func1_early, func1_later, cum_func2_early, func2_later):
     """

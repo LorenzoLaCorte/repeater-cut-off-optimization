@@ -1,0 +1,21 @@
+From 2 to 2 swaps
+From 0 to 1 distillations
+Bruteforce process for all the possible evaluations
+
+
+Protocol parameters:
+{
+    't_coh': 1400000,
+    'p_gen': 0.00092,
+    'p_swap': 0.85,
+    'w0': 0.952
+}
+
+Best configuration for 2 swaps:
+    Best Protocol: 6.902381806192633e-05
+    Best secret key rate: (1, 0, 0)
+
+Time taken:
+real	2m30.356s
+user	2m16.552s
+sys	0m15.152s

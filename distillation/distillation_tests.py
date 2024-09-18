@@ -75,7 +75,7 @@ def single_asym_test():
     print(get_protocol_rate(parameters))
 
 
-def single_test(): 
+def single_sym_test(): 
     """
     This function is used to test the repeater simulation with a fixed set of parameters.
      You can call this function from command line:
@@ -89,7 +89,7 @@ def single_test():
         "t_trunc": 1400000
     }
     
-    parameters["protocol"] = (1,1,0,0)
+    parameters["protocol"] = (1,0,1,0)
     print(get_protocol_rate(parameters))
 
 
@@ -607,4 +607,4 @@ def hw_varying_experiment_runner():
 
 
 if __name__ == "__main__":
-    single_asym_test()
+    single_sym_test()
