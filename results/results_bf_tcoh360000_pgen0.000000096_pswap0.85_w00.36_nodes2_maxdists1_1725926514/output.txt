@@ -1,4 +1,0 @@
-Time taken:
-real	0m1.740s
-user	0m3.264s
-sys	0m0.206s
