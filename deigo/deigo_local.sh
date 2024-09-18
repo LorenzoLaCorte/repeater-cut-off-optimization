@@ -11,7 +11,7 @@ RUNNER_SCRIPT_NAME="gp_asymmetric_runner.sh"
 
 RUN_SCRIPT_NAME="deigo/deigo_remote_run.sh"
 
-REMOTE_HOST="deigo"
+REMOTE_HOST="deigo-ext"
 REMOTE_DIR="experiments/cluster-sim-1"
 
 pip freeze > $REQUIREMENTS_FILE

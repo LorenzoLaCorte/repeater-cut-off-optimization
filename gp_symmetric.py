@@ -318,9 +318,9 @@ if __name__ == "__main__":
     parser.add_argument("--min_dists", type=int, default=0, help="Minimum round of distillations to be performed")
     parser.add_argument("--max_dists", type=int, default=2, help="Maximum round of distillations to be performed")
     
-    parser.add_argument("--optimizer", type=optimizerType, default="gp", help="Optimizer to be used {gp, bf}")
+    parser.add_argument("--optimizer", type=optimizerType, default="bf", help="Optimizer to be used {gp, bf}")
     
-    parser.add_argument("--space", type=spaceType, default="centerspace", 
+    parser.add_argument("--space", type=spaceType, default="enumerate", 
                         help="Space to be tested {one_level, enumerate, strategy, centerspace}")
     
     parser.add_argument("--gp_shots", type=int,
@@ -389,7 +389,7 @@ if __name__ == "__main__":
         simulator = RepeaterChainSimulation(use_cache=False)
 
     # Abort in case of bad combinations of optimizer and space
-    if optimizer == "bf" and space == "strategy":
+    if optimizer == "bf" and (space == "strategy" or space == "centerspace"):
         raise ValueError("Bruteforce not supported for strategy space, use 'enumerate'")
     elif optimizer == "gp" and space == "enumerate":
         raise ValueError("Gaussian Process not supported for enumerate space, use 'one_level' or 'strategy'")
