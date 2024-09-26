@@ -1,0 +1,1815 @@
+Running distillation with optimizer bf...
+/home/l/lorenzo-la/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 18, in <module>
+    from gp_plots import plot_optimization_process
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_plots.py", line 34, in <module>
+    import pandas as pd
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/apps/free81/python/3.10.2/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/apps/free81/python/3.10.2/lib/python3.10/site-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+INFO:root:1/2 Generating protocols for swap sequence ('s1', 's0')...
+INFO:root:2/2 Generating protocols for swap sequence ('s0', 's1')...
+INFO:root:The space of asymmetric protocols has size 64
+INFO:root:
+(1/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 's1'),	 r = 0.013344369986787771
+
+INFO:root:
+(2/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 's0'),	 r = 0.012378501281043756
+
+INFO:root:
+(3/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 's1'),	 r = 0.015061417423224597
+
+INFO:root:
+(4/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 's1'),	 r = 0.01195875739568447
+
+INFO:root:
+(5/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 's0'),	 r = 0.011445446873151664
+
+INFO:root:
+(6/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 's0'),	 r = 0.01140835181564727
+
+INFO:root:
+(7/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 's1'),	 r = 0.013018565837012165
+
+INFO:root:
+(8/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 's1'),	 r = 0.012882343318277466
+
+INFO:root:
+(9/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 's1', 'd2'),	 r = 0.01241010234903889
+
+INFO:root:
+(10/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 's0'),	 r = 0.014176162540245925
+
+INFO:root:
+(11/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 's0'),	 r = 0.010729856956563104
+
+INFO:root:
+(12/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 's0', 'd2'),	 r = 0.011410373577938202
+
+INFO:root:
+(13/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 's1'),	 r = 0.013571248713447243
+
+INFO:root:
+(14/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 's1'),	 r = 0.014070210437639492
+
+INFO:root:
+(15/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 's1'),	 r = 0.014536697966999577
+
+INFO:root:
+(16/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 's1', 'd2'),	 r = 0.01350608027784043
+
+INFO:root:
+(17/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 's0'),	 r = 0.011383516213747778
+
+INFO:root:
+(18/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 's1'),	 r = 0.010620346311794912
+
+INFO:root:
+(19/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 's1'),	 r = 0.012340369975676052
+
+INFO:root:
+(20/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 's1', 'd2'),	 r = 0.010785277032960214
+
+INFO:root:
+(21/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 's0'),	 r = 0.013065867003885723
+
+INFO:root:
+(22/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 's0'),	 r = 0.009650660479602047
+
+INFO:root:
+(23/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 's0', 'd2'),	 r = 0.01025052138567466
+
+INFO:root:
+(24/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 's0'),	 r = 0.013023056380504225
+
+INFO:root:
+(25/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 's0'),	 r = 0.009610792896452995
+
+INFO:root:
+(26/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 's0', 'd2'),	 r = 0.01020986718247786
+
+INFO:root:
+(27/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 's1'),	 r = 0.013482613481577544
+
+INFO:root:
+(28/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 's1', 'd2'),	 r = 0.011404653636147325
+
+INFO:root:
+(29/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 's1', 'd2'),	 r = 0.011686751485389427
+
+INFO:root:
+(30/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0'),	 r = 0.012172244349266267
+
+INFO:root:
+(31/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 's0', 'd2'),	 r = 0.012583700858626114
+
+INFO:root:
+(32/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 's0', 'd2'),	 r = 0.009346799310412737
+
+INFO:root:
+(33/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 's1'),	 r = 0.011662202317712658
+
+INFO:root:
+(34/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1'),	 r = 0.013912776096555491
+
+INFO:root:
+(35/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 's1', 'd2'),	 r = 0.011834941027482802
+
+INFO:root:
+(36/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 's1'),	 r = 0.014568798228650504
+
+INFO:root:
+(37/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 's1', 'd2'),	 r = 0.012119976091513539
+
+INFO:root:
+(38/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 's1', 'd2'),	 r = 0.012770926779460099
+
+INFO:root:
+(39/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 's0'),	 r = 0.01290412198229548
+
+INFO:root:
+(40/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0'),	 r = 0.00935928056250329
+
+INFO:root:
+(41/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 's0', 'd2'),	 r = 0.00991391361519964
+
+INFO:root:
+(42/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 's1'),	 r = 0.011554481272957114
+
+INFO:root:
+(43/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 's1', 'd2'),	 r = 0.009197578457466542
+
+INFO:root:
+(44/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 's1', 'd2'),	 r = 0.010879918934722793
+
+INFO:root:
+(45/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 's0'),	 r = 0.010909721824618891
+
+INFO:root:
+(46/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 's0', 'd2'),	 r = 0.011311152841634826
+
+INFO:root:
+(47/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 's0', 'd2'),	 r = 0.00830811887167985
+
+INFO:root:
+(48/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 's0'),	 r = 0.01086438843305539
+
+INFO:root:
+(49/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 's0', 'd2'),	 r = 0.011266385556185369
+
+INFO:root:
+(50/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 's0', 'd2'),	 r = 0.008270169329890125
+
+INFO:root:
+(51/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 's1', 'd2'),	 r = 0.011590774856519536
+
+INFO:root:
+(52/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0', 'd2'),	 r = 0.010293358251346692
+
+INFO:root:
+(53/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1'),	 r = 0.01262217590799282
+
+INFO:root:
+(54/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 0.00992370529724017
+
+INFO:root:
+(55/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 0.011918621295892246
+
+INFO:root:
+(56/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.012332036753953092
+
+INFO:root:
+(57/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 's0'),	 r = 0.01053300428153516
+
+INFO:root:
+(58/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 0.010912923883591363
+
+INFO:root:
+(59/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 0.007948855142107681
+
+INFO:root:
+(60/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.009797317591627535
+
+INFO:root:
+(61/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.009137500678699501
+
+INFO:root:
+(62/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.00909572407006722
+
+INFO:root:
+(63/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.010542512791809223
+
+INFO:root:
+(64/64) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.0087252799857608
+
+INFO:root:
+Best results: (np.float64(0.015061417423224597), ('d0', 's0', 's1'))
+
+real	26m31.341s
+user	26m19.709s
+sys	0m0.909s
+No plots yielded for optimizer bf
+Running distillation with optimizer bf...
+/home/l/lorenzo-la/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.0.0 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_asymmetric.py", line 18, in <module>
+    from gp_plots import plot_optimization_process
+  File "/home/l/lorenzo-la/experiments/cluster-sim-1/gp_plots.py", line 34, in <module>
+    import pandas as pd
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/__init__.py", line 1, in <module>
+    from pandas.core.arrays.arrow import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/__init__.py", line 5, in <module>
+    from pandas.core.arrays.arrow.array import ArrowExtensionArray
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/arrays/arrow/array.py", line 50, in <module>
+    from pandas.core import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/__init__.py", line 8, in <module>
+    from pandas.core.ops.array_ops import (
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 56, in <module>
+    from pandas.core.computation import expressions
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/expressions.py", line 21, in <module>
+    from pandas.core.computation.check import NUMEXPR_INSTALLED
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/core/computation/check.py", line 5, in <module>
+    ne = import_optional_dependency("numexpr", errors="warn")
+  File "/home/l/lorenzo-la/.local/lib/python3.10/site-packages/pandas/compat/_optional.py", line 135, in import_optional_dependency
+    module = importlib.import_module(name)
+  File "/apps/free81/python/3.10.2/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "/apps/free81/python/3.10.2/lib/python3.10/site-packages/numexpr/__init__.py", line 24, in <module>
+    from numexpr.interpreter import MAX_THREADS, use_vml, __BLOCK_SIZE1__
+AttributeError: _ARRAY_API not found
+INFO:root:1/2 Generating protocols for swap sequence ('s1', 's0')...
+INFO:root:2/2 Generating protocols for swap sequence ('s0', 's1')...
+INFO:root:The space of asymmetric protocols has size 486
+INFO:root:
+(1/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 's1'),	 r = 0.013344369986787771
+
+INFO:root:
+(2/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 's0'),	 r = 0.012378501281043756
+
+INFO:root:
+(3/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 's1'),	 r = 0.015061417423224597
+
+INFO:root:
+(4/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 's1'),	 r = 0.01195875739568447
+
+INFO:root:
+(5/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 's0'),	 r = 0.011445446873151664
+
+INFO:root:
+(6/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 's0'),	 r = 0.01140835181564727
+
+INFO:root:
+(7/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 's1'),	 r = 0.013018565837012165
+
+INFO:root:
+(8/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 's1'),	 r = 0.012882343318277466
+
+INFO:root:
+(9/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 's1', 'd2'),	 r = 0.01241010234903889
+
+INFO:root:
+(10/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 's0'),	 r = 0.014176162540245925
+
+INFO:root:
+(11/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 's0'),	 r = 0.010729856956563104
+
+INFO:root:
+(12/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 's0', 'd2'),	 r = 0.011410373577938202
+
+INFO:root:
+(13/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 's1'),	 r = 0.015837962476693866
+
+INFO:root:
+(14/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 's1'),	 r = 0.013571248713447243
+
+INFO:root:
+(15/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 's1'),	 r = 0.014070210437639492
+
+INFO:root:
+(16/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 's1'),	 r = 0.014536697966999577
+
+INFO:root:
+(17/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 's1', 'd2'),	 r = 0.01350608027784043
+
+INFO:root:
+(18/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 's1'),	 r = 0.009789437884397997
+
+INFO:root:
+(19/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 's0'),	 r = 0.009600084927532332
+
+INFO:root:
+(20/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 's0'),	 r = 0.011383516213747778
+
+INFO:root:
+(21/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 's1'),	 r = 0.010620346311794912
+
+INFO:root:
+(22/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 's1'),	 r = 0.012340369975676052
+
+INFO:root:
+(23/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 's1', 'd2'),	 r = 0.010785277032960214
+
+INFO:root:
+(24/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 's0'),	 r = 0.013065867003885723
+
+INFO:root:
+(25/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 's0'),	 r = 0.009650660479602047
+
+INFO:root:
+(26/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 's0', 'd2'),	 r = 0.01025052138567466
+
+INFO:root:
+(27/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 's0'),	 r = 0.009549025783976721
+
+INFO:root:
+(28/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 's0'),	 r = 0.013023056380504225
+
+INFO:root:
+(29/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 's0'),	 r = 0.009610792896452995
+
+INFO:root:
+(30/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 's0', 'd2'),	 r = 0.01020986718247786
+
+INFO:root:
+(31/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 's1'),	 r = 0.011168229712137445
+
+INFO:root:
+(32/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 's1'),	 r = 0.013482613481577544
+
+INFO:root:
+(33/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 's1', 'd2'),	 r = 0.011404653636147325
+
+INFO:root:
+(34/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 'd2', 's1'),	 r = 0.011257989375157179
+
+INFO:root:
+(35/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 's1', 'd2'),	 r = 0.011686751485389427
+
+INFO:root:
+(36/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 's1', 'd2', 'd2'),	 r = 0.010661516094751857
+
+INFO:root:
+(37/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 's0'),	 r = 0.015217579427237834
+
+INFO:root:
+(38/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0'),	 r = 0.012172244349266267
+
+INFO:root:
+(39/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 's0', 'd2'),	 r = 0.012583700858626114
+
+INFO:root:
+(40/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 'd2', 's0'),	 r = 0.008811401961655979
+
+INFO:root:
+(41/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 's0', 'd2'),	 r = 0.009346799310412737
+
+INFO:root:
+(42/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 's0', 'd2', 'd2'),	 r = 0.009718001138940356
+
+INFO:root:
+(43/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 's1'),	 r = 0.014539255558361594
+
+INFO:root:
+(44/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 's1'),	 r = 0.014426725520369063
+
+INFO:root:
+(45/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 's1'),	 r = 0.015468220092001066
+
+INFO:root:
+(46/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 's1', 'd2'),	 r = 0.013992160823678788
+
+INFO:root:
+(47/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 's1'),	 r = 0.011149272126896231
+
+INFO:root:
+(48/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 's1'),	 r = 0.011662202317712658
+
+INFO:root:
+(49/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1'),	 r = 0.013912776096555491
+
+INFO:root:
+(50/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 's1', 'd2'),	 r = 0.011834941027482802
+
+INFO:root:
+(51/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 's1'),	 r = 0.011872365387314999
+
+INFO:root:
+(52/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 's1'),	 r = 0.014568798228650504
+
+INFO:root:
+(53/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 's1', 'd2'),	 r = 0.012119976091513539
+
+INFO:root:
+(54/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 'd2', 's1'),	 r = 0.012725401283540196
+
+INFO:root:
+(55/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 's1', 'd2'),	 r = 0.012770926779460099
+
+INFO:root:
+(56/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 's1', 'd2', 'd2'),	 r = 0.011419770581858986
+
+INFO:root:
+(57/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 's0'),	 r = 0.010208668080405566
+
+INFO:root:
+(58/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 's1'),	 r = 0.008300494578767952
+
+INFO:root:
+(59/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 's1'),	 r = 0.01066387300155658
+
+INFO:root:
+(60/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 's1', 'd2'),	 r = 0.008744281418995721
+
+INFO:root:
+(61/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 's0'),	 r = 0.010950497952314219
+
+INFO:root:
+(62/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 's0'),	 r = 0.008042224262115904
+
+INFO:root:
+(63/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 's0', 'd2'),	 r = 0.00853404508148835
+
+INFO:root:
+(64/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 's0'),	 r = 0.010176008485924854
+
+INFO:root:
+(65/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 's0'),	 r = 0.01290412198229548
+
+INFO:root:
+(66/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0'),	 r = 0.00935928056250329
+
+INFO:root:
+(67/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 's0', 'd2'),	 r = 0.00991391361519964
+
+INFO:root:
+(68/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 's1'),	 r = 0.00871468900933961
+
+INFO:root:
+(69/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 's1'),	 r = 0.011554481272957114
+
+INFO:root:
+(70/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 's1', 'd2'),	 r = 0.009197578457466542
+
+INFO:root:
+(71/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 'd2', 's1'),	 r = 0.011512336705260017
+
+INFO:root:
+(72/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 's1', 'd2'),	 r = 0.010879918934722793
+
+INFO:root:
+(73/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 's1', 'd2', 'd2'),	 r = 0.00912762021913503
+
+INFO:root:
+(74/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 's0'),	 r = 0.014131743896275833
+
+INFO:root:
+(75/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 's0'),	 r = 0.010909721824618891
+
+INFO:root:
+(76/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 's0', 'd2'),	 r = 0.011311152841634826
+
+INFO:root:
+(77/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 'd2', 's0'),	 r = 0.007841332751653404
+
+INFO:root:
+(78/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 's0', 'd2'),	 r = 0.00830811887167985
+
+INFO:root:
+(79/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 's0', 'd2', 'd2'),	 r = 0.008621172229982764
+
+INFO:root:
+(80/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 's0'),	 r = 0.010889925297069208
+
+INFO:root:
+(81/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 's0'),	 r = 0.007984041457348481
+
+INFO:root:
+(82/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 's0', 'd2'),	 r = 0.008475053111915975
+
+INFO:root:
+(83/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 's0'),	 r = 0.014086582372978378
+
+INFO:root:
+(84/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 's0'),	 r = 0.01086438843305539
+
+INFO:root:
+(85/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 's0', 'd2'),	 r = 0.011266385556185369
+
+INFO:root:
+(86/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 'd2', 's0'),	 r = 0.007804062074616483
+
+INFO:root:
+(87/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 's0', 'd2'),	 r = 0.008270169329890125
+
+INFO:root:
+(88/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 's0', 'd2', 'd2'),	 r = 0.008583119667238362
+
+INFO:root:
+(89/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 's1'),	 r = 0.012166314904963622
+
+INFO:root:
+(90/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 's1', 'd2'),	 r = 0.009549196206537349
+
+INFO:root:
+(91/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 'd2', 's1'),	 r = 0.012685032509797304
+
+INFO:root:
+(92/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 's1', 'd2'),	 r = 0.011590774856519536
+
+INFO:root:
+(93/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 's1', 'd2', 'd2'),	 r = 0.009534346976317113
+
+INFO:root:
+(94/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 'd2', 's1', 'd2'),	 r = 0.010171497574418476
+
+INFO:root:
+(95/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 's1', 'd2', 'd2'),	 r = 0.009958523989896861
+
+INFO:root:
+(96/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 's0'),	 r = 0.013182290662053647
+
+INFO:root:
+(97/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 's0', 'd2'),	 r = 0.013305653623441915
+
+INFO:root:
+(98/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 's0'),	 r = 0.00991994452876852
+
+INFO:root:
+(99/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0', 'd2'),	 r = 0.010293358251346692
+
+INFO:root:
+(100/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 's0', 'd2', 'd2'),	 r = 0.010539149123735807
+
+INFO:root:
+(101/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 'd2', 's0', 'd2'),	 r = 0.007492631023559348
+
+INFO:root:
+(102/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 's0', 'd2', 'd2'),	 r = 0.007759666742267487
+
+INFO:root:
+(103/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 's1'),	 r = 0.012089634627835607
+
+INFO:root:
+(104/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 's1'),	 r = 0.01227618127019198
+
+INFO:root:
+(105/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 's1'),	 r = 0.01492315069084177
+
+INFO:root:
+(106/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 's1', 'd2'),	 r = 0.01247132209945172
+
+INFO:root:
+(107/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 's1'),	 r = 0.012074013170153455
+
+INFO:root:
+(108/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 's1'),	 r = 0.015043287608963852
+
+INFO:root:
+(109/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 's1', 'd2'),	 r = 0.012352635340045163
+
+INFO:root:
+(110/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 'd2', 's1'),	 r = 0.013679406638520526
+
+INFO:root:
+(111/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 's1', 'd2'),	 r = 0.013381897325640432
+
+INFO:root:
+(112/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 's1', 'd2', 'd2'),	 r = 0.011746239522488208
+
+INFO:root:
+(113/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 's1'),	 r = 0.009176131416382186
+
+INFO:root:
+(114/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 's1'),	 r = 0.012034794317306502
+
+INFO:root:
+(115/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 's1', 'd2'),	 r = 0.009637778355620992
+
+INFO:root:
+(116/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 's1'),	 r = 0.009432970788122687
+
+INFO:root:
+(117/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1'),	 r = 0.01262217590799282
+
+INFO:root:
+(118/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 0.00992370529724017
+
+INFO:root:
+(119/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 'd2', 's1'),	 r = 0.012950213373993776
+
+INFO:root:
+(120/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 0.011918621295892246
+
+INFO:root:
+(121/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 0.0098625580569709
+
+INFO:root:
+(122/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.012909107324667567
+
+INFO:root:
+(123/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.01006518019039366
+
+INFO:root:
+(124/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.013734914094268108
+
+INFO:root:
+(125/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.012332036753953092
+
+INFO:root:
+(126/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.010051120035619138
+
+INFO:root:
+(127/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.011152527804268165
+
+INFO:root:
+(128/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.01072417804005849
+
+INFO:root:
+(129/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 's0'),	 r = 0.00981679310221983
+
+INFO:root:
+(130/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 's0'),	 r = 0.011541380324024273
+
+INFO:root:
+(131/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 's0'),	 r = 0.008327430804398168
+
+INFO:root:
+(132/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 's0', 'd2'),	 r = 0.008807831643318996
+
+INFO:root:
+(133/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 's1'),	 r = 0.006664341839522686
+
+INFO:root:
+(134/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 's1'),	 r = 0.00930850401349019
+
+INFO:root:
+(135/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 0.007169839274032083
+
+INFO:root:
+(136/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 'd2', 's1'),	 r = 0.010616165128427913
+
+INFO:root:
+(137/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 0.009281462955681517
+
+INFO:root:
+(138/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 0.007334548479431183
+
+INFO:root:
+(139/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 's0'),	 r = 0.011909620382211822
+
+INFO:root:
+(140/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 's0'),	 r = 0.00907787833385199
+
+INFO:root:
+(141/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 's0', 'd2'),	 r = 0.009420795388022011
+
+INFO:root:
+(142/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 'd2', 's0'),	 r = 0.006497789577042374
+
+INFO:root:
+(143/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 's0', 'd2'),	 r = 0.006894435125495376
+
+INFO:root:
+(144/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 's0', 'd2', 'd2'),	 r = 0.007131358740644293
+
+INFO:root:
+(145/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 's0'),	 r = 0.011503261720449307
+
+INFO:root:
+(146/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 's0'),	 r = 0.008291569510051808
+
+INFO:root:
+(147/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 's0', 'd2'),	 r = 0.008771744825914186
+
+INFO:root:
+(148/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 's0'),	 r = 0.013957412764074367
+
+INFO:root:
+(149/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 's0'),	 r = 0.01053300428153516
+
+INFO:root:
+(150/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 0.010912923883591363
+
+INFO:root:
+(151/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 'd2', 's0'),	 r = 0.007516088341460567
+
+INFO:root:
+(152/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 0.007948855142107681
+
+INFO:root:
+(153/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 0.008226968799815416
+
+INFO:root:
+(154/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.009756392433000555
+
+INFO:root:
+(155/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.007425289242918099
+
+INFO:root:
+(156/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.011576881829076947
+
+INFO:root:
+(157/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.009797317591627535
+
+INFO:root:
+(158/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.007616469352393144
+
+INFO:root:
+(159/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.010107860839641956
+
+INFO:root:
+(160/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.00913329149316678
+
+INFO:root:
+(161/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.01182289572137706
+
+INFO:root:
+(162/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.012034395878454396
+
+INFO:root:
+(163/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.008807853863468705
+
+INFO:root:
+(164/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.009137500678699501
+
+INFO:root:
+(165/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.009365126164973016
+
+INFO:root:
+(166/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.006623963502408261
+
+INFO:root:
+(167/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.006841356186352411
+
+INFO:root:
+(168/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd0', 's0'),	 r = 0.011843312912230135
+
+INFO:root:
+(169/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd2', 's0'),	 r = 0.00901132311521902
+
+INFO:root:
+(170/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 0.009355014693297574
+
+INFO:root:
+(171/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 'd2', 's0'),	 r = 0.006441982674497414
+
+INFO:root:
+(172/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 0.006837892601076474
+
+INFO:root:
+(173/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 0.007075113127327293
+
+INFO:root:
+(174/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.011773940575435996
+
+INFO:root:
+(175/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.011987642545993618
+
+INFO:root:
+(176/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.008765949890163487
+
+INFO:root:
+(177/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.00909572407006722
+
+INFO:root:
+(178/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.009323967907028653
+
+INFO:root:
+(179/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.006590582000687527
+
+INFO:root:
+(180/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.0068079232208411
+
+INFO:root:
+(181/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 0.01226132710700419
+
+INFO:root:
+(182/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 0.010199546671494322
+
+INFO:root:
+(183/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 0.007866017032001188
+
+INFO:root:
+(184/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.010872513987013197
+
+INFO:root:
+(185/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.009620932116759772
+
+INFO:root:
+(186/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.008645145107707215
+
+INFO:root:
+(187/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 0.010737326581703855
+
+INFO:root:
+(188/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 0.01096971399477822
+
+INFO:root:
+(189/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 0.01106030699006642
+
+INFO:root:
+(190/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 0.008226267369910127
+
+INFO:root:
+(191/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 0.008426597479061387
+
+INFO:root:
+(192/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 0.00612047445700999
+
+INFO:root:
+(193/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 's1'),	 r = 0.009783691088935717
+
+INFO:root:
+(194/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 's1'),	 r = 0.012999441423867554
+
+INFO:root:
+(195/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 's1', 'd2'),	 r = 0.010259442871429705
+
+INFO:root:
+(196/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1'),	 r = 0.009859224061262268
+
+INFO:root:
+(197/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1'),	 r = 0.013274592008546448
+
+INFO:root:
+(198/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 0.010354002365728832
+
+INFO:root:
+(199/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 's1'),	 r = 0.013934485408049709
+
+INFO:root:
+(200/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 0.012589115636654505
+
+INFO:root:
+(201/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 0.010305814041551155
+
+INFO:root:
+(202/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.013160492131140825
+
+INFO:root:
+(203/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.010209799548003934
+
+INFO:root:
+(204/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.014307661819718381
+
+INFO:root:
+(205/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.012648430681038504
+
+INFO:root:
+(206/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.010208560911539365
+
+INFO:root:
+(207/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.011790263365132427
+
+INFO:root:
+(208/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.011151446906249642
+
+INFO:root:
+(209/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 's1'),	 r = 0.007269689074906401
+
+INFO:root:
+(210/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 's1'),	 r = 0.010227984711045947
+
+INFO:root:
+(211/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 0.007788450999383403
+
+INFO:root:
+(212/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 's1'),	 r = 0.0119274424805529
+
+INFO:root:
+(213/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 0.010191165871062282
+
+INFO:root:
+(214/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 0.007964231846144759
+
+INFO:root:
+(215/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.01051816747307974
+
+INFO:root:
+(216/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.007964178327461078
+
+INFO:root:
+(217/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.012611736410802873
+
+INFO:root:
+(218/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.010542512791809223
+
+INFO:root:
+(219/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.008153738730478664
+
+INFO:root:
+(220/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.011072148959230484
+
+INFO:root:
+(221/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.00987091202628055
+
+INFO:root:
+(222/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 0.013008497228119208
+
+INFO:root:
+(223/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 0.010740312221781637
+
+INFO:root:
+(224/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 0.0082601246714544
+
+INFO:root:
+(225/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.01159032230139019
+
+INFO:root:
+(226/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.010159482717917157
+
+INFO:root:
+(227/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.00934951043484215
+
+INFO:root:
+(228/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 's0'),	 r = 0.01105159317517095
+
+INFO:root:
+(229/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 's0'),	 r = 0.007910826121420009
+
+INFO:root:
+(230/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 's0', 'd2'),	 r = 0.008354595715000378
+
+INFO:root:
+(231/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 's0'),	 r = 0.012503039462440895
+
+INFO:root:
+(232/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 's0'),	 r = 0.009353423700783361
+
+INFO:root:
+(233/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 0.009686610062152911
+
+INFO:root:
+(234/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0'),	 r = 0.006645267937983126
+
+INFO:root:
+(235/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 0.007031738728168957
+
+INFO:root:
+(236/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 0.007255966660673666
+
+INFO:root:
+(237/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.007567965537958044
+
+INFO:root:
+(238/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.0056758536322016025
+
+INFO:root:
+(239/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.009766236158710258
+
+INFO:root:
+(240/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.007842810707035429
+
+INFO:root:
+(241/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.005893625045925415
+
+INFO:root:
+(242/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.009169787720420389
+
+INFO:root:
+(243/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.007705344036646413
+
+INFO:root:
+(244/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.009842410772937982
+
+INFO:root:
+(245/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.01005977829749397
+
+INFO:root:
+(246/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.007294174296534887
+
+INFO:root:
+(247/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.007579057311810704
+
+INFO:root:
+(248/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.007755347960997919
+
+INFO:root:
+(249/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.00546655323445087
+
+INFO:root:
+(250/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.005637981091020927
+
+INFO:root:
+(251/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 's0'),	 r = 0.012461446136566962
+
+INFO:root:
+(252/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 's0'),	 r = 0.009312695119929664
+
+INFO:root:
+(253/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 0.009646555158442153
+
+INFO:root:
+(254/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 'd2', 's0'),	 r = 0.0066110460403965565
+
+INFO:root:
+(255/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 0.0069972911081041195
+
+INFO:root:
+(256/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 0.007221927399795236
+
+INFO:root:
+(257/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.011396277852241996
+
+INFO:root:
+(258/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.011620825359114182
+
+INFO:root:
+(259/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.008420902509930564
+
+INFO:root:
+(260/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.0087252799857608
+
+INFO:root:
+(261/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.008930490387932729
+
+INFO:root:
+(262/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.006303742172056316
+
+INFO:root:
+(263/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.006493090204353275
+
+INFO:root:
+(264/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 0.010269725415968808
+
+INFO:root:
+(265/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 0.008125953179868615
+
+INFO:root:
+(266/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 0.006071699535042272
+
+INFO:root:
+(267/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.009761569863801766
+
+INFO:root:
+(268/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.008041122338200073
+
+INFO:root:
+(269/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.008469950958137278
+
+INFO:root:
+(270/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 0.009526143467854988
+
+INFO:root:
+(271/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 0.009744016479540762
+
+INFO:root:
+(272/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 0.00987994153035266
+
+INFO:root:
+(273/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 0.007265739958726923
+
+INFO:root:
+(274/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 0.0074277981058116305
+
+INFO:root:
+(275/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 0.005374760648582366
+
+INFO:root:
+(276/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.0097698930266778
+
+INFO:root:
+(277/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.009989634042857163
+
+INFO:root:
+(278/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.007231343323283982
+
+INFO:root:
+(279/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.007516651812096721
+
+INFO:root:
+(280/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.007694011089289256
+
+INFO:root:
+(281/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.00541626101324306
+
+INFO:root:
+(282/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.005587875058746115
+
+INFO:root:
+(283/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 0.009480850029606821
+
+INFO:root:
+(284/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 0.009699599083754914
+
+INFO:root:
+(285/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 0.009837147455976294
+
+INFO:root:
+(286/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 0.007229148979559728
+
+INFO:root:
+(287/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 0.007391533365056189
+
+INFO:root:
+(288/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d2', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 0.005346266302207478
+
+INFO:root:
+(289/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.010219093705151583
+
+INFO:root:
+(290/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.008329950104681147
+
+INFO:root:
+(291/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.00901176621432623
+
+INFO:root:
+(292/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 0.00876834643274645
+
+INFO:root:
+(293/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 0.008906259548069449
+
+INFO:root:
+(294/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('s1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('s1', 'd0', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 0.006641293642271619
+
+INFO:root:
+(295/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd1', 's1'),	 r = 0.007691693230001783
+
+INFO:root:
+(296/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 'd2', 's1'),	 r = 0.010869974730790781
+
+INFO:root:
+(297/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd1', 's1', 'd2'),	 r = 0.008219036322617845
+
+INFO:root:
+(298/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 'd2', 's1'),	 r = 0.01286916514964228
+
+INFO:root:
+(299/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 'd2', 's1', 'd2'),	 r = 0.01083288114861753
+
+INFO:root:
+(300/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 'd1', 's0', 's1', 'd2', 'd2'),	 r = 0.00840181555285464
+
+INFO:root:
+(301/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.010975413428795265
+
+INFO:root:
+(302/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.008285413074424958
+
+INFO:root:
+(303/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.013276617374109448
+
+INFO:root:
+(304/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.010998179383031357
+
+INFO:root:
+(305/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.00847041402826266
+
+INFO:root:
+(306/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.011731196504915362
+
+INFO:root:
+(307/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.010344499149538706
+
+INFO:root:
+(308/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 0.013325994697264787
+
+INFO:root:
+(309/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 0.01091891073621846
+
+INFO:root:
+(310/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 0.00836560024950665
+
+INFO:root:
+(311/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.011974436072857225
+
+INFO:root:
+(312/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.01038036670802461
+
+INFO:root:
+(313/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd0', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd0', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.009805697229067116
+
+INFO:root:
+(314/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 'd2', 's1'),	 r = 0.00822147337076399
+
+INFO:root:
+(315/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd1', 's1', 'd2'),	 r = 0.006136857653242721
+
+INFO:root:
+(316/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 'd2', 's1'),	 r = 0.010689824177443314
+
+INFO:root:
+(317/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 'd2', 's1', 'd2'),	 r = 0.008492763608654594
+
+INFO:root:
+(318/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd1', 's1', 'd2', 'd2'),	 r = 0.006356178554525989
+
+INFO:root:
+(319/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 'd2', 's1', 'd2'),	 r = 0.010050086447431404
+
+INFO:root:
+(320/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 'd1', 's0', 'd2', 's1', 'd2', 'd2'),	 r = 0.008352615971889557
+
+INFO:root:
+(321/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 0.011039689616969675
+
+INFO:root:
+(322/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 0.008695137589607108
+
+INFO:root:
+(323/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 0.006491973653907892
+
+INFO:root:
+(324/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.010484334005872894
+
+INFO:root:
+(325/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.008594373703169256
+
+INFO:root:
+(326/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.00916433077373013
+
+INFO:root:
+(327/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.010757066158932163
+
+INFO:root:
+(328/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.008742478948587784
+
+INFO:root:
+(329/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d0', 's0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d0', 's0', 'd1', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.009535982309200566
+
+INFO:root:
+(330/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd0', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd0', 's0'),	 r = 0.011957256989875405
+
+INFO:root:
+(331/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 'd2', 's0'),	 r = 0.008863933061240009
+
+INFO:root:
+(332/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd0', 's0', 'd2'),	 r = 0.009171555344480066
+
+INFO:root:
+(333/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 'd2', 's0'),	 r = 0.006264880097151823
+
+INFO:root:
+(334/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 'd2', 's0', 'd2'),	 r = 0.00662759072962748
+
+INFO:root:
+(335/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 'd2', 's1', 's0', 'd2', 'd2'),	 r = 0.006823376183267667
+
+INFO:root:
+(336/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.010115074571356655
+
+INFO:root:
+(337/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.0103268293953895
+
+INFO:root:
+(338/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.00743836436159595
+
+INFO:root:
+(339/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.007712436476107989
+
+INFO:root:
+(340/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.007876650948333846
+
+INFO:root:
+(341/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.005549398851449064
+
+INFO:root:
+(342/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.005707083346645854
+
+INFO:root:
+(343/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 'd2', 's1'),	 r = 0.008169034925841232
+
+INFO:root:
+(344/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 'd2', 's1', 'd2'),	 r = 0.0062837068521163775
+
+INFO:root:
+(345/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd1', 's1', 'd2', 'd2'),	 r = 0.00460646975145479
+
+INFO:root:
+(346/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 'd2', 's1', 'd2'),	 r = 0.008146080731255426
+
+INFO:root:
+(347/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd1', 'd2', 's1', 'd2', 'd2'),	 r = 0.006375710641947196
+
+INFO:root:
+(348/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's0', 'd2', 'd2', 's1', 'd2', 'd2'),	 r = 0.007593307093518118
+
+INFO:root:
+(349/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 0.007887837938365167
+
+INFO:root:
+(350/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 0.008085143622643317
+
+INFO:root:
+(351/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 0.00820718122959098
+
+INFO:root:
+(352/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 0.0059956182980698625
+
+INFO:root:
+(353/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd0', 'd2', 's0', 'd2', 'd2'),	 r = 0.006122500459354751
+
+INFO:root:
+(354/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd1', 's1', 'd2', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd1', 's1', 'd2', 'd2', 's0', 'd2', 'd2'),	 r = 0.004401290200790088
+
+INFO:root:
+(355/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 'd2', 's0'),	 r = 0.010070833576601162
+
+INFO:root:
+(356/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd0', 's0', 'd2'),	 r = 0.010284110921885374
+
+INFO:root:
+(357/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 'd2', 's0'),	 r = 0.007399972461383062
+
+INFO:root:
+(358/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 'd2', 's0', 'd2'),	 r = 0.007674526384137556
+
+INFO:root:
+(359/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd0', 's0', 'd2', 'd2'),	 r = 0.007839582011376136
+
+INFO:root:
+(360/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 'd2', 's0', 'd2'),	 r = 0.005518630793111747
+
+INFO:root:
+(361/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 'd2', 's1', 'd2', 's0', 'd2', 'd2'),	 r = 0.005676649730653449
+
+INFO:root:
+(362/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 's0'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 'd2', 's0'),	 r = 0.009096092380724684
+
+INFO:root:
+(363/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 'd2', 's0', 'd2'),	 r = 0.009298071589135749
+
+INFO:root:
+(364/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd0', 's0', 'd2', 'd2'),	 r = 0.009433000673500874
+
+INFO:root:
+(365/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'), 't_trunc': 10800}
+INFO:root:Protocol ('d1', 'd2', 's1', 'd0', 'd2', 'd2', 's0', 'd2'),	 r = 0.006906456911723811
+
+INFO:root:
+(366/486) Running: {'t_coh': [10800, 9500, 7200, 5600], 'p_gen': [0.2588, 0.09187, 0.09082], 'p_swap': 0.85, 'w0': [0.9577, 0.9524, 0.9523], 'protocol': ('d1', 'd2', 's1', 'd0', 'd2', 's0', 'd2', 'd2'), 't_trunc': 10800}
