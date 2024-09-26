@@ -1,0 +1,9 @@
+{
+  "()": 0.0
+}
+
+Unique values: 1
+Time taken:
+real	97m1.395s
+user	93m54.546s
+sys	1m47.681s
