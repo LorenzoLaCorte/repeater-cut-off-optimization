@@ -673,8 +673,13 @@ class RepeaterChainSimulation():
             The output waiting time and Werner parameters
         """
         # Check if it is a heterogeneous protocol
+        # If yes, heterogeneous doesn't support cut-offs and 'all_level' yet
         if isinstance(parameters["p_gen"], Iterable):
             self.validate_heterogeneous_parameters(parameters, number_of_segments)
+            if "cutoff" in parameters:
+                raise NotImplementedError("Cut-offs are not implemented for heterogeneous protocols.")
+            if "all_level" in parameters:
+                raise NotImplementedError("All levels are not implemented for heterogeneous protocols.")
             return self.asymmetric_heterogeneous_protocol(parameters, number_of_segments)
         
         S = number_of_segments
@@ -728,6 +733,9 @@ class RepeaterChainSimulation():
         """
         Compute the waiting time and the Werner parameter of an asymmetric protocol.
         """
+        # Use join_links_compatible instead of join_links_efficient, as coherence time is not homogeneous
+        # self.efficient = False
+        
         S = number_of_segments
         parameters = deepcopy(parameters)
 

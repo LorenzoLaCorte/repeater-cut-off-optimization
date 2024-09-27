@@ -256,9 +256,14 @@ def join_links_compatible(
         evaluate_func = get_dist_prob_wout
     elif isinstance(evaluate_func, str):
         raise ValueError(evaluate_func)
-    result = join_links_helper(
-        pmf1, pmf2, w_func1, w_func2, cutoff_func=cutoff_func, evaluate_func=evaluate_func, ycut=ycut, t_coh=t_coh, 
-        mt_cut=mt_cut, w_cut=w_cut, rt_cut=rt_cut)
+    if isinstance(t_coh, list):
+        result = join_links_helper_heterogeneous(
+            pmf1, pmf2, w_func1, w_func2, cutoff_func=cutoff_func, evaluate_func=evaluate_func, ycut=ycut, t_coh=t_coh, 
+            mt_cut=mt_cut, w_cut=w_cut, rt_cut=rt_cut) 
+    else:
+        result = join_links_helper(
+            pmf1, pmf2, w_func1, w_func2, cutoff_func=cutoff_func, evaluate_func=evaluate_func, ycut=ycut, t_coh=t_coh, 
+            mt_cut=mt_cut, w_cut=w_cut, rt_cut=rt_cut)
     return result
 
 
@@ -285,3 +290,57 @@ def join_links_helper(
     return result
 
 
+@nb.jit(nopython=True, error_model="numpy")
+def join_links_helper_heterogeneous(
+        pmf1, pmf2, w_func1, w_func2,
+        cutoff_func=memory_cut_off, evaluate_func=get_one, ycut=True, t_coh=[np.inf], mt_cut=np.iinfo(np.int32).max, w_cut=0.0, rt_cut=np.iinfo(np.int32).max):
+    """
+    If it is a heterogenous protocol, evaluate the decay in function of the coherence times of the nodes involved
+    Consider different links coherence times
+    Cutoff is not implemented for this case
+    """
+    size = len(pmf1)
+    result = np.zeros(size, dtype=np.float64)
+
+    links_t_coh = get_links_t_coh(t_coh)
+    decay_factors1 = np.exp(- np.arange(size) / links_t_coh[0])
+    decay_factors2 = np.exp(- np.arange(size) / links_t_coh[1])
+
+    for t1 in range(1, size):
+        for t2 in range(1, size):
+            decay_factors = decay_factors1 if t1 < t2 else decay_factors2
+            waiting_time, selection_pass = cutoff_func(
+                t1, t2, w_func1[t1], w_func2[t2],
+                mt_cut, w_cut, rt_cut, t_coh)
+            if not ycut:
+                selection_pass = not selection_pass
+            if selection_pass:
+                result[waiting_time] += pmf1[t1] * pmf2[t2] * \
+                    evaluate_func(
+                        t1, t2, w_func1[t1], w_func2[t2],
+                        decay_factors[np.abs(t1-t2)])
+    return result
+
+
+@nb.jit(nopython=True, error_model="numpy")
+def get_link_t_coh(t_coh_A: int, t_coh_B: int):
+    """
+    Return the joint coherence time of two nodes' memories.
+    """
+    return (t_coh_A * t_coh_B) / (t_coh_A + t_coh_B)
+
+
+@nb.jit(nopython=True, error_model="numpy")
+def get_links_t_coh(t_coh):
+    """
+    Return the coherence times of the links involved
+        by considering the coherence time of the nodes.
+    """
+    assert len(t_coh) == 3 or len(t_coh) == 2, f"SWAP/DIST's coherence time list must have 2 or 3 elements, got {t_coh}"
+    # Distillation
+    if len(t_coh) == 2:
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1])]*2
+    # Swap
+    else:
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1]), get_link_t_coh(t_coh[1], t_coh[2])]
+    return links_t_coh

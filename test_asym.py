@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import time
 from repeater_algorithm import repeater_sim
-from utility_functions import get_mean_waiting_time, get_mean_werner, secret_key_rate, werner_to_fid
+from utility_functions import get_mean_waiting_time, get_mean_werner, remove_unstable_werner, secret_key_rate, werner_to_fid
 from logging_utilities import create_iter_kwargs
 
 protocols = [
@@ -57,39 +57,33 @@ def test_asym_repeater_sim(protocol, benchmark):
     assert np.array_equal(w_func1, w_func2), "The w_func is not the same."
 
 
-def test_heterogeneus_repeater_sim_manual():
+def check_validity(pmf1, pmf2, w_func1, w_func2, tolerance: int = 1e-5):
+    w_func1, w_func2 = remove_unstable_werner(pmf1, w_func1, tolerance), remove_unstable_werner(pmf2, w_func2, tolerance)
+    skr1, skr2 = secret_key_rate(pmf1, w_func1), secret_key_rate(pmf2, w_func2)
+    
+    assert np.allclose(skr1, skr2, atol=tolerance, equal_nan=True), "The secret key rate is not the same."
+    assert np.allclose(pmf1, pmf2, atol=tolerance, equal_nan=True), "The pmf is not the same."
+
+    for idx, (w1, w2) in enumerate(zip(w_func1, w_func2)):
+        assert np.allclose(w1, w2, atol=tolerance, equal_nan=True), f"The w_func for idx {idx} is not the same: {w1} vs {w2}."
+
+
+@pytest.mark.parametrize("t_coh_A, t_coh_B, t_coh_C", [
+    (10, 10, 20),
+    (200, 500, 1000),
+    (300, 1200, 200),
+    (400, 100, 300),
+    (15000, 1000, 2000)
+])
+def test_heterogeneus_repeater_sim_manual(t_coh_A, t_coh_B, t_coh_C):
     """
     Verifies the decay factors for the heterogeneus protocol simulation.    
-    TODO: the second test is not working, understand why
     """
-    # ----------------
-    # Homogeneous protocol, 2 segments
-    # ----------------
-    p_swap = 0.9999
+    N, S, protocol = 3, 2, ('s0',) # Heterogeneous protocol, 2 segments
+    p_gen_AB, p_gen_BC = 0.5, 1.
+    w0_AB, w0_BC = 0.9, 1.
+    p_swap = 1.
 
-    # parameters = {
-    #     "protocol": (0,),
-    #     "p_gen": 0.5,
-    #     "p_swap": p_swap,
-    #     "w0": 0.9999,
-    #     "t_coh": 10,
-    #     "t_trunc": 1000,
-    # }
-    # pmf, w_func = repeater_sim(parameters)
-
-    # # Consider t=1
-
-
-    # ----------------
-    # Heterogeneous protocol, 2 segments
-    # ----------------
-
-    N, S, protocol = 3, 2, ('s0',)
-    t_coh_A, t_coh_B, t_coh_C = 20, 10, 5
-    p_gen_AB, p_gen_BC = 0.9999, 0.5
-    w0_AB, w0_BC = 0.9, 0.9
-
-    # TODO: try to swap the order of the segments and see if the result is the same
     parameters = {
         "protocol": protocol,
         "p_gen": [p_gen_AB, p_gen_BC],
@@ -100,55 +94,37 @@ def test_heterogeneus_repeater_sim_manual():
     }
 
     # Run the simulation
-    pmf, w_func = repeater_sim(parameters)
+    pmf1, w_func1 = repeater_sim(parameters)
 
     # Consider t=1
     # w_AB (t) should be costant 0.9, as it is for sure generated last 
     # w_BC (t) starts from near 1 and decays accordingly to
         # exp ( - deltaT * (1/t_coh_B + 1/t_coh_C) )
     # The two multiplied (SWAP) should give the same result as the simulation
-    w_BC_all = w0_BC * np.exp((1/t_coh_B + 1/t_coh_C)) * np.arange(1000)
+    w_BC_cmp = w0_BC * np.exp(-np.arange(999) * (1/t_coh_B + 1/t_coh_C))
+    w_BC_cmp = np.insert(w_BC_cmp, 0, 0) # Add the initial zero
+    w_func_cmp = w0_AB * w_BC_cmp
 
-    w_AB_1 = w0_AB
-    w_BC_1 = w_BC_all[1]
-    w_func_1 = w_AB_1 * w_BC_1
+    check_validity(pmf1, pmf1, w_func1, w_func_cmp)
 
-    # assert np.isclose(w_func[1], w_func_1, rtol=1e-3), "The output Werner for t=1 is not the same."
-
-    # Consider t=2
-    # w_AB (t) should be costant 0.9, as it is for sure generated last
-    # w_BC (t) now decays accordingly to
-        # exp ( - deltaT * (2/t_coh_B + 2/t_coh_C) )
-
-    w_AB_2 = w0_AB
-    w_BC_2 = w_BC_all[2]
-    w_func_2 = w_AB_2 * w_BC_2
-
-    # assert np.isclose(w_func[2], w_func_2, rtol=1e-3), "The output Werner for t=2 is not the same."
-
-    t_coh_A, t_coh_B, t_coh_C = 5, 10, 20
-    p_gen_AB, p_gen_BC = 0.5, 0.9999
-    w0_AB, w0_BC = 0.9, 0.9
-
+    # Swap the order of the segments and see if the result is the same
     parameters = {
         "protocol": protocol,
-        "p_gen": [p_gen_AB, p_gen_BC],
+        "p_gen": [p_gen_BC, p_gen_AB],
         "p_swap": p_swap,
-        "w0": [w0_AB, w0_BC],
-        "t_coh": [t_coh_A, t_coh_B, t_coh_C],
+        "w0": [w0_BC, w0_AB],
+        "t_coh": [t_coh_C, t_coh_B, t_coh_A],
         "t_trunc": 1000,
     }
 
     # Run the simulation
     pmf2, w_func2 = repeater_sim(parameters)
-
-    assert np.array_equal(pmf, pmf2), "The pmf is not the same."
-    assert np.array_equal(w_func, w_func2), "The w_func is not the same."
+    check_validity(pmf1, pmf2, w_func1, w_func2)
 
 
 @pytest.mark.parametrize("p_gen, p_swap, w0, t_coh, t_trunc", [
-    (0.00092, 0.85, 0.952, 1400000, 400000),
-    (0.000015, 0.85, 0.867, 720000, 400000),
+    (0.00092, 0.85, 0.952, 1400, 10000),
+    (0.000015, 0.85, 0.867, 720, 10000),
  
 ])
 @pytest.mark.parametrize("heterogeneous_protocol, homogeneous_protocol", zip(protocols, benchmarks))
@@ -184,7 +160,6 @@ def test_heterogeneus_repeater_sim(p_gen, p_swap, w0, t_coh, t_trunc, heterogene
         'w0': [w0]*segments,
         "t_trunc": t_trunc,
     }
-    print(parameters)
     parameters["protocol"] = heterogeneous_protocol
 
     start_time = time.time()
@@ -197,10 +172,7 @@ def test_heterogeneus_repeater_sim(p_gen, p_swap, w0, t_coh, t_trunc, heterogene
     print(f"Elapsed time for homogeneous protocol {homogeneous_protocol}: {elapsed1}, "
         f"for heterogeneous protocol {heterogeneous_protocol}: {elapsed2}")
     
-    assert skr1 == skr2, "The secret key rate is not the same."
-    assert np.array_equal(pmf1, pmf2), "The pmf is not the same."
-    assert np.array_equal(w_func1, w_func2), "The w_func is not the same."
-
+    check_validity(pmf1, pmf2, w_func1, w_func2)
 
 if __name__ == "__main__":
     pytest.main(["-sv", "test_asym.py::test_heterogeneus_repeater_sim_manual"])

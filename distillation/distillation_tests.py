@@ -93,6 +93,29 @@ def single_sym_test():
     print(get_protocol_rate(parameters))
 
 
+def single_het_test():
+    """
+    Test the repeater_sim function calling it for a homogeneous protocol
+        both with the algorithm for symmetric (homogeneous) protocols [benchmark]
+         and the algorithm for asymmetric (and heterogeneous) protocols.
+    """
+    t_coh_A, t_coh_B, t_coh_C = 5, 10, 20
+    p_gen_AB, p_gen_BC = 0.5, 0.9999
+    w0_AB, w0_BC = 0.9, 0.9999
+    p_swap = 0.9999
+
+    parameters = {
+        "p_gen": [p_gen_AB, p_gen_BC],
+        "p_swap": p_swap,
+        "w0": [w0_AB, w0_BC],
+        "t_coh": [t_coh_A, t_coh_B, t_coh_C],
+        "t_trunc": 1000,
+    }
+
+    parameters["protocol"] = ('s0', )
+    print(get_protocol_rate(parameters))
+
+
 def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol.png", legend=False):
     """
     Formats the input figure and axes.
@@ -607,4 +630,4 @@ def hw_varying_experiment_runner():
 
 
 if __name__ == "__main__":
-    single_sym_test()
+    single_het_test()
