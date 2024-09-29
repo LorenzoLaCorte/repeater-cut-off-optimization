@@ -57,42 +57,6 @@ def get_protocol_rate(parameters):
     return secret_key_rate(pmf, w_func, parameters["t_trunc"])
 
 
-def single_asym_test(): 
-    """
-    This function is used to test the repeater simulation with a fixed set of parameters.
-     You can call this function from command line:
-     ```py -c "from distillation_tests.py import single_test; single_test()"```
-    """
-    parameters = {
-        't_coh': 3600000,
-        'p_gen': 0.0026,
-        'p_swap': 0.85,
-        'w0': 0.958,
-        "t_trunc": 321168,
-    }
-    
-    parameters["protocol"] = ('d0', 'd1', 's0', 'd2', 'd3', 's2', 'd1', 'd3', 's1', 'd4', 'd5', 's4', 'd3', 'd5', 's3', 'd6', 'd7', 's6', 'd8', 'd9', 's8', 'd7', 'd9', 's7', 'd5', 'd9', 's5')
-    print(get_protocol_rate(parameters))
-
-
-def single_sym_test(): 
-    """
-    This function is used to test the repeater simulation with a fixed set of parameters.
-     You can call this function from command line:
-     ```py -c "from distillation_ml_gp import single_test; single_test()"```
-    """
-    parameters = {
-        't_coh': 1400000,
-        'p_gen': 0.00092,
-        'p_swap': 0.85,
-        'w0': 0.952,
-        "t_trunc": 1400000
-    }
-    
-    parameters["protocol"] = (1,0,1,0)
-    print(get_protocol_rate(parameters))
-
-
 def single_het_test():
     """
     Test the repeater_sim function calling it for a homogeneous protocol
@@ -113,6 +77,42 @@ def single_het_test():
     }
 
     parameters["protocol"] = ('s0', )
+    print(get_protocol_rate(parameters))
+
+
+def single_asym_test(): 
+    """
+    This function is used to test the repeater simulation with a fixed set of parameters.
+     You can call this function from command line:
+     ```py -c "from distillation_tests.py import single_test; single_test()"```
+    """
+    parameters = {
+        't_coh': 1400,
+        'p_gen': 0.092,
+        'p_swap': 0.85,
+        'w0': 0.98,
+        "t_trunc": 1400,
+    }
+    
+    parameters["protocol"] = ('s0', 's1', 's2', 'd3', 'd3', 'd3', 'd3')
+    print(get_protocol_rate(parameters))
+
+
+def single_sym_test(): 
+    """
+    This function is used to test the repeater simulation with a fixed set of parameters.
+     You can call this function from command line:
+     ```py -c "from distillation_ml_gp import single_test; single_test()"```
+    """
+    parameters = {
+        't_coh': 1400000,
+        'p_gen': 0.00092,
+        'p_swap': 0.85,
+        'w0': 0.952,
+        "t_trunc": 1400000
+    }
+    
+    parameters["protocol"] = (1,0,1,0)
     print(get_protocol_rate(parameters))
 
 
@@ -630,4 +630,4 @@ def hw_varying_experiment_runner():
 
 
 if __name__ == "__main__":
-    single_het_test()
+    single_asym_test()
