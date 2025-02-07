@@ -6,6 +6,7 @@ import re
 from typing import Dict, List, Tuple
 import warnings
 
+from matplotlib import rcParams
 from matplotlib.ticker import ScalarFormatter
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -357,6 +358,15 @@ def scrape_protocols_skr(file_path: str) -> Dict[str, float]:
             continue
     return protocols_skr
 
+plt.rcParams.update({
+    'font.family': 'serif',
+    'font.serif': ['DejaVu Serif'],  # Alternative font resembling LaTeX style
+    'mathtext.fontset': 'dejavuserif',  # Use DejaVu Serif for math
+    'mathtext.rm': 'serif',
+    'mathtext.it': 'serif:italic',
+    'mathtext.bf': 'serif:bold'
+})
+
 def distillation_utility() -> None:
     t_coh: int = 1400000
     p_gen: float = 0.00092
@@ -413,8 +423,9 @@ def distillation_utility() -> None:
     formatter.set_scientific(True)
     formatter.set_powerlimits((-3, 4))
     plt.gca().yaxis.set_major_formatter(formatter)
-    plt.xlabel('$w_0$')
-    plt.ylabel('Secret Key Rate')
+
+    plt.xlabel(r'$w_0$')
+    plt.ylabel('Secret-key rate')
     plt.legend(frameon=True)
     plt.tight_layout()
     plt.savefig("figures/distillation_utility.pdf", bbox_inches='tight')
