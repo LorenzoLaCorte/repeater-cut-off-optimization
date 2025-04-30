@@ -4,19 +4,21 @@ SCRIPT="gp_symmetric.py"
 PY_ALIAS="python3.10"
 
 # Define what simulation you want to run {True, False}
-GP=True
-DP_COMPLEXITY=False
+GP=False
+DP_COMPLEXITY=True
 
 # Define the general result directory
 GENERAL_RESULT_DIR="./results_symmetric"
 
 # Define the space of rounds of distillation to be simulated
 MIN_DISTS=0
-MAX_DISTS=1
+MAX_DISTS=10
 
 # Define parameters as tuples of t_trunc, t_coh, p_gen, p_swap, w0, swaps
 PARAMETER_SETS=(
-    "-1 1400000 0.00092     0.85 0.952 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
+    # "-1 400 0.5 0.5 0.933 2"
+    "-1 400 0.9 0.9 0.933 3"
+    # "-1 1400000 0.00092     0.85 0.952 2" # 50 km, 2 SWAP, rate is non-zero and higher when I distill
     # "-1 720000  0.0000150   0.85 0.867  1"  # 100 km, 1 SWAP, rate is 0 whatsoever
     # "-1 360000  0.000000096 0.85 0.36   0" # 200 km, 0 SWAP, hard to simulate
 )
@@ -39,7 +41,6 @@ PARAMETER_SETS=(
 if [ "$GP" = "True" ]; then
     # Define the optimizers and spaces to test
     OPTIMIZER_SPACE_DP_COMBS=(
-        "bf enumerate"
         "gp centerspace"
     )
 
@@ -91,14 +92,14 @@ if [ "$GP" = "True" ]; then
 
             # Move the output file to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
-            if ls *_${OPTIMIZER}.png 1> /dev/null 2>&1; then
-                mv *_${OPTIMIZER}.png "$RESULT_DIR/"
+            if ls *${OPTIMIZER}.pdf 1> /dev/null 2>&1; then
+                mv *${OPTIMIZER}.pdf "$RESULT_DIR/"
             else
                 echo "No plots yielded for optimizer $OPTIMIZER"
             fi
         done
     done
-
+fi
 # -----------------------------------------
 # DP: Parameter Set Testing with Various Optimizers and Spaces
 # -----------------------------------------
@@ -110,8 +111,15 @@ if [ "$GP" = "True" ]; then
 # 2. Specify the optimizers and search spaces to be used for testing (below).
 # -----------------------------------------
 
-elif [ "$DP_COMPLEXITY" = "True" ]; then
-    START_DISTS=$MIN_DISTS
+MIN_DISTS=0
+MAX_DISTS=7
+PARAMETER_SETS=(
+    # "-1 400 0.5 0.5 0.933 2"
+    "-1 240 0.99 0.99 0.933 3"
+)
+
+if [ "$DP_COMPLEXITY" = "True" ]; then
+    START_DISTS=$MAX_DISTS
     LIMIT_DISTS=$MAX_DISTS
     GENERAL_RESULT_DIR="./results_dp_complexity"
 
@@ -138,7 +146,7 @@ elif [ "$DP_COMPLEXITY" = "True" ]; then
                 TMPFILE=$(mktemp)
                 
                 echo "Running distillation with optimizer $OPTIMIZER, space $SPACE and max_dists $MAX_DISTS..."
-
+set -x
                 # Run the Python script with the specified parameters and append the output to TMPFILE
                 { time $PY_ALIAS $SCRIPT \
                     --min_swaps="$SWAPS" \
@@ -152,7 +160,7 @@ elif [ "$DP_COMPLEXITY" = "True" ]; then
                     --p_swap="$P_SWAP" \
                     --w0="$W0" \
                     $DP_FLAG; } 2>&1 | tee -a "$TMPFILE"
-
+set +x
                 # Create a folder for the results if it doesn't exist
                 TIMESTAMP=$(date +%s)
                 RESULT_DIR="$GENERAL_RESULT_DIR/results_${OPTIMIZER}_${SPACE}${DP_FLAG}_$TIMESTAMP"
@@ -162,9 +170,9 @@ elif [ "$DP_COMPLEXITY" = "True" ]; then
                 real_time=$(tail -n 3 "$TMPFILE" | grep '^real' | awk '{print $2}')
                 echo "swaps=$MAX_SWAPS, max_dists=$MAX_DISTS, time=$real_time" >> "$RESULT_DIR/$FILENAME"
                 rm "$TMPFILE"
-                for file in *_${OPTIMIZER}.png; 
+                for file in *${OPTIMIZER}.pdf; 
                 do 
-                    mv "$file" "$RESULT_DIR/${MAX_DISTS}.png";
+                    mv "$file" "$RESULT_DIR/${MAX_DISTS}.pdf";
                 done                
                 mv output.txt "$RESULT_DIR/${MAX_DISTS}.txt"
             done

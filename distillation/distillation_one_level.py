@@ -70,7 +70,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
 
     plt.tight_layout(pad=1.75)
     parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
-    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=config['dpi'])
+    fig.savefig(f"{exp_name}_{parameters_str}.pdf", dpi=config['dpi'])
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -100,7 +100,7 @@ def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=No
             ax.plot(np.arange(trunc), data, label=label)
         else:
             ax.plot(np.arange(trunc), data)
-        ax.set_xlabel("Waiting Time")
+        ax.set_xlabel(r"Waiting Time ($t_\text{unit}$)")
         ax.set_title(title)
         if title == "Werner parameter":
             if full_werner:
@@ -148,8 +148,8 @@ def sim_distillation_strategies(parameters_set = [{"p_gen": 0.5, "p_swap": 0.5, 
         On the y-axis we have the rate for the protocol.
         A costant line is added to benchmark the protocol in the case where no distillation is applied.
     """
-    SWAPS = range(2, 4)
-    DISTS = range(1, 6, 2)
+    SWAPS = range(1, 3)
+    DISTS = range(1, 4)
     fig, axs = plt.subplots(len(parameters_set), len(SWAPS), 
                             figsize=(config['figsize']['width'], config['figsize']['height']*len(parameters_set)))
 
