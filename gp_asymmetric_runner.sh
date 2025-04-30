@@ -90,8 +90,8 @@ if [ "$GP_HOMOGENEOUS" = "True" ]; then
 
             # Move the output file and the plots to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
-            if ls *${OPTIMIZER}.png 1> /dev/null 2>&1; then
-                mv *${OPTIMIZER}.png "$RESULT_DIR/"
+            if ls *${OPTIMIZER}.pdf 1> /dev/null 2>&1; then
+                mv *${OPTIMIZER}.pdf "$RESULT_DIR/"
             else
                 echo "No plots yielded for optimizer $OPTIMIZER"
             fi
@@ -176,8 +176,8 @@ if [ "$GP_HETEROGENEOUS" = "True" ]; then
 
             # Move the output file and the plots to the results folder
             mv "$FILENAME" "$RESULT_DIR/"
-            if ls *${OPTIMIZER}.png 1> /dev/null 2>&1; then
-                mv *${OPTIMIZER}.png "$RESULT_DIR/"
+            if ls *${OPTIMIZER}.pdf 1> /dev/null 2>&1; then
+                mv *${OPTIMIZER}.pdf "$RESULT_DIR/"
             else
                 echo "No plots yielded for optimizer $OPTIMIZER"
             fi
