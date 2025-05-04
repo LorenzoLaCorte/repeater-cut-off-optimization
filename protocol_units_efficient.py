@@ -38,12 +38,11 @@ def get_links_t_coh(t_coh):
         by considering the coherence time of the nodes.
     """
     assert len(t_coh) == 3 or len(t_coh) == 2, f"SWAP/DIST's coherence time list must have 2 or 3 elements, got {t_coh}"
-    # Distillation
+    
     if len(t_coh) == 2:
-        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1])]*2
-    # Swap
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1])]*2 # distillation
     else:
-        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1]), get_link_t_coh(t_coh[1], t_coh[2])]
+        links_t_coh = [get_link_t_coh(t_coh[0], t_coh[1]), get_link_t_coh(t_coh[1], t_coh[2])] # swapping
     return links_t_coh
 
 
@@ -130,8 +129,6 @@ def get_w2_werner(pmf1, pmf2, w_func1, w_func2, t_coh):
         func1_early = Pr(T1=t1) * exp(+t1)/t_coh_1
         func2_later = Pr(T2=t2) * w2 * exp(-t2)/t_coh_1
         func2_early = Pr(T2=t2) * w2 * exp(+t2)/t_coh_2
-
-
     """
     size = len(pmf1)
     if isinstance(t_coh, list):
@@ -349,7 +346,7 @@ def get_m1n4_array(pmf1, pmf2, m, n, t_coh):
 
 def join_links_efficient(
         pmf1, pmf2, w_func1, w_func2,
-        cutoff=np.iinfo(np.int32).max, ycut=True,
+        cutoff=np.iinfo(int).max, ycut=True,
         cut_type=None, evaluate_func=None, t_coh=np.inf):
     """
     Calculate P_s and P_f efficiently using cumulative function.

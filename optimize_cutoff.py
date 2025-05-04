@@ -557,7 +557,7 @@ def uniform_tau_pretrain(parameters, tau_dims):
     Return the probability distribution of the highest level.
     """
     ref_pmf, _ = optimization_tau_wrapper(
-        [np.iinfo(np.int32).max] * tau_dims,
+        [np.iinfo(int).max] * tau_dims,
         func=repeater_sim, parameters=parameters)
     return np.array([ref_pmf] * tau_dims)
 
@@ -567,7 +567,7 @@ def full_tau_pretrain_high_tau(parameters, tau_dims):
     """
     Return the probability distribution without cut-off of level 1 to n.
     """
-    parameters["tau"] = (np.iinfo(np.int32).max,) * len(parameters["protocol"])
+    parameters["tau"] = (np.iinfo(int).max,) * len(parameters["protocol"])
     full_result = repeater_sim(parameters, all_level=True)
     ref_pmf_matrix = np.array([result_pair[0] for result_pair in full_result])
     return ref_pmf_matrix[1:]
@@ -578,7 +578,7 @@ def full_tau_pretrain(parameters, tau_dims):
     """
     Return the probability distribution without cut-off of level 0 to n-1.
     """
-    parameters["tau"] = (np.iinfo(np.int32).max,) * len(parameters["protocol"])
+    parameters["tau"] = (np.iinfo(int).max,) * len(parameters["protocol"])
     full_result = repeater_sim(parameters, all_level=True)
     ref_pmf_matrix = np.array([result_pair[0] for result_pair in full_result])
     return ref_pmf_matrix

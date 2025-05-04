@@ -229,7 +229,7 @@ def parameter_regime_step(parameters, track, workers=1):
         opt = CutoffOptimizer(opt_kind="nonuniform_de", disp=True, adaptive=True, tol=0.01, workers=workers, simulator=simulator, sample_distance=parameters["sample_distance"])
         best_tau = opt.run(parameters)
     elif parameters["optimizer"] == "none": # no cutoff
-        best_tau = {"memory_time": np.iinfo(np.int32).max}
+        best_tau = {"memory_time": np.iinfo(int).max}
     else:
         raise ValueError("Unknown optimizer {}.".format(parameters["optimizer"]))
 
