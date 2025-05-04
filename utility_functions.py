@@ -5,12 +5,11 @@ import numba as nb
 import numpy as np
 from scipy.optimize import curve_fit
 
-states = "bell" # TODO: import from a config
+from config import StateType, STATE_TYPE
 
 @nb.jit(nopython=True)
 def pmf_to_cdf(pmf):
     return np.cumsum(pmf)
-
 
 @nb.jit(nopython=True)
 def cdf_to_pmf(cdf):
@@ -61,9 +60,9 @@ def entropy(x):
 
 
 def distillable_entanglement(w_func):
-    if states == "werner":
+    if STATE_TYPE == StateType.WERNER:
         f_func = werner_to_fid(w_func)
-    elif states == "bell":
+    elif STATE_TYPE == StateType.BELL:
         f_func = bell_to_fid(w_func)
     
     f_func[f_func < 0.5] = 0.5
@@ -98,9 +97,9 @@ def secret_key_rate(pmf, w_func, extrapolation=False, show_warning=False):
     """
     coverage = np.sum(pmf)
     
-    if states == "werner":
+    if STATE_TYPE == StateType.WERNER:
         aver_w = min(get_mean_werner(pmf, w_func, extrapolation), 1.) # avoid w > 1
-    elif states == "bell":
+    elif STATE_TYPE == StateType.BELL:
         aver_w = get_mean_bell(pmf, w_func, extrapolation)
 
     aver_t = get_mean_waiting_time(pmf, extrapolation, show_warning)
@@ -140,7 +139,7 @@ def get_mean_bell(pmf, lambdas, extrapolation=False):
 # Adjusted to Bell scenario
 def get_mean_waiting_time(pmf, extrapolation=False, show_warning=False):
     # CONTRIBUTION: if pmf is a 2-d list, extract the first element of sublist. If pmf is a 1-d list, do nothing
-    if states == "bell" and isinstance(pmf[0], list):
+    if STATE_TYPE == StateType.BELL and isinstance(pmf[0], list):
         pmf = [sublist[0] for sublist in pmf]
     
     coverage = np.sum(pmf)

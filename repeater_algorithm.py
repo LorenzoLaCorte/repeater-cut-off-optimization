@@ -15,21 +15,20 @@ try:
 except (ImportError, ModuleNotFoundError):
     _cupy_exist = False
 
-states = "werner" # or "bell"
+from config import StateType, STATE_TYPE
 
 # We currently have two versions of the protocol units
-if states == "bell":
+if STATE_TYPE == StateType.BELL:
     from protocol_units_bell import join_links_compatible
-else:
+elif STATE_TYPE == StateType.WERNER:
     from protocol_units import join_links_compatible
 
-# whereas only the werner states version of efficient protocol units exist
+# Whereas only the werner states version of efficient protocol units exist
 from protocol_units_efficient import join_links_efficient
 
 from utility_functions import secret_key_rate, ceil, werner_to_fid, bell_to_fid, find_heading_zeros_num, matrix_to_werner, werner_to_matrix, get_fidelity
 from logging_utilities import log_init, create_iter_kwargs, save_data
 from repeater_mc import repeater_mc, plot_mc_simulation
-
 
 __all__ = ["RepeaterChainSimulation", "compute_unit", "plot_algorithm",
            "join_links_compatible", "repeater_sim"]
@@ -60,11 +59,20 @@ class RepeaterChainSimulation():
         self.use_fft = True
         self.use_gpu = False
         self.gpu_threshold = 1000000
-        self.efficient = True if states == "werner" else False # do not use efficient for Bell states
+
+        if STATE_TYPE == StateType.WERNER:
+            self.efficient = True  
+        elif STATE_TYPE == StateType.BELL:
+            self.efficient = False  # Do not use efficient for Bell states
+        else:
+            raise ValueError(f"Unexpected STATE_TYPE: {STATE_TYPE}")
+
+        print(f"Using {STATE_TYPE} states.")
+        
         self.zero_padding_size = None
         self._qutip = False
         if self.use_cache:
-            self.cache = {} # parameters: (pmf, w_func) -- or -- parameters: full_result
+            self.cache = {}  # parameters: (pmf, w_func) -- or -- parameters: full_result
 
     def iterative_convolution(self,
             func, shift=0, first_func=None, p_swap=None):
@@ -98,7 +106,11 @@ class RepeaterChainSimulation():
         """
         # is_dm is True if the first_func is a density matrix
         # TODO: understand why bell states sets is_dm to False when first_func has shape 
-        if first_func is None or (states == "werner" and len(first_func.shape) == 1) or (states == "bell" and len(first_func.shape) == 2):
+        if (
+            first_func is None or
+            (STATE_TYPE == StateType.WERNER and len(first_func.shape) == 1) or
+            (STATE_TYPE == StateType.BELL and len(first_func.shape) == 2)
+        ):
             is_dm = False
         else:
             is_dm = True
@@ -120,16 +132,16 @@ class RepeaterChainSimulation():
             sum_func += sublist[0]
 
         if p_swap is not None:
-            if states == "werner":
+            if STATE_TYPE == StateType.WERNER:
                 pf = np.sum(func) * (1 - p_swap)
-            elif states == "bell":
+            elif STATE_TYPE == StateType.BELL:
                 if isinstance(p_swap, list): # if p_swp is a list, extract the first element
                     p_swap = p_swap[0]
                 pf = sum_func * (1 - p_swap)
         else:
-            if states == "werner":
+            if STATE_TYPE == StateType.WERNER:
                 pf = np.sum(func)
-            elif states == "bell":
+            elif STATE_TYPE == StateType.BELL:
                 pf = sum_func
         ###
 
@@ -143,7 +155,7 @@ class RepeaterChainSimulation():
             print(trunc)
         max_k = int(max_k)
 
-        if states == "werner":
+        if STATE_TYPE == StateType.WERNER:
             # Transpose the array of state to the shape (1,1,trunc) if werner 
             # or shape (4,4,trunc) if density matrix
             if first_func is None:
@@ -152,7 +164,7 @@ class RepeaterChainSimulation():
                 first_func = first_func.reshape((trunc, 1, 1))
             first_func = np.transpose(first_func, (1, 2, 0))
 
-        elif states == "bell":
+        elif STATE_TYPE == StateType.BELL:
             # Transpose the array of state to the shape (1, 4, trunc)
             if first_func is None:
                 first_func = func
@@ -167,11 +179,11 @@ class RepeaterChainSimulation():
         for i in range(first_func.shape[0]):
             for j in range(first_func.shape[1]):
 
-                if states == "werner":
+                if STATE_TYPE == StateType.WERNER:
                     result[i][j] = self.iterative_convolution_helper(
                          func, first_func[i][j], trunc, shift, p_swap, max_k)
                 
-                elif states == "bell":
+                elif STATE_TYPE == StateType.BELL:
                      result[i][j] = self.iterative_convolution_helper(
                          func[i][j], first_func[i][j], trunc, shift, p_swap, max_k)
 
@@ -179,9 +191,9 @@ class RepeaterChainSimulation():
         result = np.transpose(result, (2, 0, 1))
 
         if not is_dm:
-            if states == "werner":
+            if STATE_TYPE == StateType.WERNER:
                 result = result.reshape(trunc)
-            elif states == "bell":
+            elif STATE_TYPE == StateType.BELL:
                 result = result.reshape([trunc, 4])
         return result
 
