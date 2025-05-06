@@ -6,6 +6,10 @@
 /logging
 /data
 
+.pytest_cache
+
+.vscode
+.vscode/launch.json
 .vscode/settings.json
 *.pyc
 *.npy

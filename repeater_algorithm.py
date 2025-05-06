@@ -1151,15 +1151,14 @@ class RepeaterChainSimulation():
     def bell_diagonal_protocol(self, parameters, all_level=False):
         """
         TODO: write docstring
+
+        Rates for depolarization, dephase, amplitude damping, and bit phase flip
+            if present, are passed to the compute unit function
         """
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
         p_gen = parameters["p_gen"]
         lambdas = parameters["lambdas"]
-        depolar_rate = parameters.get("depolarizing_rate", 0.)
-        dephase_rate = parameters.get("dephasing_rate", 0.)
-        amplitude_damping_rate = parameters.get("amplitude_damping_rate", 0.)
-        bit_phase_flip_rate = parameters.get("bit_flip_rate", 0.)
 
         if "tau" in parameters:
             parameters["mt_cut"] = parameters.pop("tau")
@@ -1219,6 +1218,7 @@ class RepeaterChainSimulation():
             if all_level:
                 full_result.append((pmf, lambda_func))
 
+        # TODO: if im correct, we are keeping track of 4 pmfs and then only keeping one in the end?
         final_pmf = [phiplus[0] for phiplus in pmf]
         final_lambda_func = lambda_func
 

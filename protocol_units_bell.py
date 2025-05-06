@@ -16,12 +16,13 @@ resulting output parameters of each protocol unit.
 """
 ########################################################################
 """
-Error model 
-
+Error model functions
 """
 @nb.jit(nopython=True, error_model="numpy")
 def depolarizing_noise(lambdas, t, p):
-    """Applies depolarizing noise to the Bell Diagonal state, ensuring normalization."""
+    """
+    Applies depolarizing noise to the Bell Diagonal state, ensuring normalization.
+    """
     # p_t = 1 - np.exp(-p * t)
     p_t = p[t]
     # Apply depolarization to each lambda
@@ -29,9 +30,12 @@ def depolarizing_noise(lambdas, t, p):
     new_lambdas = np.asarray(new_lambdas)
     return new_lambdas
 
+
 @nb.jit(nopython=True, error_model="numpy")
 def dephasing_noise(lambdas, t, gamma):
-    """Applies dephasing noise (affecting lambda_2 and lambda_3) with normalization."""
+    """
+    Applies dephasing noise (affecting lambda_2 and lambda_3) with normalization.
+    """
     decay_factor = (1 - np.exp(-gamma * t))/2
     new_lambdas = [
         lambdas[0] * (1 - decay_factor) + lambdas[1] * decay_factor,  # Redistribute lost probability
@@ -42,9 +46,12 @@ def dephasing_noise(lambdas, t, gamma):
     new_lambdas = np.asarray(new_lambdas)
     return new_lambdas
 
+
 @nb.jit(nopython=True, error_model="numpy")
 def amplitude_damping(lambdas, t, gamma):
-    """Models amplitude damping noise affecting lambda_1 and lambda_4, ensuring probability conservation."""
+    """
+    Models amplitude damping noise affecting lambda_1 and lambda_4, ensuring probability conservation.
+    """
     p_t = 1 - np.exp(-gamma * t)
     lost_probability = (lambdas[0] - lambdas[3]) * p_t
     new_lambdas = [
@@ -56,9 +63,12 @@ def amplitude_damping(lambdas, t, gamma):
     new_lambdas = np.asarray(new_lambdas)
     return new_lambdas
 
+
 @nb.jit(nopython=True, error_model="numpy")
 def bit_phase_flip(lambdas, t, p):
-    """Applies bit-flip or phase-flip errors (affecting lambda_2 and lambda_3) with normalization."""
+    """
+    Applies bit-flip or phase-flip errors (affecting lambda_2 and lambda_3) with normalization.
+    """
     factor = (1 - 2 * p * (1 - np.exp(-t)))
     lost_probability = (1 - factor) * (lambdas[1] + lambdas[2])
     new_lambdas = [
@@ -182,11 +192,6 @@ def get_dist_prob_suc(t1, t2, lambdas1, lambdas2, depolar_rate=0., dephase_rate=
 
     output = ((lambdas1[0] + lambdas1[1])*(lambdas2[0] + lambdas2[1]) + (lambdas1[2] + lambdas1[3])*(lambdas2[2] + lambdas2[3])) 
     return [output, output, output, output]
-
-
-
-
-
 
 
 ########################################################################
