@@ -67,7 +67,7 @@ class RepeaterChainSimulation():
         else:
             raise ValueError(f"Unexpected STATE_TYPE: {STATE_TYPE}")
 
-        print(f"Using {STATE_TYPE} states.")
+        logging.debug(f"Using {STATE_TYPE} states.")
         
         self.zero_padding_size = None
         self._qutip = False
