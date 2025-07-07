@@ -9,6 +9,7 @@ import numba as nb
 import numpy as np
 
 from repeater_types import checkAsymProtocol
+
 try:
     import cupy as cp # type: ignore
     _cupy_exist = True
@@ -17,13 +18,9 @@ except (ImportError, ModuleNotFoundError):
 
 from config import StateType, STATE_TYPE
 
-# We currently have two versions of the protocol units
-if STATE_TYPE == StateType.BELL:
-    from protocol_units_bell import join_links_compatible
-elif STATE_TYPE == StateType.WERNER:
-    from protocol_units import join_links_compatible
-
-# Whereas only the werner states version of efficient protocol units exist
+# In case of bell states, this is switched
+from protocol_units import join_links_compatible as jlc
+join_links_compatible = jlc
 from protocol_units_efficient import join_links_efficient
 
 from utility_functions import secret_key_rate, ceil, werner_to_fid, bell_to_fid, find_heading_zeros_num, matrix_to_werner, werner_to_matrix, get_fidelity
@@ -54,19 +51,19 @@ class HashableParameters():
     
 
 class RepeaterChainSimulation():
-    def __init__(self, use_cache=False):
+    def __init__(self, state_type=StateType.WERNER, use_cache=False):
         self.use_cache = use_cache
         self.use_fft = True
         self.use_gpu = False
         self.gpu_threshold = 1000000
+        self.efficient = True
 
-        if STATE_TYPE == StateType.WERNER:
-            self.efficient = True  
-        elif STATE_TYPE == StateType.BELL:
-            self.efficient = False  # Do not use efficient for Bell states
-        else:
-            raise ValueError(f"Unexpected STATE_TYPE: {STATE_TYPE}")
-
+        global join_links_compatible
+        if state_type == StateType.BELL:
+            from protocol_units_bell import join_links_compatible as jlc
+            join_links_compatible = jlc
+            self.efficient = False
+        
         logging.debug(f"Using {STATE_TYPE} states.")
         
         self.zero_padding_size = None

@@ -1,7 +1,11 @@
+import copy
 import numpy as np
 import pytest
 
 from repeater_algorithm import RepeaterChainSimulation
+from utility_functions import werner_to_fid
+
+from config import StateType, STATE_TYPE
 
 repeater = RepeaterChainSimulation()
 
@@ -21,6 +25,33 @@ def simulation_params():
         "dephasing_rate": 0.05,
         # No Amplitude Damping or Bit Flip in this test
     }
+
+
+def test_bell_vs_werner(simulation_params):
+    """
+    Test the output shapes of the Bell and Werner states.
+    """
+    parameters = copy.deepcopy(simulation_params)
+    del simulation_params["cutoff"]
+    del simulation_params["cut_type"]
+    del simulation_params["depolarizing_rate"]
+    del simulation_params["dephasing_rate"]
+    parameters["protocol"] = (0,)
+
+    # Bell diagonal protocol
+    repeater = RepeaterChainSimulation(state_type=StateType.BELL)
+    pmf_bell, state_out = repeater.bell_diagonal_protocol(parameters=parameters)
+
+    # Werner protocol
+    repeater = RepeaterChainSimulation(state_type=StateType.WERNER)
+    del parameters["lambdas"]
+    parameters["p_swap"] = 0.25
+    parameters["w0"] = 0.80 # w_0 = 0.8 -> lambda = 0.85
+
+    pmf_werner, w_func = repeater.nested_protocol(parameters=parameters)
+
+    assert np.allclose(pmf_werner, pmf_bell), "PMF mismatch between Bell and Werner states"
+    assert np.allclose(state_out, [werner_to_fid(w) for w in w_func]), "Fidelity mismatch between Bell and Werner states"
 
 
 def test_distillation(simulation_params):
@@ -97,7 +128,7 @@ def test_distillation(simulation_params):
     assert state_out.shape == lambda_func1.shape, "State output shape mismatch"
 
     # Now, repeat the process calling the repeater protocol
-    parameters = simulation_params
+    parameters = copy.deepcopy(simulation_params)
     parameters["protocol"] = (1,)
 
     pmf_dist_protocol, state_out_protocol = repeater.bell_diagonal_protocol(parameters=parameters)
