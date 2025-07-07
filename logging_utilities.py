@@ -117,12 +117,9 @@ def load_data(id):
 
 
 def create_iter_kwargs(parameters):
-
     from itertools import product
     names = parameters.keys()
-    values = [value if isinstance(value, list) else [value]
-                for value in list(parameters.values())]
-
+    values = [value if isinstance(value, list) else [value] for value in parameters.values()]
     kwarg_list = []
     for param_list in product(*values):
         param_dict = {}

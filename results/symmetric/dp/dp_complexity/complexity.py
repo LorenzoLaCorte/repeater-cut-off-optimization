@@ -6,7 +6,7 @@ import sys
 import os
 
 # Add the parent directory to the system path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 from gp_utils import get_sym_protocol_space, get_no_of_permutations_per_swap
 import matplotlib.pyplot as plt
@@ -91,7 +91,7 @@ def compute_complexity(min_dists, max_dists, min_swaps, max_swaps, dp=False):
 
 
 def plot_complexity(max_swaps, min_dists, max_dists):
-    possible_swaps = range(1, 6, 4)
+    possible_swaps = range(2, 6, 4)
     possible_max_dists = range(1, max_dists+1)
 
     complexities_no_dp = {}
@@ -106,7 +106,7 @@ def plot_complexity(max_swaps, min_dists, max_dists):
             logging.info(f"NO DP \t (swaps={swaps}, max_dists={max_dists}): \t {complexities_no_dp[swaps, max_dists]}")
             logging.info(f"DP    \t (swaps={swaps}, max_dists={max_dists}): \t {complexities_dp[swaps, max_dists]}")
     
-    fig, axs = plt.subplots(1, len(possible_swaps), figsize=(8 * len(possible_swaps), 6))
+    fig, axs = plt.subplots(len(possible_swaps), 1, figsize=(8, 6 * len(possible_swaps)))
 
     if np.ndim(axs) == 0:
         axs = np.expand_dims(axs, axis=0)
@@ -115,9 +115,8 @@ def plot_complexity(max_swaps, min_dists, max_dists):
         ax = axs[i]
         ax.set_title(f"{swaps} {'swaps' if swaps > 1 else 'swap'}, "
                         f"$N = {1+2**swaps}$")
-        ax.set_xlabel("Maximum Number of distillations")
-        if i == 0:
-            ax.set_ylabel("Number of evaluations performed")
+        ax.set_xlabel(r"Maximum Number of Distillations $\beta$")
+        ax.set_ylabel("Number of evaluations performed")
         ax.set_xticks(possible_max_dists)
 
         complexities_dp_total = {key: value[0] for key, value in complexities_dp.items()}
@@ -134,10 +133,11 @@ def plot_complexity(max_swaps, min_dists, max_dists):
         f"from {min_dists} to {max_dists} rounds of distillation"
     )   
 
-    fig.suptitle(title)
+    # fig.suptitle(title)
+    plt.grid()
     plt.tight_layout()
-    plt.subplots_adjust(wspace=0.1)
-    plt.savefig("complexity.png", dpi=300)
+    plt.subplots_adjust(hspace=0.2)
+    plt.savefig("complexity.pdf", dpi=300)
     logging.info("\n\nPlot saved!")
 
     

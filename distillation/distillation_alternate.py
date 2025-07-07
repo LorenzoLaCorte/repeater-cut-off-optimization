@@ -77,7 +77,7 @@ def save_plot(fig, axs, row_titles, parameters={}, rate=None, exp_name="protocol
     plt.subplots_adjust(left=left_space, top=(0.725 + axs.shape[0]*0.04), hspace=0.2*axs.shape[0])
     
     parameters_str = '_'.join([f"{key}={value}" for key, value in parameters.items() if key != "protocol"])
-    fig.savefig(f"{exp_name}_{parameters_str}.png", dpi=config['dpi'])
+    fig.savefig(f"{exp_name}_{parameters_str}.pdf", dpi=config['dpi'])
     
 
 def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=None):
@@ -113,7 +113,7 @@ def plot_pmf_cdf_werner(pmf, w_func, trunc, axs, row, full_werner=True, label=No
         else:
             ax.plot(np.arange(trunc), data, marker=(marker if include_markers else None), markersize=4)
         
-        ax.set_xlabel("Waiting Time")
+        ax.set_xlabel(r"Waiting Time ($t_\text{unit}$)")
         ax.set_title(title)
         if title == "Werner parameter":
             if full_werner:
@@ -136,10 +136,10 @@ def entanglement_distillation_runner(distillation_type, parameters):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run entanglement distillation with specified parameters.")
-    parser.add_argument('--t_trunc', type=int, default=1200, help='Truncation time')
-    parser.add_argument('--t_coh', type=int, default=120, help='Coherence time')
-    parser.add_argument('--p_gen', type=float, default=0.5, help='Generation probability')
-    parser.add_argument('--p_swap', type=float, default=0.5, help='Swapping probability')
+    parser.add_argument('--t_trunc', type=int, default=100, help='Truncation time')
+    parser.add_argument('--t_coh', type=int, default=80, help='Coherence time')
+    parser.add_argument('--p_gen', type=float, default=0.9, help='Generation probability')
+    parser.add_argument('--p_swap', type=float, default=0.9, help='Swapping probability')
     parser.add_argument('--w0', type=float, default=0.933, help='Initial Werner state parameter')
     args = parser.parse_args()
 
@@ -158,7 +158,7 @@ if __name__ == "__main__":
         pmf, w_func = entanglement_distillation_runner(dist_type, parameters)
         plot_pmf_cdf_werner(pmf=pmf, w_func=w_func, trunc=(parameters["t_trunc"]//zoom), axs=axs, row=0, 
                             full_werner=False, 
-                            label=f"{dist_type.name.upper().replace('_', '-')}, R = {secret_key_rate(pmf, w_func):.5f}")
+                            label=f"{dist_type.name.upper().replace('_', '-')}, SKR = {secret_key_rate(pmf, w_func):.5f}")
         
     save_plot(fig=fig, axs=axs, row_titles=None, parameters=parameters, 
               rate=None, exp_name="alternate", legend=True)

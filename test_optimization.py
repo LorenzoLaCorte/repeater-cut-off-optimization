@@ -1,5 +1,5 @@
 import numpy as np
-from numpy.testing import assert_allclose, assert_
+from numpy.testing import assert_allclose, run_module_suite, assert_
 import pytest
 import multiprocessing
 

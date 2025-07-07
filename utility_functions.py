@@ -5,11 +5,11 @@ import numba as nb
 import numpy as np
 from scipy.optimize import curve_fit
 
+from config import StateType, STATE_TYPE
 
 @nb.jit(nopython=True)
 def pmf_to_cdf(pmf):
     return np.cumsum(pmf)
-
 
 @nb.jit(nopython=True)
 def cdf_to_pmf(cdf):
@@ -42,6 +42,11 @@ def werner_to_fid(werner):
     return (1. + 3. * werner) / 4.
 
 
+# Adjusted to Bell scenario
+def bell_to_fid(lambdas):
+    return [float(phiplus[0]) for phiplus in lambdas]
+
+
 def fid_to_werner(fid):
     return (4 * fid - 1) / 3.
 
@@ -55,9 +60,14 @@ def entropy(x):
 
 
 def distillable_entanglement(w_func):
-    f_func = werner_to_fid(w_func)
+    if STATE_TYPE == StateType.WERNER:
+        f_func = werner_to_fid(w_func)
+    elif STATE_TYPE == StateType.BELL:
+        f_func = bell_to_fid(w_func)
+    
     f_func[f_func < 0.5] = 0.5
     f_func[f_func == 0.5] = 0.5 + 1.e-7  # avoid log(0)
+    
     return entropy(0.5 + (f_func * (1-f_func))**0.5)
 
 
@@ -78,6 +88,7 @@ def secret_fraction(w):
     return max(1 - 2. * entropy((1.-w)/2.), 0.)
 
 
+
 def secret_key_rate(pmf, w_func, extrapolation=False, show_warning=False):
     """
     Use the secret key rate as a merit function.
@@ -85,8 +96,12 @@ def secret_key_rate(pmf, w_func, extrapolation=False, show_warning=False):
     secret key fraction.
     """
     coverage = np.sum(pmf)
-    aver_w = get_mean_werner(pmf, w_func, extrapolation)
-    aver_w = min(aver_w, 1.) # avoid w > 1
+    
+    if STATE_TYPE == StateType.WERNER:
+        aver_w = min(get_mean_werner(pmf, w_func, extrapolation), 1.) # avoid w > 1
+    elif STATE_TYPE == StateType.BELL:
+        aver_w = get_mean_bell(pmf, w_func, extrapolation)
+
     aver_t = get_mean_waiting_time(pmf, extrapolation, show_warning)
 
     key_rate = 1/aver_t * secret_fraction(aver_w)
@@ -107,7 +122,26 @@ def get_mean_werner(pmf, w_func, extrapolation=False):
     return aver_w
 
 
+# Adjusted to Bell scenario
+def get_mean_bell(pmf, lambdas, extrapolation=False):
+    lambdas = [sublist[0] for sublist in lambdas]
+    lambdas = np.where(np.isnan(lambdas), 0., lambdas)
+    coverage = sum(pmf)
+    if coverage <= 0:
+        return 0.  # to prevent nan corrupts the optimization result
+    if not extrapolation or coverage > 1 - 1.e-10 or coverage < 0.99:
+        aver_w = np.sum(pmf * lambdas) / coverage
+    else:
+        aver_w = np.sum(pmf * lambdas) + lambdas[-1] * (1. - coverage)
+    return aver_w
+
+
+# Adjusted to Bell scenario
 def get_mean_waiting_time(pmf, extrapolation=False, show_warning=False):
+    # CONTRIBUTION: if pmf is a 2-d list, extract the first element of sublist. If pmf is a 1-d list, do nothing
+    if STATE_TYPE == StateType.BELL and isinstance(pmf[0], list):
+        pmf = [sublist[0] for sublist in pmf]
+    
     coverage = np.sum(pmf)
     # if coverage < 0.99, extrapolation may leads to wrong secret key rate
     # if coverage > 1 - 1.e-10, the last few point is close to 0 and therefore the numerical noise dominant.

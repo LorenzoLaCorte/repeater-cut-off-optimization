@@ -1609,7 +1609,7 @@ def plot_protocols_key_rates(results, parameters, title,
     plt.grid(True, axis='y')
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.225)
-    plt.savefig(f'{optimizer}.png', dpi=config['high_dpi'])
+    plt.savefig(f'{optimizer}.pdf', dpi=config['high_dpi'])
 
 
 def plot_optimization_process(min_dists, max_dists, parameters,
@@ -1644,7 +1644,7 @@ def plot_optimization_process(min_dists, max_dists, parameters,
         plt.subplots_adjust(top=0.85, wspace=0.25)
 
         fig.suptitle(title)
-        fig.savefig(f'skopt_gp.png', dpi=config['high_dpi'])
+        fig.savefig(f'skopt_gp.pdf', dpi=config['high_dpi'])
     
     plot_protocols_key_rates(results, parameters, title, maximum, maxima, is_gp, number_of_swaps)
 
