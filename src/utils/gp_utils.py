@@ -14,8 +14,8 @@ from scipy.optimize import OptimizeResult
 from skopt.space import Categorical
 from scipy.stats import norm
 
-from protocol_asymmetric import SwapTreeVertex, assign_dists_to_tree, generate_swap_space, generate_dists_combs
-from repeater_types import SpaceType, checkAsymProtocol
+from src.types.protocol_types import SwapTreeVertex, assign_dists_to_tree, generate_swap_space, generate_dists_combs
+from src.types.repeater_types import SpaceType, checkAsymProtocol
 
 logging.basicConfig(level=logging.INFO)
 

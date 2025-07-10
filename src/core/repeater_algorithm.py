@@ -8,17 +8,17 @@ import matplotlib.pyplot as plt
 import numba as nb
 import numpy as np
 
-from repeater_types import checkAsymProtocol
+from src.types.repeater_types import checkAsymProtocol
 try:
     import cupy as cp # type: ignore
     _cupy_exist = True
 except (ImportError, ModuleNotFoundError):
     _cupy_exist = False
 
-from protocol_units import join_links_compatible
-from protocol_units_efficient import join_links_efficient
-from utility_functions import secret_key_rate, ceil, werner_to_fid, find_heading_zeros_num, matrix_to_werner, werner_to_matrix, get_fidelity
-from logging_utilities import log_init, create_iter_kwargs, save_data
+from src.core.protocol_units import join_links_compatible
+from src.core.protocol_units_efficient import join_links_efficient
+from src.utils.utility_functions import secret_key_rate, ceil, werner_to_fid, find_heading_zeros_num, matrix_to_werner, werner_to_matrix, get_fidelity
+from src.utils.logging_utilities import log_init, create_iter_kwargs, save_data
 
 
 __all__ = ["RepeaterChainSimulation", "compute_unit", "plot_algorithm",

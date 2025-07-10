@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SCRIPT="gp_symmetric.py"
-PY_ALIAS="python3.10"
+SCRIPT="src.optimization.gp_symmetric"
+PY_ALIAS="python3 -m"
 
 # Define what simulation you want to run {True, False}
 GP=False

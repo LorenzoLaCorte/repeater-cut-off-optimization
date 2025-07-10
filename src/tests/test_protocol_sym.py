@@ -3,9 +3,9 @@ import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 
-from repeater_algorithm import repeater_sim, RepeaterChainSimulation
+from src.core.repeater_algorithm import repeater_sim, RepeaterChainSimulation
 
-from utility_functions import secret_key_rate
+from src.utils.utility_functions import secret_key_rate
 
 
 def test_secret_key_rate():

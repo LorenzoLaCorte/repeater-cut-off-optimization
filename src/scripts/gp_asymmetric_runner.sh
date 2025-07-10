@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SCRIPT="gp_asymmetric.py"
-PY_ALIAS="python3.10"
+SCRIPT="src.optimization.gp_asymmetric"
+PY_ALIAS="python3 -m"
 
 # Define what simulation you want to run {True, False}
 GP_HOMOGENEOUS=True

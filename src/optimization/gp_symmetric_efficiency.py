@@ -6,10 +6,10 @@ from argparse import ArgumentParser, Namespace
 import logging
 import time
 
-from gp_utils import OptimizerType, SimParameters, SpaceType, get_sym_protocol_space_size
-from repeater_algorithm import RepeaterChainSimulation
-from gp_symmetric import gaussian_optimization, brute_force_optimization
-from gp_plots import plot_gp_optimization_efficiency
+from src.utils.gp_utils import OptimizerType, SimParameters, SpaceType, get_sym_protocol_space_size
+from src.core.repeater_algorithm import RepeaterChainSimulation
+from src.optimization.gp_symmetric import gaussian_optimization, brute_force_optimization
+from src.optimization.gp_plots import plot_gp_optimization_efficiency
 
 logging.getLogger().level = logging.INFO
 

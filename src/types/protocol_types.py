@@ -4,7 +4,7 @@ import logging
 import math
 import statistics
 from typing import Generator, List, Optional, Tuple
-from repeater_types import checkAsymProtocol
+from src.types.repeater_types import checkAsymProtocol
 
 
 class SwapTreeVertex:

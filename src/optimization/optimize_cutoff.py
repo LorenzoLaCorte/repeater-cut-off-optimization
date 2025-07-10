@@ -9,10 +9,10 @@ import logging
 import numpy as np
 from scipy.optimize import differential_evolution
 
-from utility_functions import create_cutoff_dict, secret_key_rate
-from logging_utilities import (
+from src.utils.utility_functions import create_cutoff_dict, secret_key_rate
+from src.utils.logging_utilities import (
     log_init, log_params, log_finish, mytimeit, create_iter_kwargs)
-from repeater_algorithm import repeater_sim, compute_unit, plot_algorithm, RepeaterChainSimulation
+from src.core.repeater_algorithm import repeater_sim, compute_unit, plot_algorithm, RepeaterChainSimulation
 
 
 __all__ = ["CutoffOptimizer",

@@ -15,17 +15,17 @@ from skopt.space import Real, Integer, Categorical
 from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 
-from gp_plots import plot_optimization_process
-from gp_utils import (
+from src.optimization.gp_plots import plot_optimization_process
+from src.utils.gp_utils import (
     get_asym_protocol_space,  # Getters for Spaces
     get_protocol_from_center_spacing_symmetricity, # Getters for Protocols
     get_t_trunc, get_ordered_results, # Other Getters
 ) 
 
-from repeater_types import optimizerType, OptimizerType, ThresholdExceededError, SimParameters # Typing
+from src.types.repeater_types import optimizerType, OptimizerType, ThresholdExceededError, SimParameters # Typing
 
-from repeater_algorithm import RepeaterChainSimulation
-from utility_functions import pmf_to_cdf, secret_key_rate
+from src.core.repeater_algorithm import RepeaterChainSimulation
+from src.utils.utility_functions import pmf_to_cdf, secret_key_rate
 
 logging.basicConfig(level=logging.INFO)
 cdf_threshold = 0.99

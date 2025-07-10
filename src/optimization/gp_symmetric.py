@@ -30,19 +30,19 @@ from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-from gp_plots import plot_optimization_process
-from gp_utils import (
+from src.optimization.gp_plots import plot_optimization_process
+from src.utils.gp_utils import (
     write_results, # Utils
     get_sym_protocol_space, get_sym_protocol_space_size,  # Getters for Spaces
     get_protocol_from_distillations, get_protocol_from_strategy, get_protocol_from_center_and_spacing, # Getters for Protocols
     get_all_maxima, get_t_trunc, get_ordered_results, # Other Getters
 ) 
 
-from repeater_types import SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, spaceType # Typing
+from src.types.repeater_types import SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, spaceType # Typing
 
-from repeater_algorithm import RepeaterChainSimulation
-from utility_functions import secret_key_rate, pmf_to_cdf
-from logging_utilities import (
+from src.core.repeater_algorithm import RepeaterChainSimulation
+from src.utils.utility_functions import secret_key_rate, pmf_to_cdf
+from src.utils.logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data
 )
 logging.getLogger().level = logging.INFO

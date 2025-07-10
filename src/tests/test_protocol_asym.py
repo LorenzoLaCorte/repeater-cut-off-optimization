@@ -1,9 +1,9 @@
 import pytest
 import numpy as np
 import time
-from repeater_algorithm import repeater_sim
-from utility_functions import get_mean_waiting_time, get_mean_werner, remove_unstable_werner, secret_key_rate, werner_to_fid
-from logging_utilities import create_iter_kwargs
+from src.core.repeater_algorithm import repeater_sim
+from src.utils.utility_functions import get_mean_waiting_time, get_mean_werner, remove_unstable_werner, secret_key_rate, werner_to_fid
+from src.utils.logging_utilities import create_iter_kwargs
 
 protocols = [
     ("s0", "s2", "s1"),

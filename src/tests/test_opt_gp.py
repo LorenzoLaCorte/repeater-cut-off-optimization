@@ -3,8 +3,16 @@ import itertools
 import logging
 import time
 import pytest
-from gp_utils import get_catalan_number, get_asym_protocol_space, get_asym_protocol_space_size, get_distillation_per_shape, get_joined_space, get_sym_protocol_space, get_no_of_permutations_per_swap, get_protocol_from_center_spacing_symmetricity, get_swap_space
-from repeater_types import checkAsymProtocol
+from src.utils.gp_utils import (
+    get_catalan_number,
+    get_asym_protocol_space,
+    get_asym_protocol_space_size,
+    get_sym_protocol_space,
+    get_no_of_permutations_per_swap,
+    get_protocol_from_center_spacing_symmetricity,
+    get_swap_space,
+)
+from src.types.repeater_types import checkAsymProtocol
 
 logging.basicConfig(level=logging.DEBUG)
 

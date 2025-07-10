@@ -2,10 +2,10 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-from protocol_units import *
-from logging_utilities import *
-from utility_functions import *
-from optimize_cutoff import CutoffOptimizer
+from src.core.protocol_units import *
+from src.utils.logging_utilities import *
+from src.utils.utility_functions import *
+from src.optimization.optimize_cutoff import CutoffOptimizer
 
 def test_fidelity_cut_off_function():
     w_cut = 0.95
