@@ -11,3 +11,25 @@ Copyright 2018-2019 QuTech (TUDelft and TNO)
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+
+---------------------------------------------------------------------
+Additional Licensing Terms for Modifications
+
+Copyright 2025 OIST (Lorenzo La Corte)
+
+Licensed under the MIT License (the "New License");
+you may not use your modifications except in compliance with the New License.
+You may obtain a copy of the New License at
+
+    https://opensource.org/licenses/MIT
+
+Unless required by applicable law or agreed to in writing, any modifications
+distributed under the New License are distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the New License for the specific language governing permissions and
+limitations under the New License.
+
+---------------------------------------------------------------------
+Note: Portions of this project are licensed under the Apache License, Version 2.0.
+The additional licensing terms apply solely to the modifications made by Lorenzo La Corte.
+For the Apache-licensed code, please refer to the [original repository](github.com/BoxiLi/repeater-cut-off-optimization)
