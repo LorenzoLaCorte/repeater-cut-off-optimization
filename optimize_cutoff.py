@@ -13,7 +13,6 @@ from utility_functions import create_cutoff_dict, secret_key_rate
 from logging_utilities import (
     log_init, log_params, log_finish, mytimeit, create_iter_kwargs)
 from repeater_algorithm import repeater_sim, compute_unit, plot_algorithm, RepeaterChainSimulation
-from repeater_mc import repeater_mc, plot_mc_simulation
 
 
 __all__ = ["CutoffOptimizer",
@@ -28,7 +27,7 @@ def optimization_tau_wrapper(
         ref_pmf_matrix=None, tracker_data=None,
         **kwargs):
     """
-    Wrapper for repeater_sim or repeater_mc. It uses the cut-off
+    Wrapper for repeater_sim. It uses the cut-off
     as explicitly parameter and mutes the warning message
     of the given function.
     It is designed to be usd in the optimizer for cut-off time.
@@ -44,7 +43,7 @@ def optimization_tau_wrapper(
     func: python function
         A python function that takes parameters and return
         the `pmf` and `w_func`.
-        The function can be e.g. `repeater_sim` and `repeater_mc`.
+        The function can be e.g. `repeater_sim`.
     parameters: dict
         Dictionary for the network parameters. If present,
         the value of the key `cutoffs` will be overwritten.
@@ -59,7 +58,7 @@ def optimization_tau_wrapper(
         It should take the pmf and w_func
         as input and return a float number. E.g. `secrete_key_rate`
     **kwargs:
-        additional keyword arguments for repeater_sim and repeater_mc.
+        additional keyword arguments for repeater_sim.
 
     Returns
     -------

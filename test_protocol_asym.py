@@ -175,4 +175,4 @@ def test_heterogeneus_repeater_sim(p_gen, p_swap, w0, t_coh, t_trunc, heterogene
     check_validity(pmf1, pmf2, w_func1, w_func2)
 
 if __name__ == "__main__":
-    pytest.main(["-sv", "test_asym.py::test_heterogeneus_repeater_sim_manual"])
+    pytest.main(["-sv", __file__])

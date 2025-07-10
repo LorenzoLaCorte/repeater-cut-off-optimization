@@ -88,4 +88,4 @@ def test_symmetric_protocol_space(min_dists, max_dists, number_of_swaps):
 
 
 if __name__ == "__main__":
-    pytest.main(["-sv", "test_gp.py"])
+    pytest.main(["-sv", __file__])
