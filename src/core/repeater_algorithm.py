@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numba as nb
 import numpy as np
 
+from src.core.states.werner import WFunc, WernerState, polish_w_func
 from src.types.protocol_types import find_right_segment
 from src.types.repeater_types import checkAsymProtocol, validate_heterogeneous_parameters
 try:
@@ -407,17 +408,19 @@ class RepeaterChainEvaluation():
 
         Returns
         -------
-        t_pmf, w_func: array-like 1-D
-            The output waiting time and Werner parameters
+        t_pmf, sf: array-like 1-D -- TODO: here, the type can be different
+            The output waiting time and state quality (e.g., Werner parameters)
         """
+        # If only one link is given, assume the operation is done on two identical links
         if pmf2 is None:
             pmf2 = pmf1
         if sf2 is None:
             sf2 = sf1
+        
         p_gen = parameters["p_gen"]
         p_swap = parameters["p_swap"]
-        w0 = parameters["w0"]
         t_coh = parameters.get("t_coh", np.inf)
+
         cut_type = parameters.get("cut_type", "memory_time")
         if "cutoff" in parameters.keys():
             cutoff = parameters["cutoff"]
@@ -450,29 +453,22 @@ class RepeaterChainEvaluation():
             raise TypeError(f"Time cut-off must be an integer. not {cutoff}")
         if cut_type == "fidelity" and not (cutoff >= 0. or cutoff < 1.):
             raise TypeError(f"Fidelity cut-off must be a real number between 0 and 1.")
-        if isinstance(w0, list):
-            if not all(np.isreal(w) and 0.0 <= w <= 1.0 for w in w0):
-                raise TypeError(f"Invalid Werner parameter w0 = {w0}")
-        elif not np.isreal(w0) or w0 < 0.0 or w0 > 1.0:
-            raise TypeError(f"Invalid Werner parameter w0 = {w0}")
 
-        # swap or distillation for next level
+        # Perform swap or distillation
         if unit_kind == "swap":
-            pmf, w_func = self.swapping(
+            pmf, sf = self.swapping(
                 pmf1, sf1, pmf2, sf2, p_swap,
                 cutoff=cutoff, t_coh=t_coh, cut_type=cut_type)
         elif unit_kind == "dist":
-            pmf, w_func = self.distillation(
+            pmf, sf = self.distillation(
                 pmf1, sf1, pmf2, sf2,
                 cutoff=cutoff, t_coh=t_coh, cut_type=cut_type)
 
-        # erase ridiculous Werner parameters,
-        # it can happen when the probability is too small ~1.0e-20.
-        w_func = np.where(np.isnan(w_func), 1., w_func)
-        w_func[w_func > 1.0] = 1.0
-        w_func[w_func < 0.] = 0.
+        # Polish the state quality function from non-sensical values
+        if isinstance(sf, WFunc):
+            sf = polish_w_func(sf)
 
-        # check probability coverage
+        # Check probability coverage
         coverage = np.sum(pmf)
         if coverage < 0.99:
             logging.warning(
@@ -480,7 +476,7 @@ class RepeaterChainEvaluation():
                 "please increase t_trunc.\n".format(
                     coverage*100))
         
-        return pmf, w_func
+        return pmf, sf
 
 
     def nested_protocol(self, parameters, all_level=False):
@@ -502,17 +498,31 @@ class RepeaterChainEvaluation():
         t_pmf, sf: array-like 1-D -- TODO: here, the type can be different
             The output waiting time and state quality (e.g., Werner parameters)
         """
-        i = 0
+        i: int = 0
         parameters = deepcopy(parameters)
-        protocol = parameters["protocol"]
-        
+        protocol: tuple[int] = parameters["protocol"]
+
         # Preliminary check
-        # In case of symmetric protocol, ensure protocol is treated as a tuple
-        if isinstance(protocol, int): 
-            protocol = (protocol,)
-        
-        p_gen = parameters["p_gen"]
-        w0 = parameters["w0"]
+        if isinstance(protocol, int):
+            # In case of protocol with only one operation, ensure protocol is treated as a tuple
+            if protocol == 0 or protocol == 1: 
+                protocol = (protocol,)
+            else:
+                raise ValueError("The protocol must be a tuple of 0 and 1, "
+                                 "or a singleton 0 or 1.")
+
+        p_gen: int = parameters["p_gen"]
+        if isinstance(p_gen, Iterable):
+            raise NotImplementedError("Heterogeneous nested protocols are not supported yet.")
+
+        if "w0" in parameters:
+            logging.info("Werner state representation is used.")
+            state: WernerState = WernerState(parameters["w0"])
+        elif "lambdas" in parameters:
+            raise NotImplementedError("Bell diagonal representation is not supported yet.")
+        else:
+            raise ValueError("The parameters must contain either 'w0' or 'lambdas'.")
+
         if "tau" in parameters:  # backward compatibility
             parameters["mt_cut"] = parameters.pop("tau")
         if "cutoff_dict" in parameters.keys():
@@ -539,15 +549,18 @@ class RepeaterChainEvaluation():
         else:
             rt_cut = tuple(rt_cut)
 
+        # Truncation time for the protocol
         t_trunc = parameters["t_trunc"]
 
-        # Elementary link generation
+        # GEN: Elementary link generation
         t_list = np.arange(1, t_trunc)
         pmf = p_gen * (1 - p_gen)**(t_list - 1)
         pmf = np.concatenate((np.array([0.]), pmf))
-        w_func = np.array([w0] * t_trunc)
+
+        sf: WFunc = state.get_generation_sf(t_trunc)
+
         if all_level:
-            full_result = [(pmf, w_func)]
+            full_result = [(pmf, sf)]
         
         total_step_size = 1
 
@@ -561,22 +574,20 @@ class RepeaterChainEvaluation():
             parameters["rt_cut"] = rt_cut[i]
 
             if operation == 0:
-                pmf, w_func = self.compute_unit(
-                    parameters, pmf, w_func, unit_kind="swap", step_size=total_step_size)
+                pmf, sf = self.compute_unit(
+                    parameters, pmf, sf, unit_kind="swap", step_size=total_step_size)
             elif operation == 1:
-                pmf, w_func = self.compute_unit(
-                    parameters, pmf, w_func, unit_kind="dist", step_size=total_step_size)
+                pmf, sf = self.compute_unit(
+                    parameters, pmf, sf, unit_kind="dist", step_size=total_step_size)
             
             if all_level:
-                full_result.append((pmf, w_func))
+                full_result.append((pmf, sf))
             i += 1
 
-        final_pmf = pmf
-        final_w_func = w_func
         if all_level:
             return full_result
         else:
-            return final_pmf, final_w_func
+            return pmf, sf
 
 
     def asymmetric_homogeneous_protocol(self, parameters, number_of_segments):
@@ -744,16 +755,19 @@ def repeater_sim(parameters, all_level=False):
     """
     simulator = RepeaterChainEvaluation()
 
+    # Redirect to symmetric (nested) or asymmetric protocol
     if isinstance(parameters["protocol"], Iterable) and all(isinstance(i, int) for i in parameters["protocol"]):
         return simulator.nested_protocol(parameters=parameters, all_level=all_level)
+    
     elif isinstance(parameters["protocol"], Iterable) and all(isinstance(i, str) for i in parameters["protocol"]):
-        # preliminary checks
+        # Preliminary check for asymmetric protocols
         number_of_segments = checkAsymProtocol(parameters["protocol"])
         if "cutoff" in parameters:
             raise NotImplementedError("Cut-offs are not implemented for heterogeneous protocols.")
         if "all_level" in parameters:
             raise NotImplementedError("All levels are not implemented for heterogeneous protocols.")
-        # redirect to homogeneous or heterogeneous protocol
+        
+        # Redirect to homogeneous or heterogeneous protocol
         if isinstance(parameters["p_gen"], Iterable):
             return simulator.asymmetric_heterogeneous_protocol(parameters, number_of_segments)
         else:
