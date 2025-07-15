@@ -44,7 +44,7 @@ if __name__ == "__main__":
         'w0': w0,
     }
 
-    simulator = RepeaterChainSimulation(use_cache=False)
+    simulator = RepeaterChainSimulation()
 
     start_time = time.time()
     correct_results = brute_force_optimization(simulator, parameters, "enumerate", min_swaps, max_swaps, min_dists, max_dists, "output.txt", False)

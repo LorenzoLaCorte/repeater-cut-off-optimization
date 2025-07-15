@@ -45,16 +45,13 @@ class HashableParameters():
     
 
 class RepeaterChainSimulation():
-    def __init__(self, use_cache=False):
-        self.use_cache = use_cache
+    def __init__(self):
         self.use_fft = True
         self.use_gpu = False
         self.gpu_threshold = 1000000
         self.efficient = True
         self.zero_padding_size = None
         self._qutip = False
-        if self.use_cache:
-            self.cache = {} # parameters: (pmf, w_func) -- or -- parameters: full_result
 
     def iterative_convolution(self,
             func, shift=0, first_func=None, p_swap=None):
@@ -489,33 +486,6 @@ class RepeaterChainSimulation():
         return pmf, w_func
 
 
-    def check_cache(self, parameters, all_level=False):
-        parameters_new = deepcopy(parameters)
-        protocol_new = parameters_new.pop("protocol")
-        trunc_new = parameters_new.pop("t_trunc")
-
-        parameters_new_hash = HashableParameters(parameters_new)
-        cached_result = None
-
-        for i in range(len(protocol_new), 0, -1):
-            # check if there is a cache for the protocol under investigation
-            parameters_new_hash.set("protocol", protocol_new[:i])
-            if parameters_new_hash in self.cache:
-                if all_level:
-                    trunc_cached = len(self.cache[parameters_new_hash][-1][0]) # TODO: check if this is correct
-                else:
-                    trunc_cached = len((self.cache[parameters_new_hash][0]))
-                # check also if the cached results fully cover the truncation
-                if trunc_cached >= trunc_new:
-                    # start computing from i level with self.cache[parameters_hash][-1]
-                    cached_result = self.cache[parameters_new_hash]
-                    break
-        else:
-            # if no cache found, start from the beginning the computation
-            i = 0
-        
-        return i, parameters_new_hash, cached_result
-    
     def nested_protocol(self, parameters, all_level=False):
         """
         Compute the waiting time and the Werner parameter of a symmetric
@@ -535,13 +505,7 @@ class RepeaterChainSimulation():
         t_pmf, w_func: array-like 1-D
             The output waiting time and Werner parameters
         """
-        # check if there is a result cached for the parameters and one sub-protocol, starting from the longest
         i = 0
-        if self.use_cache:
-            i, parameters_hash, cached_result = self.check_cache(parameters, all_level)
-            if cached_result is not None:
-                logging.info(f"Using cached result: {parameters_hash.parameters['protocol']}")
-        
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
         # in case of 1-level protocol:
@@ -578,31 +542,18 @@ class RepeaterChainSimulation():
 
         t_trunc = parameters["t_trunc"]
 
-        # if some intermediate result exists, starts computing from i level with it
-        if i > 0:
-            if all_level:
-                full_result = cached_result
-            else:
-                pmf, w_func = cached_result
-        else:
-            # elementary link
-            t_list = np.arange(1, t_trunc)
-            pmf = p_gen * (1 - p_gen)**(t_list - 1)
-            pmf = np.concatenate((np.array([0.]), pmf))
-            w_func = np.array([w0] * t_trunc)
-            if all_level:
-                full_result = [(pmf, w_func)]
-            
+        # elementary link
+        t_list = np.arange(1, t_trunc)
+        pmf = p_gen * (1 - p_gen)**(t_list - 1)
+        pmf = np.concatenate((np.array([0.]), pmf))
+        w_func = np.array([w0] * t_trunc)
+        if all_level:
+            full_result = [(pmf, w_func)]
+        
         total_step_size = 1
 
-        # Compute protocol units, eventually caching partial results
+        # Compute protocol units
         while i < len(protocol):
-            # Prepare the hash for the caching
-            if self.use_cache:
-                curr_protocol = protocol[:i+1]
-                parameters_hash = deepcopy(parameters_hash)
-                parameters_hash.set("protocol", curr_protocol)
-
             operation = protocol[i]
             if "cutoff" in parameters and isinstance(cutoff, Iterable):
                 parameters["cutoff"] = cutoff[i]
@@ -619,11 +570,6 @@ class RepeaterChainSimulation():
             
             if all_level:
                 full_result.append((pmf, w_func))
-                if self.use_cache:
-                    self.cache[parameters_hash] = full_result
-            else:
-                if self.use_cache:
-                    self.cache[parameters_hash] = (pmf, w_func)
             i += 1
 
         final_pmf = pmf

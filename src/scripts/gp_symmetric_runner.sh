@@ -126,7 +126,6 @@ if [ "$DP_COMPLEXITY" = "True" ]; then
     for MAX_DISTS in $(seq $START_DISTS $LIMIT_DISTS); do
         OPTIMIZER_SPACE_DP_COMBS=(
                 "bf enumerate"
-                "bf enumerate --dp"
             )
         for PARAMETERS in "${PARAMETER_SETS[@]}"; do
             IFS=' ' read -r -a PARAM_ARRAY <<< "$PARAMETERS"

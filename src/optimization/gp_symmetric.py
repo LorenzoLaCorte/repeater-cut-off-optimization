@@ -341,8 +341,6 @@ if __name__ == "__main__":
     parser.add_argument("--p_swap", type=float, default=0.85, help="Swapping probability")
     parser.add_argument("--w0", type=float, default=0.9577, help="Werner parameter")
 
-    parser.add_argument("--dp", action='store_true', default=False, 
-                        help="Use dynamic programming to cache results and set a fixed truncation time")
     parser.add_argument("--t_trunc", type=int, 
                         help=(  "Fixed truncation time. In case of dynamic programming, it is fixed to this value "
                                 "or a default value is computed. "
@@ -379,14 +377,10 @@ if __name__ == "__main__":
     dp_enabled = args.dp
     simulator = None
 
-    # Set up the caching of results for dp
-    if dp_enabled:
-        simulator = RepeaterChainSimulation(use_cache=True)
-        # In case of dynamic programming, a fixed truncation time is required
-        if args.t_trunc is None:
-            fixed_t_trunc = get_t_trunc(p_gen, p_swap, t_coh, max_swaps, max_dists)
-    else:
-        simulator = RepeaterChainSimulation(use_cache=False)
+    simulator = RepeaterChainSimulation()
+    # In case of dynamic programming, a fixed truncation time is required
+    if args.t_trunc is None:
+        fixed_t_trunc = get_t_trunc(p_gen, p_swap, t_coh, max_swaps, max_dists)
 
     # Abort in case of bad combinations of optimizer and space
     if optimizer == "bf" and (space == "strategy" or space == "centerspace"):
