@@ -1,6 +1,6 @@
 # Python
 /__pycache__
-
+.pytest_cache
 
 # Results folder
 /logging
@@ -14,4 +14,3 @@
 /.ipynb_checkpoints
 
 venv
-thesis
