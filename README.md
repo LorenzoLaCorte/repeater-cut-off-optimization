@@ -34,6 +34,11 @@ pip install -r requirements.txt
 chmod +x ./src/scripts/reproduce_results.sh
 source ./src/scripts/reproduce_results.sh
 ```
+or (dockerized version):
+```bash
+docker build -t bopt-runner .
+docker run --rm -v "$(pwd)/results:/app/results" bopt-runner
+```
 
 ## File overview
 - The core code for the numerical simulation of repeater chains is under `core/repeater_algorithm.py`.
