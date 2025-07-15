@@ -30,7 +30,7 @@ from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 from sklearn.gaussian_process import GaussianProcessRegressor
 
-from src.optimization.gp_plots import plot_optimization_process
+from src.plotting.gp_plots import plot_optimization_process
 from src.utils.gp_utils import (
     write_results, # Utils
     get_sym_protocol_space, get_sym_protocol_space_size,  # Getters for Spaces

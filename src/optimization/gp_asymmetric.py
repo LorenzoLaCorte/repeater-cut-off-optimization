@@ -15,7 +15,7 @@ from skopt.space import Real, Integer, Categorical
 from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 
-from src.optimization.gp_plots import plot_optimization_process
+from src.plotting.gp_plots import plot_optimization_process
 from src.utils.gp_utils import (
     get_asym_protocol_space,  # Getters for Spaces
     get_protocol_from_center_spacing_symmetricity, # Getters for Protocols
@@ -162,11 +162,12 @@ def is_gp_done(result: OptimizeResult):
 def gaussian_optimization(simulator, parameters: SimParameters, 
                           nodes: int, max_dists: int, 
                           gp_shots: Optional[int], gp_initial_points: Optional[int],
-                          filename: str, store_results: bool = True) -> None:
+                          filename: str, store_results: bool = True, 
+                          random_state: Optional[int] = None) -> None:
     """
     This function is used to test the performance of different protocols in an extensive way.
     """
-    logging.info(f"\n\nNumber of nodes: {nodes}, max dists: {max_dists}")
+    logging.info(f"\n\nNumber of nodes: {nodes}, max dists: {max_dists}, seed: {random_state}")
     logging.info(f"Gaussian process with {gp_shots} evaluations "
                 f"and {gp_initial_points} initial points\n\n")
 
@@ -195,6 +196,7 @@ def gaussian_optimization(simulator, parameters: SimParameters,
             acq_func='LCB',
             kappa=1.96,
             noise=1e-10,    # There is no noise in results
+            random_state=random_state
         )
         
         ordered_results: List[Tuple[np.float64, Tuple[int]]] = get_ordered_results(
@@ -240,6 +242,7 @@ if __name__ == "__main__":
     parser.add_argument("--t_coh", type=int, nargs='+', default=[560000], help="Coherence time")
     parser.add_argument("--p_gen", type=float, nargs='+', default=[0.0009082], help="Generation success probability")
     parser.add_argument("--w0", type=float, nargs='+', default=[0.9523], help="Werner parameter")
+    parser.add_argument("--seed", type=int, default=None, help="Random state for Gaussian Process optimization")
     
     args = parser.parse_args()
 
@@ -257,6 +260,8 @@ if __name__ == "__main__":
     p_gen: Union[float, List[float]] = args.p_gen if len(args.p_gen) > 1 else args.p_gen[0]
     w0: Union[float, List[float]] = args.w0 if len(args.w0) > 1 else args.w0[0]
     t_coh: List[int] = args.t_coh if len(args.t_coh) > 1 else args.t_coh[0]
+
+    random_state: Optional[int] = args.seed
 
     # Ensure all are lists if one is a list
     if isinstance(p_gen, list):
@@ -277,7 +282,8 @@ if __name__ == "__main__":
         gaussian_optimization(simulator, parameters, 
                               nodes, max_dists, 
                               gp_shots, gp_initial_points, 
-                              filename)
+                              filename,
+                              random_state=random_state)
     elif optimizer == "bf":
         brute_force_optimization(simulator, parameters, 
                                  nodes, max_dists, 
