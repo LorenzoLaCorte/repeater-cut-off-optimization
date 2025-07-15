@@ -1,5 +1,3 @@
-import time
-import warnings
 from copy import deepcopy
 from collections.abc import Iterable
 import logging
@@ -8,7 +6,8 @@ import matplotlib.pyplot as plt
 import numba as nb
 import numpy as np
 
-from src.types.repeater_types import checkAsymProtocol
+from src.types.protocol_types import find_right_segment
+from src.types.repeater_types import checkAsymProtocol, validate_heterogeneous_parameters
 try:
     import cupy as cp # type: ignore
     _cupy_exist = True
@@ -17,11 +16,9 @@ except (ImportError, ModuleNotFoundError):
 
 from src.core.protocol_units import join_links_compatible
 from src.core.protocol_units_efficient import join_links_efficient
-from src.utils.utility_functions import secret_key_rate, ceil, werner_to_fid, find_heading_zeros_num, matrix_to_werner, werner_to_matrix, get_fidelity
-from src.utils.logging_utilities import log_init, create_iter_kwargs, save_data
 
 
-__all__ = ["RepeaterChainSimulation", "compute_unit", "join_links_compatible", "repeater_sim"]
+__all__ = ["RepeaterChainEvaluation", "compute_unit", "join_links_compatible", "repeater_sim"]
 
 
 class HashableParameters():
@@ -43,7 +40,7 @@ class HashableParameters():
         return f"HashableParameters{self.parameters['protocol'] or '()'}"
     
 
-class RepeaterChainSimulation():
+class RepeaterChainEvaluation():
     def __init__(self):
         self.use_fft = True
         self.use_gpu = False
@@ -82,6 +79,7 @@ class RepeaterChainSimulation():
         sum_convolved: array-like
             The result of the sum of all convolutions.
         """
+        # TODO: implement the typecheck here using StateType
         if first_func is None or len(first_func.shape) == 1:
             is_dm = False
         else:
@@ -197,7 +195,7 @@ class RepeaterChainSimulation():
             if self.use_gpu and shape > self.gpu_threshold:
                 result = cp.asnumpy(result)
 
-        else:  # Use exact convolution
+        else:  # Use exact convolution (not using FFT)
             zero_state = np.zeros(trunc - len(convolved), dtype=convolved.dtype)
             convolved = np.concatenate([convolved, zero_state])
             for k in range(1, max_k):
@@ -210,8 +208,8 @@ class RepeaterChainSimulation():
             result = sum_convolved
         return result
 
-    def entanglement_swap(self,
-            pmf1, w_func1, pmf2, w_func2, p_swap,
+    def swapping(self,
+            pmf1, sf1, pmf2, sf2, p_swap,
             cutoff, t_coh, cut_type):
         """
         Calculate the waiting time and average Werner parameter with time-out
@@ -221,8 +219,8 @@ class RepeaterChainSimulation():
         ----------
         pmf1, pmf2: array-like 1-D
             The waiting time distribution of the two input links.
-        w_func1, w_func2: array-like 1-D
-            The Werner parameter as function of T of the two input links.
+        sf1, sf2: array-like 1-D -- TODO: here, the type can be different
+            The state quality (e.g., Werner parameter) as function of T of the two input links.
         p_swap: float
             The success probability of entanglement swap.
         cutoff: int or float
@@ -240,14 +238,11 @@ class RepeaterChainSimulation():
         w_func: array-like 1-D
             The Werner parameter as function of T of the entanglement swap.
         """
+        # TODO: implement the typecheck here using StateType
+        # TODO: if dealing with Werner states 
         if self.efficient and cut_type == "memory_time":
             join_links = join_links_efficient
-            if self._qutip:
-                # only used for testing, very slow
-                # join_links_state = join_links_matrix_qutip
-                pass
-            else:
-                join_links_state = join_links_efficient
+            join_links_state = join_links_efficient
         else:
             join_links = join_links_compatible
             join_links_state = join_links_compatible
@@ -258,11 +253,11 @@ class RepeaterChainSimulation():
 
         # P'_f
         pf_cutoff = join_links(
-            pmf1, pmf2, w_func1, w_func2, ycut=False,
+            pmf1, pmf2, sf1, sf2, ycut=False,
             cutoff=cutoff, cut_type=cut_type, evaluate_func="1", t_coh=t_coh)
         # P'_s
         ps_cutoff = join_links(
-            pmf1, pmf2, w_func1, w_func2, ycut=True,
+            pmf1, pmf2, sf1, sf2, ycut=True,
             cutoff=cutoff, cut_type=cut_type, evaluate_func="1", t_coh=t_coh)
         # P_f or P_s (Differs only by a constant p_swap)
         pmf_cutoff = self.iterative_convolution(
@@ -275,7 +270,7 @@ class RepeaterChainSimulation():
 
         # Wsuc * P_s
         state_suc = join_links_state(
-            pmf1, pmf2, w_func1=w_func1, w_func2=w_func2, ycut=True,
+            pmf1, pmf2, w_func1=sf1, w_func2=sf2, ycut=True,
             cutoff=cutoff, cut_type=cut_type,
             t_coh=t_coh, evaluate_func="w1w2")
         # Wprep * Pr(Tout = t)
@@ -301,8 +296,8 @@ class RepeaterChainSimulation():
         return pmf_swap, state_out
 
 
-    def destillation(self,
-            pmf1, w_func1, pmf2, w_func2,
+    def distillation(self,
+            pmf1, sf1, pmf2, sf2,
             cutoff, t_coh, cut_type):
         """
         Calculate the waiting time and average Werner parameter
@@ -312,8 +307,8 @@ class RepeaterChainSimulation():
         ----------
         pmf1, pmf2: array-like 1-D
             The waiting time distribution of the two input links.
-        w_func1, w_func2: array-like 1-D
-            The Werner parameter as function of T of the two input links.
+        sf1, sf2: array-like 1-D -- TODO: here, the type can be different
+            The state quality (e.g., Werner parameter) as function of T of the two input links.
         cutoff: int or float
             The memory time cut-off, werner parameter cut-off, or 
             run time cut-off.
@@ -339,12 +334,12 @@ class RepeaterChainSimulation():
             shift = 0
         # P'_f  cutoff attempt when cutoff fails
         pf_cutoff = join_links(
-            pmf1, pmf2, w_func1, w_func2, ycut=False,
+            pmf1, pmf2, sf1, sf2, ycut=False,
             cutoff=cutoff, cut_type=cut_type,
             evaluate_func="1", t_coh=t_coh)
         # P'_ss  cutoff attempt when cutoff and dist succeed
         pss_cutoff = join_links(
-            pmf1, pmf2, w_func1, w_func2, ycut=True,
+            pmf1, pmf2, sf1, sf2, ycut=True,
             cutoff=cutoff, cut_type=cut_type,
             evaluate_func="0.5+0.5w1w2", t_coh=t_coh)
         # P_s  dist attempt when dist succeeds
@@ -354,7 +349,7 @@ class RepeaterChainSimulation():
         del pss_cutoff
         # P'_sf  cutoff attempt when cutoff succeeds but dist fails
         psf_cutoff = join_links(
-            pmf1, pmf2, w_func1, w_func2, ycut=True,
+            pmf1, pmf2, sf1, sf2, ycut=True,
             cutoff=cutoff, cut_type=cut_type,
             evaluate_func="0.5-0.5w1w2", t_coh=t_coh)
         # P_f  dist attempt when dist fails
@@ -370,7 +365,7 @@ class RepeaterChainSimulation():
 
         # Wsuc * P'_ss
         state_suc = join_links(
-            pmf1, pmf2, w_func1, w_func2, ycut=True,
+            pmf1, pmf2, sf1, sf2, ycut=True,
             cutoff=cutoff, cut_type=cut_type,
             evaluate_func="w1+w2+4w1w2", t_coh=t_coh)
         # Wprep * P_s
@@ -391,7 +386,7 @@ class RepeaterChainSimulation():
 
 
     def compute_unit(self,
-            parameters, pmf1, w_func1, pmf2=None, w_func2=None,
+            parameters, pmf1, sf1, pmf2=None, sf2=None,
             unit_kind="swap", step_size=1):
         """
         Calculate the the waiting time distribution and
@@ -405,8 +400,8 @@ class RepeaterChainSimulation():
             the repeater and the simulation.
         pmf1, pmf2: array-like 1-D
             The waiting time distribution of the two input links.
-        w_func1, w_func2: array-like 1-D
-            The Werner parameter as function of T of the two input links.
+        sf1, sf2: array-like 1-D -- TODO: here, the type can be different
+            The state quality (e.g., Werner parameter) as function of T of the two input links.
         unit_kind: str
             "swap" or "dist"
 
@@ -417,8 +412,8 @@ class RepeaterChainSimulation():
         """
         if pmf2 is None:
             pmf2 = pmf1
-        if w_func2 is None:
-            w_func2 = w_func1
+        if sf2 is None:
+            sf2 = sf1
         p_gen = parameters["p_gen"]
         p_swap = parameters["p_swap"]
         w0 = parameters["w0"]
@@ -455,17 +450,20 @@ class RepeaterChainSimulation():
             raise TypeError(f"Time cut-off must be an integer. not {cutoff}")
         if cut_type == "fidelity" and not (cutoff >= 0. or cutoff < 1.):
             raise TypeError(f"Fidelity cut-off must be a real number between 0 and 1.")
-        # if not np.isreal(w0) or w0 < 0. or w0 > 1.:
-        #     raise TypeError(f"Invalid Werner parameter w0 = {w0}")
+        if isinstance(w0, list):
+            if not all(np.isreal(w) and 0.0 <= w <= 1.0 for w in w0):
+                raise TypeError(f"Invalid Werner parameter w0 = {w0}")
+        elif not np.isreal(w0) or w0 < 0.0 or w0 > 1.0:
+            raise TypeError(f"Invalid Werner parameter w0 = {w0}")
 
         # swap or distillation for next level
         if unit_kind == "swap":
-            pmf, w_func = self.entanglement_swap(
-                pmf1, w_func1, pmf2, w_func2, p_swap,
+            pmf, w_func = self.swapping(
+                pmf1, sf1, pmf2, sf2, p_swap,
                 cutoff=cutoff, t_coh=t_coh, cut_type=cut_type)
         elif unit_kind == "dist":
-            pmf, w_func = self.destillation(
-                pmf1, w_func1, pmf2, w_func2,
+            pmf, w_func = self.distillation(
+                pmf1, sf1, pmf2, sf2,
                 cutoff=cutoff, t_coh=t_coh, cut_type=cut_type)
 
         # erase ridiculous Werner parameters,
@@ -497,20 +495,22 @@ class RepeaterChainSimulation():
             the repeater and the simulation.
         all_level: bool
             If true, Return a list of the result of all the levels.
-            [(t_pmf0, w_func0), (t_pmf1, w_func1) ...]
+            [(t_pmf0, sf0), (t_pmf1, sf1), ...]
 
         Returns
         -------
-        t_pmf, w_func: array-like 1-D
-            The output waiting time and Werner parameters
+        t_pmf, sf: array-like 1-D -- TODO: here, the type can be different
+            The output waiting time and state quality (e.g., Werner parameters)
         """
         i = 0
         parameters = deepcopy(parameters)
         protocol = parameters["protocol"]
-        # in case of 1-level protocol:
-        # ensure protocol is treated as a tuple
+        
+        # Preliminary check
+        # In case of symmetric protocol, ensure protocol is treated as a tuple
         if isinstance(protocol, int): 
             protocol = (protocol,)
+        
         p_gen = parameters["p_gen"]
         w0 = parameters["w0"]
         if "tau" in parameters:  # backward compatibility
@@ -541,7 +541,7 @@ class RepeaterChainSimulation():
 
         t_trunc = parameters["t_trunc"]
 
-        # elementary link
+        # Elementary link generation
         t_list = np.arange(1, t_trunc)
         pmf = p_gen * (1 - p_gen)**(t_list - 1)
         pmf = np.concatenate((np.array([0.]), pmf))
@@ -579,53 +579,23 @@ class RepeaterChainSimulation():
             return final_pmf, final_w_func
 
 
-    def find_right_segment(self, segments, start_index):
-        r_segm = start_index + 1
-        while r_segm < len(segments) and segments[r_segm] is None:
-            r_segm += 1
-        if r_segm >= len(segments):
-            raise ValueError("No non-None segment found after index {}".format(start_index))
-        return r_segm
-
-
-    def validate_heterogeneous_parameters(self, parameters, number_of_segments):
+    def asymmetric_homogeneous_protocol(self, parameters, number_of_segments):
         """
-        Validate the parameters of a heterogeneous protocol.
-        """
-        if not isinstance(parameters["w0"], Iterable) or not isinstance(parameters["t_coh"], Iterable):
-            raise ValueError("w0 and t_coh must be iterable.")
-        if len(parameters["w0"]) != number_of_segments or len(parameters["p_gen"]) != number_of_segments:
-            raise ValueError("The number of segments must match the number of p_gen and w0 values.")
-        if len(parameters["t_coh"]) != number_of_segments + 1:
-            raise ValueError("The number of nodes must match the number of t_coh values.")
-
-
-    def asymmetric_protocol(self, parameters, number_of_segments):
-        """
-        Compute the waiting time and the Werner parameter of an asymmetric protocol.
+        Compute the waiting time and the Werner parameter of an asymmetric homogeneous protocol.
         Parameters
         ----------
         parameters: dict
-            A dictionary contains the parameters of
+            A dictionary contains the (homogeneous) parameters of
             the repeater and the simulation.
-
-        Cut-offs and 'all_level' are not implemented.
+        
+        number_of_segments: int
+            The number of segments in the protocol.
 
         Returns
         -------
         t_pmf, w_func: array-like 1-D
             The output waiting time and Werner parameters
         """
-        # Check if it is a heterogeneous protocol
-        # If yes, heterogeneous doesn't support cut-offs and 'all_level' yet
-        if isinstance(parameters["p_gen"], Iterable):
-            self.validate_heterogeneous_parameters(parameters, number_of_segments)
-            if "cutoff" in parameters:
-                raise NotImplementedError("Cut-offs are not implemented for heterogeneous protocols.")
-            if "all_level" in parameters:
-                raise NotImplementedError("All levels are not implemented for heterogeneous protocols.")
-            return self.asymmetric_heterogeneous_protocol(parameters, number_of_segments)
-        
         S = number_of_segments
         parameters = deepcopy(parameters)
 
@@ -658,7 +628,7 @@ class RepeaterChainSimulation():
             curr_segment = segments[idx] 
             
             if operation == 's':
-                next_idx = self.find_right_segment(segments, idx)
+                next_idx = find_right_segment(segments, idx)
                 next_segment = segments[next_idx]
                 pmf, w_func = self.compute_unit(
                     parameters, *curr_segment, *next_segment, unit_kind="swap", step_size=1)
@@ -676,9 +646,22 @@ class RepeaterChainSimulation():
     def asymmetric_heterogeneous_protocol(self, parameters, number_of_segments):
         """
         Compute the waiting time and the Werner parameter of an asymmetric protocol.
+        Parameters
+        ----------
+        parameters: dict
+            A dictionary contains the (heterogeneous) parameters of
+            the repeater and the simulation.
+
+        number_of_segments: int
+            The number of segments in the protocol.
+
+        Returns
+        -------
+        t_pmf, w_func: array-like 1-D
+            The output waiting time and Werner parameters
         """
-        # Use join_links_compatible instead of join_links_efficient, as coherence time is not homogeneous
-        # self.efficient = False
+        # Preliminary check
+        validate_heterogeneous_parameters(parameters, number_of_segments)
         
         S = number_of_segments
         parameters = deepcopy(parameters)
@@ -716,7 +699,7 @@ class RepeaterChainSimulation():
             curr_segment = segments[idx]
 
             if operation == 's':
-                next_idx = self.find_right_segment(segments, idx)
+                next_idx = find_right_segment(segments, idx)
                 next_segment = segments[next_idx]
                 assert curr_segment[3] == next_segment[2], f"Segments {curr_segment[2]} and {next_segment[3]} are not compatible."
                 parameters["t_coh"] = [t_cohs[curr_segment[2]], t_cohs[next_segment[2]], t_cohs[next_segment[3]]] 
@@ -736,30 +719,44 @@ class RepeaterChainSimulation():
         return (final_segment[0], final_segment[1])
 
 
-def compute_unit(
-        parameters, pmf1, w_func1, pmf2=None, w_func2=None,
-        unit_kind="swap", step_size=1):
-    """
-    Functional warpper for compute_unit
-    """
-    simulator = RepeaterChainSimulation()
-    return simulator.compute_unit(
-        parameters=parameters, pmf1=pmf1, w_func1=w_func1, pmf2=pmf2, w_func2=w_func2, unit_kind=unit_kind, step_size=step_size)
-
-
 def repeater_sim(parameters, all_level=False):
     """
-    Functional wrapper for nested_protocol
-    A first typecheck on the protocol is done to identify the simulation to run, i.e.
-    If the protocol is a tuple of integers, run the nested protocol
-    Otherwise, the tuples should be of strings, so run the asymmetric protocol
+    Functional wrapper for nested (Li et al. 2021) or asymmetric (La Corte et al. 2025) protocol evaluation.
+    A first typecheck on the protocol is done to identify the evaluation to run, i.e.
+    - If the protocol is a tuple of integers, run the nested protocol
+    - Otherwise, the tuples should be of strings, so run the asymmetric protocol
+    Notice that cut-offs and 'all_level' are not implemented yet for asymmetric protocols.
+
+    Parameters
+    ----------
+    parameters: dict
+        A dictionary contains the parameters of
+        the repeater and the simulation.
+        
+    all_level: bool
+        If true, Return a list of the result of all the levels.
+        [(t_pmf0, w_func0), (t_pmf1, w_func1) ...]
+
+    Returns
+    -------
+    t_pmf, w_func: array-like 1-D
+        The output waiting time and Werner parameters
     """
-    simulator = RepeaterChainSimulation()
+    simulator = RepeaterChainEvaluation()
 
     if isinstance(parameters["protocol"], Iterable) and all(isinstance(i, int) for i in parameters["protocol"]):
         return simulator.nested_protocol(parameters=parameters, all_level=all_level)
     elif isinstance(parameters["protocol"], Iterable) and all(isinstance(i, str) for i in parameters["protocol"]):
+        # preliminary checks
         number_of_segments = checkAsymProtocol(parameters["protocol"])
-        return simulator.asymmetric_protocol(parameters, number_of_segments)
+        if "cutoff" in parameters:
+            raise NotImplementedError("Cut-offs are not implemented for heterogeneous protocols.")
+        if "all_level" in parameters:
+            raise NotImplementedError("All levels are not implemented for heterogeneous protocols.")
+        # redirect to homogeneous or heterogeneous protocol
+        if isinstance(parameters["p_gen"], Iterable):
+            return simulator.asymmetric_heterogeneous_protocol(parameters, number_of_segments)
+        else:
+            return simulator.asymmetric_homogeneous_protocol(parameters, number_of_segments)
     else:
         raise ValueError("The protocol must be a tuple of integers or strings.")

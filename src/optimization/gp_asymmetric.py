@@ -24,7 +24,7 @@ from src.utils.gp_utils import (
 
 from src.types.repeater_types import optimizerType, OptimizerType, ThresholdExceededError, SimParameters # Typing
 
-from src.core.repeater_algorithm import RepeaterChainSimulation
+from src.core.repeater_algorithm import RepeaterChainEvaluation
 from src.utils.utility_functions import pmf_to_cdf, secret_key_rate
 
 logging.basicConfig(level=logging.INFO)
@@ -275,7 +275,7 @@ if __name__ == "__main__":
         'w0': w0,
     }
         
-    simulator = RepeaterChainSimulation()
+    simulator = RepeaterChainEvaluation()
     
     # Start the optimization process
     if optimizer == "gp":

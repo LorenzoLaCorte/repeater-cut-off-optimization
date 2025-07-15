@@ -40,7 +40,7 @@ from src.utils.gp_utils import (
 
 from src.types.repeater_types import SpaceType, optimizerType, OptimizerType, ThresholdExceededError, SimParameters, spaceType # Typing
 
-from src.core.repeater_algorithm import RepeaterChainSimulation
+from src.core.repeater_algorithm import RepeaterChainEvaluation
 from src.utils.utility_functions import secret_key_rate, pmf_to_cdf
 from src.utils.logging_utilities import (
     log_init, log_params, log_finish, create_iter_kwargs, save_data
@@ -377,7 +377,7 @@ if __name__ == "__main__":
     dp_enabled = args.dp
     simulator = None
 
-    simulator = RepeaterChainSimulation()
+    simulator = RepeaterChainEvaluation()
     # In case of dynamic programming, a fixed truncation time is required
     if args.t_trunc is None:
         fixed_t_trunc = get_t_trunc(p_gen, p_swap, t_coh, max_swaps, max_dists)

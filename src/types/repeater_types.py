@@ -3,6 +3,7 @@
 TODO: types and exception defined in gp_utils should be moved here
 """
 from argparse import ArgumentTypeError
+from collections.abc import Iterable
 import re
 from typing import Tuple, TypedDict, Union, Literal, List
 
@@ -82,7 +83,16 @@ def checkAsymProtocol(protocol: Tuple[str], S: int = None) -> Tuple[str]:
     
     # Check if the number is between the allowed indexes for segments
     assert all([0 <= s <= S-2 for s in swapped_segments]) and len(swapped_segments) == S-1, "The protocol is bad formatted."
-
     return S
 
 
+def validate_heterogeneous_parameters(parameters, number_of_segments):
+    """
+    Validate the parameters of a heterogeneous protocol.
+    """
+    if not isinstance(parameters["w0"], Iterable) or not isinstance(parameters["t_coh"], Iterable):
+        raise ValueError("w0 and t_coh must be iterable.")
+    if len(parameters["w0"]) != number_of_segments or len(parameters["p_gen"]) != number_of_segments:
+        raise ValueError("The number of segments must match the number of p_gen and w0 values.")
+    if len(parameters["t_coh"]) != number_of_segments + 1:
+        raise ValueError("The number of nodes must match the number of t_coh values.")

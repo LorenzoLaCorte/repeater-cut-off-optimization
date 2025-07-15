@@ -1,10 +1,7 @@
 import copy
 import itertools
-import logging
-import math
 import statistics
 from typing import Generator, List, Optional, Tuple
-from src.types.repeater_types import checkAsymProtocol
 
 
 class SwapTreeVertex:
@@ -298,3 +295,18 @@ def generate_asym_protocol_space(N: int, max_dists: int):
     for nodeLabeledShape, _ in generate_swap_space(S):
         for edgeLabeledShape in generate_dists_combs(v, nodeLabeledShape, max_dists):
             yield edgeLabeledShape.get_sequence()
+
+
+def find_right_segment(segments, start_index):
+    """
+    Finds the next non-None segment in the segments list starting from the given index.
+    If no non-None segment is found, raises a ValueError.
+    """
+    r_segm = start_index + 1
+    while r_segm < len(segments) and segments[r_segm] is None:
+        r_segm += 1
+    if r_segm >= len(segments):
+        raise ValueError("No non-None segment found after index {}".format(start_index))
+    return r_segm
+
+

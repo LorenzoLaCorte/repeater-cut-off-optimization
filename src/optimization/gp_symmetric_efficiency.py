@@ -7,7 +7,7 @@ import logging
 import time
 
 from src.utils.gp_utils import OptimizerType, SimParameters, SpaceType, get_sym_protocol_space_size
-from src.core.repeater_algorithm import RepeaterChainSimulation
+from src.core.repeater_algorithm import RepeaterChainEvaluation
 from src.optimization.gp_symmetric import gaussian_optimization, brute_force_optimization
 from src.plotting.gp_plots import plot_gp_optimization_efficiency
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         'w0': w0,
     }
 
-    simulator = RepeaterChainSimulation()
+    simulator = RepeaterChainEvaluation()
 
     start_time = time.time()
     correct_results = brute_force_optimization(simulator, parameters, "enumerate", min_swaps, max_swaps, min_dists, max_dists, "output.txt", False)
