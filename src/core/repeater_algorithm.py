@@ -1,12 +1,15 @@
 from copy import deepcopy
 from collections.abc import Iterable
 import logging
+from typing import Union
 
 import numpy as np
 
+from src.core.bell.state import BellState, LFunc
+from src.core.states import QuantumState
 from src.core.werner.state import WFunc, WernerState, polish_w_func
 from src.types.protocol_types import find_right_segment
-from src.types.repeater_types import PMF, QProtocol, SymProtocol, checkAsymProtocol, validate_heterogeneous_parameters
+from src.types.repeater_types import PMF, AsymProtocol, QuantumProtocol, SimParameters, SymProtocol, checkAsymProtocol, validate_heterogeneous_parameters
 try:
     import cupy as cp # type: ignore
     _cupy_exist = True
@@ -15,7 +18,7 @@ except (ImportError, ModuleNotFoundError):
 
 from src.core.werner.protocol_units import werner_join
 from src.core.werner.protocol_units_efficient import werner_join_efficient
-
+from src.core.bell.protocol_units import bell_join
 
 __all__ = ["RepeaterChainEvaluation", "compute_unit", "werner_join", "repeater_sim"]
 
@@ -207,6 +210,7 @@ class RepeaterChainEvaluation():
 
 
     def swapping(self,
+            parameters: SimParameters,
             pmf1: PMF, sf1, pmf2: PMF, sf2, p_swap,
             cutoff, t_coh, cut_type):
         """
@@ -215,6 +219,9 @@ class RepeaterChainEvaluation():
 
         Parameters
         ----------
+        parameters: dict
+            A dictionary contains the parameters of
+            the repeater and the simulation.
         pmf1, pmf2: array-like 1-D
             The waiting time distribution of the two input links.
         sf1, sf2: array-like 1-D -- TODO: here, the type can be different
@@ -236,15 +243,17 @@ class RepeaterChainEvaluation():
         state_out: array-like 1-D
             The Werner parameter as function of T of the entanglement swap.
         """
-        if isinstance(sf1, WFunc) and isinstance(sf2, WFunc):
+        state: QuantumState = parameters["state"]
+        if cut_type == "memory_time":
+            shift = cutoff
+        else:
+            shift = 0
+
+        if isinstance(state, WernerState):
             if self.efficient and cut_type == "memory_time":
                 join_links = werner_join_efficient
             else:
                 join_links = werner_join
-            if cut_type == "memory_time":
-                shift = cutoff
-            else:
-                shift = 0
 
             # P'_f
             pf_cutoff = join_links(
@@ -288,10 +297,76 @@ class RepeaterChainEvaluation():
                     state_out[:,:,1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
                     state_out = np.transpose(state_out, (2, 1, 0))
 
+        if isinstance(state, BellState):
+            join_links = bell_join
+
+            depolar_rate = parameters.get("depolarizing_rate", 0.)
+            dephase_rate = parameters.get("dephasing_rate", 0.)
+            amplitude_damping_rate = parameters.get("amplitude_damping_rate", 0.)
+            bit_phase_flip_rate = parameters.get("bit_phase_flip_rate", 0.)
+
+            # P'_f
+            pf_cutoff = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2,
+                ycut=False, cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="1", 
+                depolar_rate=depolar_rate, dephase_rate=dephase_rate,
+                amplitude_damping_rate=amplitude_damping_rate,
+                bit_phase_flip_rate=bit_phase_flip_rate)
+            # P'_s
+            ps_cutoff = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2,
+                ycut=True, cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="1",
+                depolar_rate=depolar_rate, dephase_rate=dephase_rate,
+                amplitude_damping_rate=amplitude_damping_rate,
+                bit_phase_flip_rate=bit_phase_flip_rate)
+            # P_f or P_s
+            pmf_cutoff = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=ps_cutoff)
+            del ps_cutoff
+            # Pr(Tout = t)
+            pmf_swap = self.iterative_convolution(
+                pmf_cutoff, shift=0, p_swap=1/4)  # TODO: here I would put p_swap
+
+            # Wsuc * P_s
+            state_suc = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf1, 
+                ycut=True, cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="f1f2", # TODO: what?
+                depolar_rate=depolar_rate, dephase_rate=dephase_rate, 
+                amplitude_damping_rate=amplitude_damping_rate, 
+                bit_phase_flip_rate=bit_phase_flip_rate)
+            # Wprep * Pr(Tout = t)
+            state_prep = self.iterative_convolution(
+                pf_cutoff,
+                shift=shift, first_func=state_suc)
+            del pf_cutoff, state_suc
+            # Wout * Pr(Tout = t)
+            state_out = self.iterative_convolution(
+                pmf_cutoff, shift=0,
+                first_func=state_prep, p_swap=1/4) # TODO: here I would put p_swap
+            del pmf_cutoff
+        
+            # Checks whther state_out is 1D or 3D 
+            with np.errstate(divide='ignore', invalid='ignore'):
+                if len(state_out.shape) == 2 and state_out.shape[1] == 4:
+                    for i in range(1, len(state_out)):
+                        state_out[i] = state_out[i] / pmf_swap[i]
+                        for j in range(0, state_out.shape[1]):
+                            state_out[i][j] = np.where(np.isnan(state_out[i][j]), 1., state_out[i][j] ) #if nan, replace state_out with 1
+                else:
+                    raise ValueError("The state_out is not in the correct shape.")
+            # state_out = np.transpose(state_out, (1, 2, 0))
+            # state_out[:,:,1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
+            # state_out = np.transpose(state_out, (2, 1, 0))
+
         return pmf_swap, state_out
 
 
     def distillation(self,
+            parameters: SimParameters,
             pmf1, sf1, pmf2, sf2,
             cutoff, t_coh, cut_type):
         """
@@ -300,6 +375,9 @@ class RepeaterChainEvaluation():
 
         Parameters
         ----------
+        parameters: dict
+            A dictionary contains the parameters of
+            the repeater and the simulation.
         pmf1, pmf2: array-like 1-D
             The waiting time distribution of the two input links.
         sf1, sf2: array-like 1-D -- TODO: here, the type can be different
@@ -319,18 +397,18 @@ class RepeaterChainEvaluation():
         w_func: array-like 1-D
             The Werner parameter as function of T of the distillation.
         """
-        if isinstance(sf1, WFunc) and isinstance(sf2, WFunc):
+        state: QuantumState = parameters["state"]
+        if cut_type == "memory_time":
+            shift = cutoff
+        else:
+            shift = 0
+
+        if isinstance(state, WernerState):
             if self.efficient and cut_type == "memory_time":
                 join_links = werner_join_efficient
             else:
                 join_links = werner_join
-            if cut_type == "memory_time":
-                shift = cutoff
-            else:
-                shift = 0
 
-            # TODO: this part is probably state agnostic or refactorable
-            # --------------------------------------------------------
             # P'_f  cutoff attempt when cutoff fails
             pf_cutoff = join_links(
                 pmf1, pmf2, sf1, sf2, ycut=False,
@@ -361,7 +439,6 @@ class RepeaterChainEvaluation():
                 pf_dist, shift=0,
                 first_func=ps_dist)
             del ps_dist
-            # --------------------------------------------------------
 
             # Wsuc * P'_ss
             state_suc = join_links(
@@ -382,7 +459,87 @@ class RepeaterChainEvaluation():
             with np.errstate(divide='ignore', invalid='ignore'):
                 state_out[1:] /= pmf_dist[1:]
                 state_out = np.where(np.isnan(state_out), 1., state_out)
+        
+        if isinstance(state, BellState):
+            join_links = bell_join
+            depolar_rate = parameters.get("depolarizing_rate", 0.)
+            dephase_rate = parameters.get("dephasing_rate", 0.)
+            amplitude_damping_rate = parameters.get("amplitude_damping_rate", 0.)
+            bit_phase_flip_rate = parameters.get("bit_phase_flip_rate", 0.)
 
+            # P'_f  cutoff attempt when cutoff fails
+            pf_cutoff = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="1", depolar_rate=depolar_rate, dephase_rate=dephase_rate, 
+                amplitude_damping_rate=amplitude_damping_rate, bit_phase_flip_rate=bit_phase_flip_rate)
+            # P'_ss  cutoff attempt when cutoff and dist succeed
+            pss_cutoff = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="0.5+0.5f1f2",  depolar_rate=depolar_rate, dephase_rate=dephase_rate, 
+                amplitude_damping_rate=amplitude_damping_rate, bit_phase_flip_rate=bit_phase_flip_rate)
+            pss_cutoff_link = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="1",  depolar_rate=depolar_rate, dephase_rate=dephase_rate, 
+                amplitude_damping_rate=amplitude_damping_rate, bit_phase_flip_rate=bit_phase_flip_rate)
+            # P_s  dist attempt when dist succeeds
+            ps_dist = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=pss_cutoff)
+            ps_dist_link = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=pss_cutoff_link)
+            del pss_cutoff
+            # P'_sf  cutoff attempt when cutoff succeeds but dist fails
+            psf_cutoff = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="0.5-0.5f1f2", depolar_rate=depolar_rate, dephase_rate=dephase_rate, 
+                amplitude_damping_rate=amplitude_damping_rate, bit_phase_flip_rate=bit_phase_flip_rate) 
+            # P_f  dist attempt when dist fails
+            pf_dist = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=psf_cutoff)
+            del psf_cutoff
+            # Pr(Tout = t)
+            pmf_dist = self.iterative_convolution(
+                pf_dist, shift=0,
+                first_func=ps_dist)
+            pmf_dist_link = self.iterative_convolution(
+                pf_dist, shift=0,
+                first_func=ps_dist_link)
+            del ps_dist
+
+            # Wsuc * P'_ss
+            state_suc = join_links(
+                pmf1, pmf2, lambda_func1=sf1, lambda_func2=sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="f1+f2+4f1f2", depolar_rate=depolar_rate, dephase_rate=dephase_rate, 
+                amplitude_damping_rate=amplitude_damping_rate, bit_phase_flip_rate=bit_phase_flip_rate)
+            # Wprep * P_s
+            state_prep = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=state_suc)
+            del pf_cutoff, state_suc
+            # Wout * Pr(Tout = t)
+            state_out = self.iterative_convolution(
+                pf_dist, shift=0,
+                first_func=state_prep)
+            del pf_dist, state_prep
+
+            with np.errstate(divide='ignore', invalid='ignore'):
+                if len(state_out.shape) == 2 and state_out.shape[1] == 4:
+                    for i in range(1, len(state_out)):    
+                        for j in range(0, state_out.shape[1]):
+                            state_out[i][j] = state_out[i][j] / pmf_dist_link[i][j]
+                            state_out[i][j] = np.where(np.isnan(state_out[i][j]), 1., state_out[i][j] ) #if nan, replace state_out with 1
+                else:
+                    raise ValueError("The state_out is not in the correct shape.")
+            # state_out = np.transpose(state_out, (1, 2, 0))
+            # state_out[:,:,1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
+            # state_out = np.transpose(state_out, (2, 1, 0))
         return pmf_dist, state_out
 
 
@@ -417,6 +574,7 @@ class RepeaterChainEvaluation():
         if sf2 is None:
             sf2 = sf1
         
+        state: QuantumState = parameters["state"]
         p_gen = parameters["p_gen"]
         p_swap = parameters["p_swap"]
         t_coh = parameters.get("t_coh", np.inf)
@@ -458,10 +616,12 @@ class RepeaterChainEvaluation():
         # Perform swap or distillation
         if unit_kind == "swap":
             pmf, sf = self.swapping(
+                parameters,
                 pmf1, sf1, pmf2, sf2, p_swap,
                 cutoff=cutoff, t_coh=t_coh, cut_type=cut_type)
         elif unit_kind == "dist":
             pmf, sf = self.distillation(
+                parameters,
                 pmf1, sf1, pmf2, sf2,
                 cutoff=cutoff, t_coh=t_coh, cut_type=cut_type)
 
@@ -478,6 +638,35 @@ class RepeaterChainEvaluation():
                     coverage*100))
         
         return pmf, sf
+
+
+    def infer_state_type(self, parameters) -> QuantumState:
+        """
+        Infer the type of quantum state based on the parameters provided.
+        Adds it to the parameters dictionary under the key "state".
+        Parameters
+        ----------
+        parameters: dict
+            A dictionary containing the parameters of the repeater and the simulation.
+        Returns
+        -------
+        state: QuantumState
+            An instance of WernerState or BellState based on the parameters.
+        Raises
+        -------
+        ValueError: If neither 'w0' nor 'lambdas' is found in
+        parameters.
+        """
+        if "w0" in parameters:
+            logging.info("Werner state representation is used.")
+            state: WernerState = WernerState(parameters["w0"])
+        elif "lambdas" in parameters:
+            logging.info("Bell state representation is used.")
+            state: BellState = BellState(parameters["lambdas"])
+        else:
+            raise ValueError("The parameters must contain either 'w0' or 'lambdas'.")
+        parameters["state"] = state
+        return state
 
 
     def nested_protocol(self, parameters, all_level=False):
@@ -499,9 +688,9 @@ class RepeaterChainEvaluation():
         t_pmf, sf: array-like 1-D -- TODO: here, the type can be different
             The output waiting time and state quality (e.g., Werner parameters)
         """
-        i: int = 0
         parameters = deepcopy(parameters)
         protocol: SymProtocol = parameters["protocol"]
+        state: QuantumState = self.infer_state_type(parameters)
 
         # Preliminary check            
         if isinstance(protocol, int):
@@ -515,14 +704,6 @@ class RepeaterChainEvaluation():
         p_gen: int = parameters["p_gen"]
         if isinstance(p_gen, Iterable):
             raise NotImplementedError("Heterogeneous nested protocols are not supported yet.")
-
-        if "w0" in parameters:
-            logging.info("Werner state representation is used.")
-            state: WernerState = WernerState(parameters["w0"])
-        elif "lambdas" in parameters:
-            raise NotImplementedError("Bell diagonal representation is not supported yet.")
-        else:
-            raise ValueError("The parameters must contain either 'w0' or 'lambdas'.")
 
         if "tau" in parameters:  # backward compatibility
             parameters["mt_cut"] = parameters.pop("tau")
@@ -558,7 +739,7 @@ class RepeaterChainEvaluation():
         pmf: PMF = p_gen * (1 - p_gen)**(t_list - 1)
         pmf: PMF = np.concatenate((np.array([0.]), pmf))
 
-        sf: WFunc = state.get_generation_sf(t_trunc)
+        sf: Union[WFunc, LFunc] = state.get_generation_sf(t_trunc)
 
         if all_level:
             full_result = [(pmf, sf)]
@@ -566,6 +747,7 @@ class RepeaterChainEvaluation():
         total_step_size = 1
 
         # Compute protocol units
+        i = 0
         while i < len(protocol):
             operation = protocol[i]
             if "cutoff" in parameters and isinstance(cutoff, Iterable):
@@ -589,7 +771,7 @@ class RepeaterChainEvaluation():
             return full_result
         else:
             return pmf, sf
-
+    
 
     def asymmetric_homogeneous_protocol(self, parameters, number_of_segments):
         """
@@ -611,12 +793,12 @@ class RepeaterChainEvaluation():
         S = number_of_segments
         parameters = deepcopy(parameters)
 
-        protocol = parameters["protocol"]
-        p_gen = parameters["p_gen"]
-        w0 = parameters["w0"]
-        t_trunc = parameters["t_trunc"]
-        t_list = np.arange(1, t_trunc)
+        protocol: AsymProtocol = parameters["protocol"]
+        state: QuantumState = self.infer_state_type(parameters)
 
+        p_gen = parameters["p_gen"]
+        t_trunc = parameters["t_trunc"]
+        
         # In case of 1-level protocol, ensure protocol is treated as a tuple
         if isinstance(protocol, str): 
             protocol = (protocol,)
@@ -624,12 +806,15 @@ class RepeaterChainEvaluation():
         # Each segment will keep a distribution for waiting time and Werner parameter
         segments = []
 
-        # Elementary link: for each segment, generate its distribution
+        # GEN: Elementary link generation
+        t_list: np.ndarray = np.arange(1, t_trunc)
+        pmf: PMF = p_gen * (1 - p_gen)**(t_list - 1)
+        pmf: PMF = np.concatenate((np.array([0.]), pmf))
+        sf: Union[WFunc, LFunc] = state.get_generation_sf(t_trunc)
+
+        # For each segment, generate its distribution
         for _ in range(S):
-            pmf = p_gen * (1 - p_gen)**(t_list - 1)
-            pmf = np.concatenate((np.array([0.]), pmf))
-            w_func = np.array([w0] * t_trunc)
-            segments.append((pmf, w_func))
+            segments.append((pmf, sf))
 
         # Compute step by step the whole protocol
         # Given idx as the index of the segment (or left segment in case of swap)
@@ -679,10 +864,10 @@ class RepeaterChainEvaluation():
         parameters = deepcopy(parameters)
 
         protocol = parameters["protocol"]
+        state: QuantumState = self.infer_state_type(parameters)
+
         p_gens = parameters["p_gen"]
-        w0s = parameters["w0"]
         t_trunc = parameters["t_trunc"]
-        t_list = np.arange(1, t_trunc)
         t_cohs = parameters["t_coh"]
 
         # In case of 1-level protocol, ensure protocol is treated as a tuple
@@ -694,13 +879,15 @@ class RepeaterChainEvaluation():
         # - a distribution for waiting time and Werner parameter
         segments = []
 
-        # Elementary link: for each segment, generate its distribution
+        # GEN: Elementary link generation
+        # For each segment, generate its distribution
+        t_list = np.arange(1, t_trunc)
         for i in range(S):
             pmf = p_gens[i] * (1 - p_gens[i])**(t_list - 1)
             pmf = np.concatenate((np.array([0.]), pmf))
-            w_func = np.array([w0s[i]] * t_trunc)
+            sf = state.get_generation_sf(t_trunc, i)
             # Keep track of segment endpoints
-            segments.append((pmf, w_func, i, i+1))
+            segments.append((pmf, sf, i, i+1))
 
         # Compute step by step the whole protocol
         # Given idx as the index of the segment (or left segment in case of swap)

@@ -295,7 +295,7 @@ def time_cut_off(
 
 
 ########################################################################
-def join_links_compatible(
+def bell_join(
         pmf1, pmf2, lambda_func1, lambda_func2, ycut=True,
         cutoff=np.iinfo(int).max, 
         cut_type="memory_time", evaluate_func=get_one, 
@@ -364,13 +364,13 @@ def join_links_compatible(
         evaluate_func = get_one
     elif evaluate_func == "get_swap_prob_suc":
         evaluate_func = get_swap_prob_suc
-    elif evaluate_func == "w1w2":
+    elif evaluate_func == "f1f2":
         evaluate_func = get_swap_lambda_out
-    elif evaluate_func == "0.5+0.5w1w2":
+    elif evaluate_func == "0.5+0.5f1f2":
         evaluate_func = get_dist_prob_suc
-    elif evaluate_func == "0.5-0.5w1w2":
+    elif evaluate_func == "0.5-0.5f1f2":
         evaluate_func = get_dist_prob_fail
-    elif evaluate_func == "w1+w2+4w1w2":
+    elif evaluate_func == "f1+f2+4f1f2":
         evaluate_func = get_dist_lambda_out
     elif isinstance(evaluate_func, str):
         raise ValueError(evaluate_func)

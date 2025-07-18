@@ -28,7 +28,7 @@ class WernerState(QuantumState):
         return f"WernerState(w0={self.w0})"
     
 
-    def get_generation_sf(self, t_trunc) -> WFunc:
+    def get_generation_sf(self, t_trunc, idx=None) -> WFunc:
         """
         Generate the state quality function for the Werner state.
 
@@ -37,12 +37,19 @@ class WernerState(QuantumState):
         t_trunc : int
             The truncation time for the simulation.
 
+        idx : int, optional
+            The index of the Werner parameter of which the state quality function to return.
+            None if the chain is homogeneous.
         Returns
         -------
         WFunc
             An initial array of state quality values for each time step.
         """
-        return np.array([self.w0] * t_trunc)
+        if idx is not None:
+            w_func = np.array([self.w0[idx]] * t_trunc)
+        else:
+            w_func = np.array([self.w0] * t_trunc)
+        return w_func
 
 
 class InvalidWernerParameterError(Exception):

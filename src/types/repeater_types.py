@@ -8,6 +8,8 @@ import re
 from typing import Tuple, TypedDict, Union, Literal, List
 import numpy as np
 
+from src.core.states import QuantumState
+
 class ThresholdExceededError(Exception):
     """
     This exception is raised when the CDF coverage is below the threshold.
@@ -18,18 +20,20 @@ class ThresholdExceededError(Exception):
 
 SymProtocol = Tuple[int] 
 AsymProtocol = Tuple[str]
-QProtocol = Union[SymProtocol, AsymProtocol]
+QuantumProtocol = Union[SymProtocol, AsymProtocol]
 
 class SimParameters(TypedDict):
     """
     Type representing a set of parameters for a generic simulation of the algorithm
     """
-    protocol: QProtocol
+    state: QuantumState
+    protocol: QuantumProtocol
     t_coh: Union[int, List[int]]
     p_gen: Union[float, List[float]]
     p_swap: float
-    w0: Union[float, List[float]]
     t_trunc: int
+    w0: Union[float, List[float]]
+    lambdas: list[float]
 
 PMF = np.ndarray
 
