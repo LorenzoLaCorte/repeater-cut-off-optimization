@@ -4,7 +4,7 @@ import numpy as np
 import numba as nb
 
 
-__all__ = ["join_links_efficient"]
+__all__ = ["werner_join_efficient"]
 
 
 ##############################################################################
@@ -347,7 +347,7 @@ def get_m1n4_array(pmf1, pmf2, m, n, t_coh):
 ###############################################################################
 # API function for merging two entangled states by swap or distillation.
 
-def join_links_efficient(
+def werner_join_efficient(
         pmf1, pmf2, w_func1, w_func2,
         cutoff=np.iinfo(np.int32).max, ycut=True,
         cut_type=None, evaluate_func=None, t_coh=np.inf):

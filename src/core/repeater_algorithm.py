@@ -2,24 +2,22 @@ from copy import deepcopy
 from collections.abc import Iterable
 import logging
 
-import matplotlib.pyplot as plt
-import numba as nb
 import numpy as np
 
-from src.core.states.werner import WFunc, WernerState, polish_w_func
+from src.core.werner.state import WFunc, WernerState, polish_w_func
 from src.types.protocol_types import find_right_segment
-from src.types.repeater_types import checkAsymProtocol, validate_heterogeneous_parameters
+from src.types.repeater_types import PMF, QProtocol, SymProtocol, checkAsymProtocol, validate_heterogeneous_parameters
 try:
     import cupy as cp # type: ignore
     _cupy_exist = True
 except (ImportError, ModuleNotFoundError):
     _cupy_exist = False
 
-from src.core.protocol_units import join_links_compatible
-from src.core.protocol_units_efficient import join_links_efficient
+from src.core.werner.protocol_units import werner_join
+from src.core.werner.protocol_units_efficient import werner_join_efficient
 
 
-__all__ = ["RepeaterChainEvaluation", "compute_unit", "join_links_compatible", "repeater_sim"]
+__all__ = ["RepeaterChainEvaluation", "compute_unit", "werner_join", "repeater_sim"]
 
 
 class HashableParameters():
@@ -68,10 +66,10 @@ class RepeaterChainEvaluation():
             time-out mt_cut.
         first_func: array-like, optional
             The first_function in the convolution. If not given, use func.
-            It can be different because the first_func is
-            `P_s` and the `func` P_f.
+            It can be different, e.g., 
+            first_func is `P_s` and func is `P_f`.
             It is upper bounded by 1.
-            It can be a probability, or an array of states.
+            It can be a PMF, or a state function.
         p_swap: float, optimal
             Entanglement swap success probability.
 
@@ -104,9 +102,6 @@ class RepeaterChainEvaluation():
                 max_k = trunc
             else:
                 max_k = min(max_k, (-52 - np.log(trunc))/ np.log(pf))
-        if max_k > trunc:
-            print(max_k)
-            print(trunc)
         max_k = int(max_k)
 
         # Transpose the array of state to the shape (1,1,trunc)
@@ -130,6 +125,7 @@ class RepeaterChainEvaluation():
             result = result.reshape(trunc)
 
         return result
+
 
     def iterative_convolution_helper(
             self, func, first_func, trunc, shift, p_swap, max_k):
@@ -209,8 +205,9 @@ class RepeaterChainEvaluation():
             result = sum_convolved
         return result
 
+
     def swapping(self,
-            pmf1, sf1, pmf2, sf2, p_swap,
+            pmf1: PMF, sf1, pmf2: PMF, sf2, p_swap,
             cutoff, t_coh, cut_type):
         """
         Calculate the waiting time and average Werner parameter with time-out
@@ -236,63 +233,60 @@ class RepeaterChainEvaluation():
         -------
         t_pmf: array-like 1-D
             The waiting time distribution of the entanglement swap.
-        w_func: array-like 1-D
+        state_out: array-like 1-D
             The Werner parameter as function of T of the entanglement swap.
         """
-        # TODO: implement the typecheck here using StateType
-        # TODO: if dealing with Werner states 
-        if self.efficient and cut_type == "memory_time":
-            join_links = join_links_efficient
-            join_links_state = join_links_efficient
-        else:
-            join_links = join_links_compatible
-            join_links_state = join_links_compatible
-        if cut_type == "memory_time":
-            shift = cutoff
-        else:
-            shift = 0
-
-        # P'_f
-        pf_cutoff = join_links(
-            pmf1, pmf2, sf1, sf2, ycut=False,
-            cutoff=cutoff, cut_type=cut_type, evaluate_func="1", t_coh=t_coh)
-        # P'_s
-        ps_cutoff = join_links(
-            pmf1, pmf2, sf1, sf2, ycut=True,
-            cutoff=cutoff, cut_type=cut_type, evaluate_func="1", t_coh=t_coh)
-        # P_f or P_s (Differs only by a constant p_swap)
-        pmf_cutoff = self.iterative_convolution(
-            pf_cutoff, shift=shift,
-            first_func=ps_cutoff)
-        del ps_cutoff
-        # Pr(Tout = t)
-        pmf_swap = self.iterative_convolution(
-            pmf_cutoff, shift=0, p_swap=p_swap)
-
-        # Wsuc * P_s
-        state_suc = join_links_state(
-            pmf1, pmf2, w_func1=sf1, w_func2=sf2, ycut=True,
-            cutoff=cutoff, cut_type=cut_type,
-            t_coh=t_coh, evaluate_func="w1w2")
-        # Wprep * Pr(Tout = t)
-        state_prep = self.iterative_convolution(
-            pf_cutoff,
-            shift=shift, first_func=state_suc)
-        del pf_cutoff, state_suc
-        # Wout * Pr(Tout = t)
-        state_out = self.iterative_convolution(
-            pmf_cutoff, shift=0,
-            first_func=state_prep, p_swap=p_swap)
-        del pmf_cutoff
-
-        with np.errstate(divide='ignore', invalid='ignore'):
-            if len(state_out.shape) == 1:
-                state_out[1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
-                state_out = np.where(np.isnan(state_out), 1., state_out)
+        if isinstance(sf1, WFunc) and isinstance(sf2, WFunc):
+            if self.efficient and cut_type == "memory_time":
+                join_links = werner_join_efficient
             else:
-                state_out = np.transpose(state_out, (1, 2, 0))
-                state_out[:,:,1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
-                state_out = np.transpose(state_out, (2, 1, 0))
+                join_links = werner_join
+            if cut_type == "memory_time":
+                shift = cutoff
+            else:
+                shift = 0
+
+            # P'_f
+            pf_cutoff = join_links(
+                pmf1, pmf2, sf1, sf2, ycut=False,
+                cutoff=cutoff, cut_type=cut_type, evaluate_func="1", t_coh=t_coh)
+            # P'_s
+            ps_cutoff = join_links(
+                pmf1, pmf2, sf1, sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type, evaluate_func="1", t_coh=t_coh)
+            # P_f or P_s (Differs only by a constant p_swap)
+            pmf_cutoff = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=ps_cutoff)
+            del ps_cutoff
+            # Pr(Tout = t)
+            pmf_swap = self.iterative_convolution(
+                pmf_cutoff, shift=0, p_swap=p_swap)
+
+            # Wsuc * P_s
+            state_suc = join_links(
+                pmf1, pmf2, w_func1=sf1, w_func2=sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                t_coh=t_coh, evaluate_func="w1w2")
+            # Wprep * Pr(Tout = t)
+            state_prep = self.iterative_convolution(
+                pf_cutoff,
+                shift=shift, first_func=state_suc)
+            del pf_cutoff, state_suc
+            # Wout * Pr(Tout = t)
+            state_out = self.iterative_convolution(
+                pmf_cutoff, shift=0,
+                first_func=state_prep, p_swap=p_swap)
+            del pmf_cutoff
+
+            with np.errstate(divide='ignore', invalid='ignore'):
+                if len(state_out.shape) == 1:
+                    state_out[1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
+                    state_out = np.where(np.isnan(state_out), 1., state_out)
+                else:
+                    state_out = np.transpose(state_out, (1, 2, 0))
+                    state_out[:,:,1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
+                    state_out = np.transpose(state_out, (2, 1, 0))
 
         return pmf_swap, state_out
 
@@ -325,69 +319,75 @@ class RepeaterChainEvaluation():
         w_func: array-like 1-D
             The Werner parameter as function of T of the distillation.
         """
-        if self.efficient and cut_type == "memory_time":
-            join_links = join_links_efficient
-        else:
-            join_links = join_links_compatible
-        if cut_type == "memory_time":
-            shift = cutoff
-        else:
-            shift = 0
-        # P'_f  cutoff attempt when cutoff fails
-        pf_cutoff = join_links(
-            pmf1, pmf2, sf1, sf2, ycut=False,
-            cutoff=cutoff, cut_type=cut_type,
-            evaluate_func="1", t_coh=t_coh)
-        # P'_ss  cutoff attempt when cutoff and dist succeed
-        pss_cutoff = join_links(
-            pmf1, pmf2, sf1, sf2, ycut=True,
-            cutoff=cutoff, cut_type=cut_type,
-            evaluate_func="0.5+0.5w1w2", t_coh=t_coh)
-        # P_s  dist attempt when dist succeeds
-        ps_dist = self.iterative_convolution(
-            pf_cutoff, shift=shift,
-            first_func=pss_cutoff)
-        del pss_cutoff
-        # P'_sf  cutoff attempt when cutoff succeeds but dist fails
-        psf_cutoff = join_links(
-            pmf1, pmf2, sf1, sf2, ycut=True,
-            cutoff=cutoff, cut_type=cut_type,
-            evaluate_func="0.5-0.5w1w2", t_coh=t_coh)
-        # P_f  dist attempt when dist fails
-        pf_dist = self.iterative_convolution(
-            pf_cutoff, shift=shift,
-            first_func=psf_cutoff)
-        del psf_cutoff
-        # Pr(Tout = t)
-        pmf_dist = self.iterative_convolution(
-            pf_dist, shift=0,
-            first_func=ps_dist)
-        del ps_dist
+        if isinstance(sf1, WFunc) and isinstance(sf2, WFunc):
+            if self.efficient and cut_type == "memory_time":
+                join_links = werner_join_efficient
+            else:
+                join_links = werner_join
+            if cut_type == "memory_time":
+                shift = cutoff
+            else:
+                shift = 0
 
-        # Wsuc * P'_ss
-        state_suc = join_links(
-            pmf1, pmf2, sf1, sf2, ycut=True,
-            cutoff=cutoff, cut_type=cut_type,
-            evaluate_func="w1+w2+4w1w2", t_coh=t_coh)
-        # Wprep * P_s
-        state_prep = self.iterative_convolution(
-            pf_cutoff, shift=shift,
-            first_func=state_suc)
-        del pf_cutoff, state_suc
-        # Wout * Pr(Tout = t)
-        state_out = self.iterative_convolution(
-            pf_dist, shift=0,
-            first_func=state_prep)
-        del pf_dist, state_prep
+            # TODO: this part is probably state agnostic or refactorable
+            # --------------------------------------------------------
+            # P'_f  cutoff attempt when cutoff fails
+            pf_cutoff = join_links(
+                pmf1, pmf2, sf1, sf2, ycut=False,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="1", t_coh=t_coh)
+            # P'_ss  cutoff attempt when cutoff and dist succeed
+            pss_cutoff = join_links(
+                pmf1, pmf2, sf1, sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="0.5+0.5w1w2", t_coh=t_coh)
+            # P_s  dist attempt when dist succeeds
+            ps_dist = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=pss_cutoff)
+            del pss_cutoff
+            # P'_sf  cutoff attempt when cutoff succeeds but dist fails
+            psf_cutoff = join_links(
+                pmf1, pmf2, sf1, sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="0.5-0.5w1w2", t_coh=t_coh)
+            # P_f  dist attempt when dist fails
+            pf_dist = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=psf_cutoff)
+            del psf_cutoff
+            # Pr(Tout = t)
+            pmf_dist = self.iterative_convolution(
+                pf_dist, shift=0,
+                first_func=ps_dist)
+            del ps_dist
+            # --------------------------------------------------------
 
-        with np.errstate(divide='ignore', invalid='ignore'):
-            state_out[1:] /= pmf_dist[1:]
-            state_out = np.where(np.isnan(state_out), 1., state_out)
+            # Wsuc * P'_ss
+            state_suc = join_links(
+                pmf1, pmf2, sf1, sf2, ycut=True,
+                cutoff=cutoff, cut_type=cut_type,
+                evaluate_func="w1+w2+4w1w2", t_coh=t_coh)
+            # Wprep * P_s
+            state_prep = self.iterative_convolution(
+                pf_cutoff, shift=shift,
+                first_func=state_suc)
+            del pf_cutoff, state_suc
+            # Wout * Pr(Tout = t)
+            state_out = self.iterative_convolution(
+                pf_dist, shift=0,
+                first_func=state_prep)
+            del pf_dist, state_prep
+
+            with np.errstate(divide='ignore', invalid='ignore'):
+                state_out[1:] /= pmf_dist[1:]
+                state_out = np.where(np.isnan(state_out), 1., state_out)
+
         return pmf_dist, state_out
 
 
     def compute_unit(self,
-            parameters, pmf1, sf1, pmf2=None, sf2=None,
+            parameters, pmf1: PMF, sf1, pmf2: PMF = None, sf2 = None,
             unit_kind="swap", step_size=1):
         """
         Calculate the the waiting time distribution and
@@ -435,6 +435,7 @@ class RepeaterChainEvaluation():
         else:
             cutoff = np.iinfo(int).max
 
+        # TODO: refactor to type check in the appropriate place
         # type check (allow for list of p_gen)
         if isinstance(p_gen, Iterable):
             if not all(np.isreal(p) for p in p_gen):
@@ -500,9 +501,9 @@ class RepeaterChainEvaluation():
         """
         i: int = 0
         parameters = deepcopy(parameters)
-        protocol: tuple[int] = parameters["protocol"]
+        protocol: SymProtocol = parameters["protocol"]
 
-        # Preliminary check
+        # Preliminary check            
         if isinstance(protocol, int):
             # In case of protocol with only one operation, ensure protocol is treated as a tuple
             if protocol == 0 or protocol == 1: 
@@ -553,9 +554,9 @@ class RepeaterChainEvaluation():
         t_trunc = parameters["t_trunc"]
 
         # GEN: Elementary link generation
-        t_list = np.arange(1, t_trunc)
-        pmf = p_gen * (1 - p_gen)**(t_list - 1)
-        pmf = np.concatenate((np.array([0.]), pmf))
+        t_list: np.ndarray = np.arange(1, t_trunc)
+        pmf: PMF = p_gen * (1 - p_gen)**(t_list - 1)
+        pmf: PMF = np.concatenate((np.array([0.]), pmf))
 
         sf: WFunc = state.get_generation_sf(t_trunc)
 

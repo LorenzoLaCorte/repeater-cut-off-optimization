@@ -1,5 +1,5 @@
 import numpy as np
-from src.core.states.state import QuantumState
+from src.core.states import QuantumState
 
 WFunc = np.ndarray
 

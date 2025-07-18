@@ -6,7 +6,7 @@
 /logging
 /data
 
-.vscode/settings.json
+.vscode
 *.pyc
 *.npy
 *.pdf

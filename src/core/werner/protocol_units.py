@@ -181,7 +181,7 @@ def time_cut_off(
 
 
 ########################################################################
-def join_links_compatible(
+def werner_join(
         pmf1, pmf2, w_func1, w_func2,
         cutoff=np.iinfo(np.int32).max, ycut=True,
         cut_type="memory_time", evaluate_func=get_one, t_coh=np.inf):

@@ -6,6 +6,7 @@ from argparse import ArgumentTypeError
 from collections.abc import Iterable
 import re
 from typing import Tuple, TypedDict, Union, Literal, List
+import numpy as np
 
 class ThresholdExceededError(Exception):
     """
@@ -15,20 +16,26 @@ class ThresholdExceededError(Exception):
         super().__init__(message)
         self.extra_info = extra_info
 
+SymProtocol = Tuple[int] 
+AsymProtocol = Tuple[str]
+QProtocol = Union[SymProtocol, AsymProtocol]
 
 class SimParameters(TypedDict):
     """
     Type representing a set of parameters for a generic simulation of the algorithm
     """
-    protocol: Union[Tuple[int], Tuple[str]]
-    t_coh: float
-    p_gen: float
+    protocol: QProtocol
+    t_coh: Union[int, List[int]]
+    p_gen: Union[float, List[float]]
     p_swap: float
-    w0: float
+    w0: Union[float, List[float]]
+    t_trunc: int
+
+PMF = np.ndarray
 
 # Define the type for the optimizer and space_type
 OptimizerType = Literal["bf", "gp"]
-SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace", "asymmetric"]
+SpaceType = Literal["one_level", "strategy", "enumerate", "centerspace", "asymmetric"] # TODO: remove all except the one we use
 
 def optimizerType(value: str) -> OptimizerType:
     """
