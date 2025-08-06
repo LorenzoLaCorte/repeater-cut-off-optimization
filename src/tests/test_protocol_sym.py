@@ -5,6 +5,7 @@ from numpy.testing import assert_allclose
 
 from src.core.repeater_algorithm import repeater_sim, RepeaterChainEvaluation
 
+from src.core.werner.state import WernerState
 from src.utils.utility_functions import secret_key_rate
 
 
@@ -34,22 +35,22 @@ SETUPS for testing the algorithm.
 
 # Default solution for the test cases (uses non-efficient protocol_units.py)
 def default_solution(parameters):
-    simulator = RepeaterChainEvaluation()
+    simulator = RepeaterChainEvaluation(state_type=WernerState)
     simulator.efficient = False
     simulator.use_fft = False
     pmf, w_func = simulator.nested_protocol(parameters)
     return pmf, w_func
 
 # Efficient protocol simulation setups (uses efficient protocol_units_efficient.py)
-_convolution_simulator = RepeaterChainEvaluation()
+_convolution_simulator = RepeaterChainEvaluation(state_type=WernerState)
 _convolution_simulator.use_fft = False
 
 # FFT-based protocol simulation setups
-_fft_simulator = RepeaterChainEvaluation()
+_fft_simulator = RepeaterChainEvaluation(state_type=WernerState)
 _fft_simulator.use_fft = True
 
 # GPU-accelerated protocol simulation setups
-_gpu_simulator = RepeaterChainEvaluation()
+_gpu_simulator = RepeaterChainEvaluation(state_type=WernerState)
 _gpu_simulator.use_fft = True
 _gpu_simulator.use_gpu = True
 _gpu_simulator.gpu_threshold = 1

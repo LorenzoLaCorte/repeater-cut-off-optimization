@@ -9,6 +9,7 @@ import logging
 import numpy as np
 from scipy.optimize import differential_evolution
 
+from src.core.werner.state import WernerState
 from src.utils.utility_functions import create_cutoff_dict, secret_key_rate
 from src.utils.logging_utilities import (
     log_init, log_params, log_finish, mytimeit, create_iter_kwargs)
@@ -287,7 +288,7 @@ class CutoffOptimizer():
 
         count = 0  # Number of repetitions in total
         if self.simulator is None:
-            self.simulator = RepeaterChainEvaluation()
+            simulator = RepeaterChainEvaluation(state_type=WernerState)
         while True:
             target_function = partial(
                 optimization_tau_wrapper,
@@ -608,7 +609,7 @@ if __name__ == "__main__":
         }
 
     ID = log_init("optimize", level=logging.INFO)
-    simulator = RepeaterChainEvaluation()
+    simulator = RepeaterChainEvaluation(state_type=WernerState)
     simulator.use_gpu = True
     optimizer = CutoffOptimizer(simulator=simulator, workers=8, adaptive=True, opt_kind="nonuniform_de")
     optimal_cutoff = optimizer.run(parameters)

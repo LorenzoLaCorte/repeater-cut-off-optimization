@@ -43,13 +43,15 @@ class HashableParameters():
     
 
 class RepeaterChainEvaluation():
-    def __init__(self):
+    def __init__(self, state_type = WernerState):
+        self.state_type = state_type
         self.use_fft = True
         self.use_gpu = False
         self.gpu_threshold = 1000000
         self.efficient = True
         self.zero_padding_size = None
         self._qutip = False
+
 
     def iterative_convolution(self,
             func, shift=0, first_func=None, p_swap=None):
@@ -81,8 +83,11 @@ class RepeaterChainEvaluation():
         sum_convolved: array-like
             The result of the sum of all convolutions.
         """
-        # TODO: implement the typecheck here using StateType
-        if first_func is None or len(first_func.shape) == 1:
+        if (
+            first_func is None or 
+                (self.state_type == WernerState and len(first_func.shape) == 1) or
+                (self.state_type == BellState and len(first_func.shape) == 2)
+        ):
             is_dm = False
         else:
             is_dm = True
@@ -96,36 +101,66 @@ class RepeaterChainEvaluation():
             max_k = int(np.ceil((trunc/shift)))
         else:
             max_k = trunc
+
+        if self.state_type == BellState:
+            sum_func = sum([sublist[0] for sublist in func])
+
         if p_swap is not None:
-            pf = np.sum(func) * (1 - p_swap)
+            if isinstance(p_swap, list): p_swap = p_swap[0]
+            if self.state_type == WernerState:
+                pf = np.sum(func) * (1 - p_swap)
+            elif self.state_type == BellState:
+                pf = sum_func * (1 - p_swap)
         else:
-            pf = np.sum(func)
+            if self.state_type == WernerState:
+                pf = np.sum(func)
+            elif self.state_type == BellState:
+                pf = sum_func
+        
         with np.errstate(divide='ignore'):
             if pf <= 0.:  # pf ~ 0 and round-off error
                 max_k = trunc
             else:
                 max_k = min(max_k, (-52 - np.log(trunc))/ np.log(pf))
         max_k = int(max_k)
-
-        # Transpose the array of state to the shape (1,1,trunc)
-        # if werner or shape (4,4,trunc) if density matrix
-        if first_func is None:
-            first_func = func
-        if not is_dm:
-            first_func = first_func.reshape((trunc, 1, 1))
-        first_func = np.transpose(first_func, (1, 2, 0))
+        
+        if self.state_type == WernerState:
+            # Transpose the array of state to the shape (1,1,trunc)
+            # if werner or shape (4,4,trunc) if density matrix
+            if first_func is None:
+                first_func = func
+            if not is_dm:
+                first_func = first_func.reshape((trunc, 1, 1))
+            first_func = np.transpose(first_func, (1, 2, 0))
+        
+        elif self.state_type == BellState:
+            # Transpose the array of state to the shape (1, 4, trunc)
+            if first_func is None:
+                first_func = func
+            if not is_dm:
+                first_func = first_func.reshape((trunc, 4, 1))
+            first_func = np.transpose(first_func, (1, 2, 0))
+            func = func.reshape((trunc, 4, 1))
+            func = np.transpose(func, (1, 2, 0))
 
         # Convolution
         result = np.empty(first_func.shape, first_func.dtype)
         for i in range(first_func.shape[0]):
             for j in range(first_func.shape[1]):
-                result[i][j] = self.iterative_convolution_helper(
-                    func, first_func[i][j], trunc, shift, p_swap, max_k)
-
+                if self.state_type == WernerState:
+                    result[i][j] = self.iterative_convolution_helper(
+                        func, first_func[i][j], trunc, shift, p_swap, max_k)
+                elif self.state_type == BellState:
+                    result[i][j] = self.iterative_convolution_helper(
+                        func[i][j], first_func[i][j], trunc, shift, p_swap, max_k)
+                
         # Permute the indices back
         result = np.transpose(result, (2, 0, 1))
         if not is_dm:
-            result = result.reshape(trunc)
+            if self.state_type == WernerState:
+                result = result.reshape(trunc)
+            elif self.state_type == BellState:
+                result = result.reshape([trunc, 4])
 
         return result
 
@@ -243,13 +278,12 @@ class RepeaterChainEvaluation():
         state_out: array-like 1-D
             The Werner parameter as function of T of the entanglement swap.
         """
-        state: QuantumState = parameters["state"]
         if cut_type == "memory_time":
             shift = cutoff
         else:
             shift = 0
 
-        if isinstance(state, WernerState):
+        if self.state_type == WernerState:
             if self.efficient and cut_type == "memory_time":
                 join_links = werner_join_efficient
             else:
@@ -297,7 +331,7 @@ class RepeaterChainEvaluation():
                     state_out[:,:,1:] /= pmf_swap[1:]  # 0-th element has 0 pmf
                     state_out = np.transpose(state_out, (2, 1, 0))
 
-        if isinstance(state, BellState):
+        elif self.state_type == BellState:
             join_links = bell_join
 
             depolar_rate = parameters.get("depolarizing_rate", 0.)
@@ -397,13 +431,12 @@ class RepeaterChainEvaluation():
         w_func: array-like 1-D
             The Werner parameter as function of T of the distillation.
         """
-        state: QuantumState = parameters["state"]
         if cut_type == "memory_time":
             shift = cutoff
         else:
             shift = 0
 
-        if isinstance(state, WernerState):
+        if self.state_type == WernerState:
             if self.efficient and cut_type == "memory_time":
                 join_links = werner_join_efficient
             else:
@@ -460,7 +493,7 @@ class RepeaterChainEvaluation():
                 state_out[1:] /= pmf_dist[1:]
                 state_out = np.where(np.isnan(state_out), 1., state_out)
         
-        if isinstance(state, BellState):
+        elif self.state_type == BellState:
             join_links = bell_join
             depolar_rate = parameters.get("depolarizing_rate", 0.)
             dephase_rate = parameters.get("dephasing_rate", 0.)
@@ -574,7 +607,6 @@ class RepeaterChainEvaluation():
         if sf2 is None:
             sf2 = sf1
         
-        state: QuantumState = parameters["state"]
         p_gen = parameters["p_gen"]
         p_swap = parameters["p_swap"]
         t_coh = parameters.get("t_coh", np.inf)
@@ -640,35 +672,6 @@ class RepeaterChainEvaluation():
         return pmf, sf
 
 
-    def infer_state_type(self, parameters) -> QuantumState:
-        """
-        Infer the type of quantum state based on the parameters provided.
-        Adds it to the parameters dictionary under the key "state".
-        Parameters
-        ----------
-        parameters: dict
-            A dictionary containing the parameters of the repeater and the simulation.
-        Returns
-        -------
-        state: QuantumState
-            An instance of WernerState or BellState based on the parameters.
-        Raises
-        -------
-        ValueError: If neither 'w0' nor 'lambdas' is found in
-        parameters.
-        """
-        if "w0" in parameters:
-            logging.info("Werner state representation is used.")
-            state: WernerState = WernerState(parameters["w0"])
-        elif "lambdas" in parameters:
-            logging.info("Bell state representation is used.")
-            state: BellState = BellState(parameters["lambdas"])
-        else:
-            raise ValueError("The parameters must contain either 'w0' or 'lambdas'.")
-        parameters["state"] = state
-        return state
-
-
     def nested_protocol(self, parameters, all_level=False):
         """
         Compute the waiting time and the Werner parameter of a symmetric
@@ -690,7 +693,6 @@ class RepeaterChainEvaluation():
         """
         parameters = deepcopy(parameters)
         protocol: SymProtocol = parameters["protocol"]
-        state: QuantumState = self.infer_state_type(parameters)
 
         # Preliminary check            
         if isinstance(protocol, int):
@@ -739,7 +741,11 @@ class RepeaterChainEvaluation():
         pmf: PMF = p_gen * (1 - p_gen)**(t_list - 1)
         pmf: PMF = np.concatenate((np.array([0.]), pmf))
 
-        sf: Union[WFunc, LFunc] = state.get_generation_sf(t_trunc)
+        if self.state_type == WernerState:
+            sf: WFunc = WernerState(parameters["w0"]).get_generation_sf(t_trunc)
+        elif self.state_type == BellState:
+            pmf = np.tile(pmf[:, np.newaxis], 4)
+            sf: LFunc = BellState(parameters["lambdas"]).get_generation_sf(t_trunc)
 
         if all_level:
             full_result = [(pmf, sf)]
@@ -767,6 +773,8 @@ class RepeaterChainEvaluation():
                 full_result.append((pmf, sf))
             i += 1
 
+        if self.state_type == BellState:
+            pmf = [phiplus[0] for phiplus in pmf]
         if all_level:
             return full_result
         else:
@@ -794,7 +802,6 @@ class RepeaterChainEvaluation():
         parameters = deepcopy(parameters)
 
         protocol: AsymProtocol = parameters["protocol"]
-        state: QuantumState = self.infer_state_type(parameters)
 
         p_gen = parameters["p_gen"]
         t_trunc = parameters["t_trunc"]
@@ -810,8 +817,12 @@ class RepeaterChainEvaluation():
         t_list: np.ndarray = np.arange(1, t_trunc)
         pmf: PMF = p_gen * (1 - p_gen)**(t_list - 1)
         pmf: PMF = np.concatenate((np.array([0.]), pmf))
-        sf: Union[WFunc, LFunc] = state.get_generation_sf(t_trunc)
 
+        if self.state_type == WernerState:
+            sf: WFunc = WernerState(parameters["w0"]).get_generation_sf(t_trunc)
+        elif self.state_type == BellState:
+            sf: LFunc = BellState(parameters["lambdas"]).get_generation_sf(t_trunc)
+    
         # For each segment, generate its distribution
         for _ in range(S):
             segments.append((pmf, sf))
@@ -864,7 +875,7 @@ class RepeaterChainEvaluation():
         parameters = deepcopy(parameters)
 
         protocol = parameters["protocol"]
-        state: QuantumState = self.infer_state_type(parameters)
+        state: QuantumState = self.state_type
 
         p_gens = parameters["p_gen"]
         t_trunc = parameters["t_trunc"]
@@ -885,7 +896,11 @@ class RepeaterChainEvaluation():
         for i in range(S):
             pmf = p_gens[i] * (1 - p_gens[i])**(t_list - 1)
             pmf = np.concatenate((np.array([0.]), pmf))
-            sf = state.get_generation_sf(t_trunc, i)
+            if self.state_type == WernerState:
+                sf: WFunc = WernerState(parameters["w0"]).get_generation_sf(t_trunc, i)
+            elif self.state_type == BellState:
+                sf: LFunc = BellState(parameters["lambdas"]).get_generation_sf(t_trunc, i)
+
             # Keep track of segment endpoints
             segments.append((pmf, sf, i, i+1))
 
@@ -918,7 +933,7 @@ class RepeaterChainEvaluation():
         return (final_segment[0], final_segment[1])
 
 
-def repeater_sim(parameters, all_level=False):
+def repeater_sim(parameters, all_level=False, state_type=WernerState):
     """
     Functional wrapper for nested (Li et al. 2021) or asymmetric (La Corte et al. 2025) protocol evaluation.
     A first typecheck on the protocol is done to identify the evaluation to run, i.e.
@@ -941,7 +956,7 @@ def repeater_sim(parameters, all_level=False):
     t_pmf, w_func: array-like 1-D
         The output waiting time and Werner parameters
     """
-    simulator = RepeaterChainEvaluation()
+    simulator = RepeaterChainEvaluation(state_type)
 
     # Redirect to symmetric (nested) or asymmetric protocol
     if isinstance(parameters["protocol"], Iterable) and all(isinstance(i, int) for i in parameters["protocol"]):

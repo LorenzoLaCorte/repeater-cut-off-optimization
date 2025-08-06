@@ -10,6 +10,8 @@ from typing import List, Tuple, Optional
 import logging
 
 import matplotlib.pyplot as plt
+
+from src.core.werner.state import WernerState
 colorblind_palette = [
     "#0072B2",
     "#E69F00",
@@ -377,7 +379,7 @@ if __name__ == "__main__":
     dp_enabled = args.dp
     simulator = None
 
-    simulator = RepeaterChainEvaluation()
+    simulator = RepeaterChainEvaluation(state_type=WernerState)
     # In case of dynamic programming, a fixed truncation time is required
     if args.t_trunc is None:
         fixed_t_trunc = get_t_trunc(p_gen, p_swap, t_coh, max_swaps, max_dists)

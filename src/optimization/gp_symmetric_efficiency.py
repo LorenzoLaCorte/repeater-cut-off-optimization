@@ -6,6 +6,7 @@ from argparse import ArgumentParser, Namespace
 import logging
 import time
 
+from src.core.werner.state import WernerState
 from src.utils.gp_utils import OptimizerType, SimParameters, SpaceType, get_sym_protocol_space_size
 from src.core.repeater_algorithm import RepeaterChainEvaluation
 from src.optimization.gp_symmetric import gaussian_optimization, brute_force_optimization
@@ -44,7 +45,7 @@ if __name__ == "__main__":
         'w0': w0,
     }
 
-    simulator = RepeaterChainEvaluation()
+    simulator = RepeaterChainEvaluation(state_type=WernerState)
 
     start_time = time.time()
     correct_results = brute_force_optimization(simulator, parameters, "enumerate", min_swaps, max_swaps, min_dists, max_dists, "output.txt", False)

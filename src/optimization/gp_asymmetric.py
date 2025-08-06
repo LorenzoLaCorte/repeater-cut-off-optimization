@@ -15,6 +15,7 @@ from skopt.space import Real, Integer, Categorical
 from scipy.optimize import OptimizeResult
 from skopt.utils import use_named_args
 
+from src.core.werner.state import WernerState
 from src.plotting.gp_plots import plot_optimization_process
 from src.utils.gp_utils import (
     get_asym_protocol_space,  # Getters for Spaces
@@ -275,7 +276,7 @@ if __name__ == "__main__":
         'w0': w0,
     }
         
-    simulator = RepeaterChainEvaluation()
+    simulator = RepeaterChainEvaluation(state_type=WernerState)
     
     # Start the optimization process
     if optimizer == "gp":
