@@ -155,17 +155,15 @@ def test_distillation(simulation_params):
     print("Distillation test passed.")
 
 
-
-
 def test_bell_vs_werner(simulation_params):
     """
     Test the output shapes of the Bell and Werner states.
     """
     parameters = copy.deepcopy(simulation_params)
-    del simulation_params["cutoff"]
-    del simulation_params["cut_type"]
-    del simulation_params["depolarizing_rate"]
-    del simulation_params["dephasing_rate"]
+    del parameters["cutoff"]
+    del parameters["cut_type"]
+    del parameters["depolarizing_rate"]
+    del parameters["dephasing_rate"]
     parameters["protocol"] = (0,)
 
     # Bell diagonal protocol
@@ -184,4 +182,6 @@ def test_bell_vs_werner(simulation_params):
     assert np.allclose(pmf_werner, pmf_bell), "PMF mismatch between Bell and Werner states"
     fids1 = [l[0] for l in lambda_func]
     fids2 = [werner_to_fid(w) for w in w_func]
+    assert np.allclose(pmf_bell, pmf_werner), "PMF mismatch between Bell and Werner states"
+    print(f"Fidelities (Bell vs Werner): {[f' {f1:.4f} (B) vs {f2:.4f} (W)' for f1, f2 in zip(fids1[:20], fids2[:20])]} ...")
     assert np.allclose(fids1, fids2), "Fidelity mismatch between Bell and Werner states"
